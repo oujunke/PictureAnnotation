@@ -20,7 +20,8 @@ namespace PictureAnnotation
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            pbMian.Image = ImageManagers.GetImageList()[0].Image;
+            ImageManagers.LoadVocDirectory("VOCYolo100");
+            //pbMian.Image = ImageManagers.GetImageList()[0].Image;
         }
     }
 }
