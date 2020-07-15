@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PictureAnnotation.BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,12 +20,7 @@ namespace PictureAnnotation
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
+            pbMian.Image = ImageManagers.GetImageList()[0].Image;
         }
     }
 }
