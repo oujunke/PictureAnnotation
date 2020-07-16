@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.msMain = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
@@ -36,19 +37,32 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pbMian = new System.Windows.Forms.PictureBox();
             this.palFoot = new System.Windows.Forms.Panel();
             this.lvMain = new System.Windows.Forms.ListView();
-            this.palNext = new System.Windows.Forms.Panel();
-            this.palLast = new System.Windows.Forms.Panel();
             this.ilMain = new System.Windows.Forms.ImageList(this.components);
+            this.palNext = new System.Windows.Forms.Panel();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.palLast = new System.Windows.Forms.Panel();
+            this.btnLast = new System.Windows.Forms.Button();
+            this.tcMain = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
+            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
+            this.fbdOpenFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.msMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbMian)).BeginInit();
             this.palFoot.SuspendLayout();
+            this.palNext.SuspendLayout();
+            this.palLast.SuspendLayout();
+            this.tcMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // msMain
@@ -60,6 +74,7 @@
             this.msMain.Size = new System.Drawing.Size(1250, 25);
             this.msMain.TabIndex = 0;
             this.msMain.Text = "menuStrip1";
+            this.msMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.msMain_ItemClicked);
             // 
             // toolStripMenuItem1
             // 
@@ -68,7 +83,8 @@
             this.toolStripMenuItem3,
             this.toolStripMenuItem2,
             this.toolStripSeparator1,
-            this.toolStripMenuItem4});
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem6});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(44, 21);
             this.toolStripMenuItem1.Text = "文件";
@@ -76,31 +92,39 @@
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(189, 22);
             this.toolStripMenuItem5.Text = "加载Voc数据集";
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(189, 22);
             this.toolStripMenuItem3.Text = "加载图片数据集";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 22);
             this.toolStripMenuItem2.Text = "加载Voc-XML标注";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(177, 22);
-            this.toolStripMenuItem4.Text = "导出Voc模型";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem4.Text = "导出Voc数据集";
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem6.Text = "导出EasyData数据集";
+            this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripMenuItem6_Click);
             // 
             // splitContainer1
             // 
@@ -112,6 +136,10 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.pbMian);
             this.splitContainer1.Panel1.Controls.Add(this.palFoot);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tcMain);
             this.splitContainer1.Size = new System.Drawing.Size(1250, 527);
             this.splitContainer1.SplitterDistance = 1000;
             this.splitContainer1.TabIndex = 1;
@@ -123,8 +151,12 @@
             this.pbMian.Location = new System.Drawing.Point(0, 0);
             this.pbMian.Name = "pbMian";
             this.pbMian.Size = new System.Drawing.Size(1000, 407);
+            this.pbMian.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbMian.TabIndex = 1;
             this.pbMian.TabStop = false;
+            this.pbMian.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseDown);
+            this.pbMian.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseMove);
+            this.pbMian.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseUp);
             // 
             // palFoot
             // 
@@ -141,6 +173,7 @@
             // 
             this.lvMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvMain.HideSelection = false;
+            this.lvMain.LargeImageList = this.ilMain;
             this.lvMain.Location = new System.Drawing.Point(45, 0);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
@@ -148,28 +181,93 @@
             this.lvMain.Size = new System.Drawing.Size(910, 120);
             this.lvMain.TabIndex = 2;
             this.lvMain.UseCompatibleStateImageBehavior = false;
+            this.lvMain.ItemActivate += new System.EventHandler(this.lvMain_ItemActivate);
+            this.lvMain.SelectedIndexChanged += new System.EventHandler(this.lvMain_SelectedIndexChanged);
+            this.lvMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvMain_MouseClick);
+            // 
+            // ilMain
+            // 
+            this.ilMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
+            this.ilMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilMain.ImageStream")));
+            this.ilMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.ilMain.Images.SetKeyName(0, "000fb092e2f84211a854d62aaff65736.jpg");
             // 
             // palNext
             // 
+            this.palNext.Controls.Add(this.btnNext);
             this.palNext.Dock = System.Windows.Forms.DockStyle.Right;
             this.palNext.Location = new System.Drawing.Point(955, 0);
             this.palNext.Name = "palNext";
             this.palNext.Size = new System.Drawing.Size(45, 120);
             this.palNext.TabIndex = 1;
             // 
+            // btnNext
+            // 
+            this.btnNext.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnNext.Font = new System.Drawing.Font("Microsoft YaHei UI", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnNext.Location = new System.Drawing.Point(0, 0);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(45, 120);
+            this.btnNext.TabIndex = 0;
+            this.btnNext.Text = ">";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
             // palLast
             // 
+            this.palLast.Controls.Add(this.btnLast);
             this.palLast.Dock = System.Windows.Forms.DockStyle.Left;
             this.palLast.Location = new System.Drawing.Point(0, 0);
             this.palLast.Name = "palLast";
             this.palLast.Size = new System.Drawing.Size(45, 120);
             this.palLast.TabIndex = 0;
             // 
-            // ilMain
+            // btnLast
             // 
-            this.ilMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.ilMain.ImageSize = new System.Drawing.Size(16, 16);
-            this.ilMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.btnLast.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnLast.Font = new System.Drawing.Font("Microsoft YaHei UI", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLast.Location = new System.Drawing.Point(0, 0);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(45, 120);
+            this.btnLast.TabIndex = 0;
+            this.btnLast.Text = "<";
+            this.btnLast.UseVisualStyleBackColor = true;
+            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
+            // 
+            // tcMain
+            // 
+            this.tcMain.Controls.Add(this.tabPage1);
+            this.tcMain.Controls.Add(this.tabPage2);
+            this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tcMain.Location = new System.Drawing.Point(0, 0);
+            this.tcMain.Name = "tcMain";
+            this.tcMain.SelectedIndex = 0;
+            this.tcMain.Size = new System.Drawing.Size(246, 527);
+            this.tcMain.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(238, 497);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "标签筛选";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(238, 497);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "图片设置";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // ofdOpenFile
+            // 
+            this.ofdOpenFile.FileName = "openFileDialog1";
             // 
             // MainForm
             // 
@@ -184,10 +282,14 @@
             this.msMain.ResumeLayout(false);
             this.msMain.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbMian)).EndInit();
             this.palFoot.ResumeLayout(false);
+            this.palNext.ResumeLayout(false);
+            this.palLast.ResumeLayout(false);
+            this.tcMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,6 +311,15 @@
         private System.Windows.Forms.ListView lvMain;
         private System.Windows.Forms.Panel palNext;
         private System.Windows.Forms.ImageList ilMain;
+        private System.Windows.Forms.SaveFileDialog sfdSaveFile;
+        private System.Windows.Forms.OpenFileDialog ofdOpenFile;
+        private System.Windows.Forms.FolderBrowserDialog fbdOpenFolder;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.Button btnLast;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.TabControl tcMain;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 

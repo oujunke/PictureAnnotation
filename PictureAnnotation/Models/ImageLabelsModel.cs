@@ -10,7 +10,7 @@ namespace PictureAnnotation.Models
         /// <summary>
         /// 标注id
         /// </summary>
-		[JsonProperty("label_id")]
+		[JsonProperty("label_id",NullValueHandling =NullValueHandling.Ignore)]
 		public string LabelId { get; set; }
         /// <summary>
         /// 标注名称
@@ -37,5 +37,10 @@ namespace PictureAnnotation.Models
         /// </summary>
 		[JsonProperty("y2")]
 		public int Y2 { get; set; }
+        /// <summary>
+        /// 父图片
+        /// </summary>
+        [JsonIgnore]
+        public ImageItemModel ImageItemModel { set; get; }
 	}
 }

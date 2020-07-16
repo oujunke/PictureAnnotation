@@ -34,15 +34,20 @@ namespace PictureAnnotation.Models
         [JsonProperty("height")]
         public int Height { set; get; }
         /// <summary>
+        /// 是否标注完成
+        /// </summary>
+        [JsonProperty("is_complete")]
+        public bool IsComplete { set; get; }
+        /// <summary>
         /// 图片
         /// </summary>
 		[JsonIgnore]
 		public Bitmap Image{ set; get; }
-       
+
         /// <summary>
         /// 图片标注
         /// </summary>
-		[JsonProperty("labels")]
-		public List<ImageLabelsModel> Labels { get; set; }
+        [JsonProperty("labels")]
+        public List<ImageLabelsModel> Labels { get; set; } = new List<ImageLabelsModel>();
 	}
 }
