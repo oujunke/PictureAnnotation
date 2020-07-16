@@ -1,4 +1,5 @@
 ﻿using PictureAnnotation.BLL;
+using PictureAnnotation.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,6 @@ namespace PictureAnnotation
     public partial class MainForm : Form
     {
         private int _loadImgIndex;
-        private int _clickImgIndex;
         private int _listImgIndex;
         private int _ilImgIndex;
         public MainForm()
@@ -24,10 +24,10 @@ namespace PictureAnnotation
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var num = ImageManagers.LoadVocDirectory(@"E:\数据集\拼多多\VovYoloPdd");
-            if (num > 10 && ilMain.Images.Count < 10)
+            var num = ImageManagers.LoadVocDirectory(@"VOCYolo100");
+            if (num > 20 && ilMain.Images.Count < 10)
             {
-                AddImageItem(10 - ilMain.Images.Count);
+                AddImageItem(20 - ilMain.Images.Count);
             }
             //pbMian.Image = ImageManagers.GetImageList()[0].Image;
         }
@@ -43,7 +43,7 @@ namespace PictureAnnotation
                 var num = ImageManagers.LoadVocDirectory(fbdOpenFolder.SelectedPath);
                 if (num > 10 && ilMain.Images.Count < 10)
                 {
-                    AddImageItem(10 - ilMain.Images.Count);
+                    AddImageItem(20 - ilMain.Images.Count);
                 }
                 MessageBox.Show($"数据集加载成功,当前加载数据{num}条,共{ImageManagers.ImageCount}条");
             }
@@ -104,17 +104,17 @@ namespace PictureAnnotation
             {
                 return;
             }
-            if (lvMain.Items.Count <= 3)
+            if (lvMain.Items.Count <= 6)
             {
-                if (ilMain.Images.Count > 20)
+                if (ilMain.Images.Count > 40)
                 {
-                    _ilImgIndex += 10;
+                    _ilImgIndex += 20;
                     for (int i = 0; i < 10; i++)
                     {
                         ilMain.Images.RemoveAt(0);
                     }
                 }
-                AddImageItem(10);
+                AddImageItem(20);
             }
             _listImgIndex++;
             lvMain.Items.RemoveAt(0);
@@ -136,23 +136,68 @@ namespace PictureAnnotation
             var item = lvMain.GetItemAt(e.X, e.Y);
             if (item != null)
             {
-                pbMian.Image = ilMain.Images[item.ImageKey];
+                pbMian.Image = GetDrawBitamp(item.ImageKey);
             }
         }
-
+        private Bitmap GetDrawBitamp(string key)
+        {
+            var imageItemModel = ImageManagers.GetImageItemModel(key);
+            if (imageItemModel == null)
+            {
+                LogUtils.Log($"图片:{key}未找到");
+                return null;
+            }
+            var heightMultiple = 1.0f;
+            var widthMultiple = 1.0f;
+            //if(imageItemModel.Image.Width>0&& imageItemModel.Image.Width != imageItemModel.Width)
+            //{
+            //    widthMultiple = imageItemModel.Image.Width * 1.0f / imageItemModel.Width;
+            //}
+            //if (imageItemModel.Image.Height > 0 && imageItemModel.Image.Height != imageItemModel.Height)
+            //{
+            //    heightMultiple = imageItemModel.Image.Height * 1.0f/ imageItemModel.Height;
+            //}
+            Graphics graphics = Graphics.FromImage(imageItemModel.Image);
+            foreach (var lable in imageItemModel.Labels)
+            {
+                graphics.DrawRectangle(Pens.Red, lable.X1 * widthMultiple, lable.Y1 * heightMultiple,(lable.X2-lable.X1)*widthMultiple,(lable.Y2-lable.Y1)*heightMultiple) ;
+            }
+            graphics.Dispose();
+            return imageItemModel.Image;
+        }
+        bool isRightMouseDown;
+        DateTime lastRightMouseDownDateTime;
+        Point lastRightMouseDownPoint;
+        Graphics bpGraphics;
         private void pbMian_MouseDown(object sender, MouseEventArgs e)
         {
-
+            if (e.Clicks==1&&e.Button == MouseButtons.Right)
+            {
+                lastRightMouseDownDateTime = DateTime.Now;
+                lastRightMouseDownPoint = e.Location;
+                isRightMouseDown = true;
+            }
         }
 
         private void pbMian_MouseMove(object sender, MouseEventArgs e)
         {
-
+            if (isRightMouseDown && (DateTime.Now - lastRightMouseDownDateTime).TotalSeconds > 0.5 && Math.Abs(e.X - lastRightMouseDownPoint.X) + Math.Abs(e.Y - lastRightMouseDownPoint.Y) > 10)
+            {
+                if (bpGraphics == null)
+                {
+                    bpGraphics = Graphics.FromImage(pbMian.Image);
+                }
+                bpGraphics.DrawRectangle(Pens.Red, lastRightMouseDownPoint.X,lastRightMouseDownPoint.Y,e.X-lastRightMouseDownPoint.X,e.Y-lastRightMouseDownPoint.Y);
+            }
         }
 
         private void pbMian_MouseUp(object sender, MouseEventArgs e)
         {
-
+            if ( e.Button == MouseButtons.Right)
+            {
+                isRightMouseDown = false;
+                bpGraphics?.Dispose();
+            }
         }
     }
 }

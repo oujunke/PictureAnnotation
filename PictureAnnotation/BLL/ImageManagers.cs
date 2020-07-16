@@ -21,24 +21,37 @@ namespace PictureAnnotation.BLL
         {
             return _currentImageData.Skip(index).Take(size).ToList();
         }
-        public static List<Image> GetImageList(int index = 0, int size = 10)
+        public static List<Bitmap> GetImageList(int index = 0, int size = 10)
         {
             return GetImageModelList(index,size).Select(im=>GetImage(im)).ToList();
         }
-        public static Image GetImage(ImageItemModel itemModel)
+        public static Bitmap GetImage(ImageItemModel itemModel)
         {
             var img=MemoryCache.Default.Get(itemModel.Id);
-            Image image = null;
+            Bitmap image = null;
             if (img == null)
             {
-                image = Image.FromFile(itemModel.Path);
+                image = Image.FromFile(itemModel.Path) as Bitmap;
                 MemoryCache.Default.Add(itemModel.Id, image, new DateTimeOffset(DateTime.Now.AddMinutes(20)));
             }
             else
             {
-                image = img as Image;
+                image = img as Bitmap;
             }
             return image;
+        }
+        public static ImageItemModel GetImageItemModel(string key)
+        {
+            if (_kevImageData.ContainsKey(key))
+            {
+                var result = _kevImageData[key];
+                result.Image = GetImage(result);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
         /// <summary>
         /// 加载Voc数据集文件夹,返回加入数据条数
