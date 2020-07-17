@@ -16,7 +16,9 @@ namespace PictureAnnotation
     {
         private int _loadImgIndex;
         private int _listImgIndex;
+        private string _listImgKey;
         private int _ilImgIndex;
+        private bool _lvLableUpdate;
         public MainForm()
         {
             InitializeComponent();
@@ -25,11 +27,28 @@ namespace PictureAnnotation
         private void MainForm_Load(object sender, EventArgs e)
         {
             var num = ImageManagers.LoadVocDirectory(@"VOCYolo100");
+            RefreshLable();
             if (num > 20 && ilMain.Images.Count < 10)
             {
                 AddImageItem(20 - ilMain.Images.Count);
             }
             //pbMian.Image = ImageManagers.GetImageList()[0].Image;
+        }
+        private void RefreshLable()
+        {
+            _lvLableUpdate = true;
+            lvLables.BeginUpdate();
+            lvLables.Items.Clear();
+            foreach (var name in ImageManagers.LableNames)
+            {
+                var lableColor = LableColorManagers.GetLableColor(name);
+                var listViewItem = lvLables.Items.Add(name);
+                listViewItem.SubItems.Add(lableColor.Name);
+                listViewItem.SubItems.Add(lableColor.IsFill ? "填充" : "不填充");
+                listViewItem.Checked = lableColor.IsSelect;
+            }
+            lvLables.EndUpdate();
+            _lvLableUpdate = false;
         }
         private void msMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -41,6 +60,7 @@ namespace PictureAnnotation
             if (fbdOpenFolder.ShowDialog() == DialogResult.OK)
             {
                 var num = ImageManagers.LoadVocDirectory(fbdOpenFolder.SelectedPath);
+                RefreshLable();
                 if (num > 10 && ilMain.Images.Count < 10)
                 {
                     AddImageItem(20 - ilMain.Images.Count);
@@ -72,22 +92,22 @@ namespace PictureAnnotation
 
         private void btnLast_Click(object sender, EventArgs e)
         {
-            if (_listImgIndex<=0)
+            if (_listImgIndex <= 0)
             {
                 return;
             }
-            var imageItemModels=ImageManagers.GetImageModelList(_listImgIndex - 1, 1);
+            var imageItemModels = ImageManagers.GetImageModelList(_listImgIndex - 1, 1);
             if (imageItemModels.Count == 1)
             {
                 lvMain.BeginUpdate();
-                _listImgIndex --;
+                _listImgIndex--;
                 var image = ImageManagers.GetImage(imageItemModels[0]);
                 if (!ilMain.Images.ContainsKey(imageItemModels[0].Id))
                 {
                     ilMain.Images.Add(imageItemModels[0].Id, image);
                 }
                 ListViewItem[] listViewItems = new ListViewItem[lvMain.Items.Count];
-                lvMain.Items.CopyTo(listViewItems,0);
+                lvMain.Items.CopyTo(listViewItems, 0);
                 lvMain.Items.Clear();
                 lvMain.Items.Add(imageItemModels[0].Name, imageItemModels[0].Id);
                 foreach (var item in listViewItems)
@@ -142,6 +162,7 @@ namespace PictureAnnotation
         private Bitmap GetDrawBitamp(string key)
         {
             var imageItemModel = ImageManagers.GetImageItemModel(key);
+            _listImgKey = key;
             if (imageItemModel == null)
             {
                 LogUtils.Log($"图片:{key}未找到");
@@ -157,13 +178,18 @@ namespace PictureAnnotation
             //{
             //    heightMultiple = imageItemModel.Image.Height * 1.0f/ imageItemModel.Height;
             //}
-            Graphics graphics = Graphics.FromImage(imageItemModel.Image);
+            var newBit = new Bitmap(imageItemModel.Image);
+            Graphics graphics = Graphics.FromImage(newBit);
             foreach (var lable in imageItemModel.Labels)
             {
-                graphics.DrawRectangle(Pens.Red, lable.X1 * widthMultiple, lable.Y1 * heightMultiple,(lable.X2-lable.X1)*widthMultiple,(lable.Y2-lable.Y1)*heightMultiple) ;
+                var lableColor = LableColorManagers.GetLableColor(lable.Name);
+                if (lableColor.IsSelect)
+                {
+                    graphics.DrawRectangle(lableColor.Pen, lable.X1 * widthMultiple, lable.Y1 * heightMultiple, (lable.X2 - lable.X1) * widthMultiple, (lable.Y2 - lable.Y1) * heightMultiple);
+                }
             }
             graphics.Dispose();
-            return imageItemModel.Image;
+            return newBit;
         }
         bool isRightMouseDown;
         DateTime lastRightMouseDownDateTime;
@@ -171,7 +197,7 @@ namespace PictureAnnotation
         Graphics bpGraphics;
         private void pbMian_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Clicks==1&&e.Button == MouseButtons.Right)
+            if (e.Clicks == 1 && e.Button == MouseButtons.Right)
             {
                 lastRightMouseDownDateTime = DateTime.Now;
                 lastRightMouseDownPoint = e.Location;
@@ -187,17 +213,33 @@ namespace PictureAnnotation
                 {
                     bpGraphics = Graphics.FromImage(pbMian.Image);
                 }
-                bpGraphics.DrawRectangle(Pens.Red, lastRightMouseDownPoint.X,lastRightMouseDownPoint.Y,e.X-lastRightMouseDownPoint.X,e.Y-lastRightMouseDownPoint.Y);
+                bpGraphics.DrawRectangle(Pens.Red, lastRightMouseDownPoint.X, lastRightMouseDownPoint.Y, e.X - lastRightMouseDownPoint.X, e.Y - lastRightMouseDownPoint.Y);
             }
         }
 
         private void pbMian_MouseUp(object sender, MouseEventArgs e)
         {
-            if ( e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 isRightMouseDown = false;
                 bpGraphics?.Dispose();
             }
+        }
+
+        private void lvLables_MouseClick(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void lvLables_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (_lvLableUpdate|| _listImgKey==null)
+            {
+                return;
+            }
+            var item = lvLables.Items[e.Index];
+            var lableColor = LableColorManagers.GetLableColor(item.Text);
+            lableColor.IsSelect = !item.Checked;
+            pbMian.Image = GetDrawBitamp(_listImgKey);
         }
     }
 }

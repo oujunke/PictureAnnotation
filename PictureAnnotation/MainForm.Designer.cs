@@ -49,6 +49,11 @@
             this.btnLast = new System.Windows.Forms.Button();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lvLables = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
@@ -63,6 +68,7 @@
             this.palNext.SuspendLayout();
             this.palLast.SuspendLayout();
             this.tcMain.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // msMain
@@ -247,6 +253,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lvLables);
+            this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -254,6 +262,47 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "标签筛选";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lvLables
+            // 
+            this.lvLables.CheckBoxes = true;
+            this.lvLables.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.lvLables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvLables.FullRowSelect = true;
+            this.lvLables.HideSelection = false;
+            this.lvLables.Location = new System.Drawing.Point(3, 81);
+            this.lvLables.MultiSelect = false;
+            this.lvLables.Name = "lvLables";
+            this.lvLables.Size = new System.Drawing.Size(232, 413);
+            this.lvLables.TabIndex = 1;
+            this.lvLables.UseCompatibleStateImageBehavior = false;
+            this.lvLables.View = System.Windows.Forms.View.Details;
+            this.lvLables.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lvLables_ItemCheck);
+            this.lvLables.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvLables_MouseClick);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "标签名";
+            this.columnHeader1.Width = 100;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "标签颜色";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "填充";
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(232, 78);
+            this.panel1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -290,6 +339,7 @@
             this.palNext.ResumeLayout(false);
             this.palLast.ResumeLayout(false);
             this.tcMain.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -320,6 +370,11 @@
         private System.Windows.Forms.TabControl tcMain;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ListView lvLables;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
     }
 }
 

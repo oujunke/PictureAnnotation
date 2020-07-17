@@ -16,6 +16,8 @@ namespace PictureAnnotation.BLL
     {
         private static List<ImageItemModel> _currentImageData = new List<ImageItemModel>();
         private static Dictionary<string, ImageItemModel> _kevImageData = new Dictionary<string, ImageItemModel>();
+        private static Dictionary<string, string> _lableNameData = new Dictionary<string, string>();
+        public static List<string> LableNames = new List<string>();
         public static int ImageCount { get => _currentImageData.Count; }
         public static List<ImageItemModel> GetImageModelList(int index = 0, int size = 10)
         {
@@ -125,6 +127,11 @@ namespace PictureAnnotation.BLL
                     {
                         ImageLabelsModel imageLabels = new ImageLabelsModel();
                         imageLabels.Name = objectElement.Element("name").Value;
+                        if (!_lableNameData.ContainsKey(imageLabels.Name))
+                        {
+                            _lableNameData.Add(imageLabels.Name,null);
+                            LableNames.Add(imageLabels.Name);
+                        }
                         var bndboxElement = objectElement.Element("bndbox");
                         imageLabels.X1 = bndboxElement.Element("xmin").Value.StringToInt();
                         imageLabels.X2 = bndboxElement.Element("xmax").Value.StringToInt();
