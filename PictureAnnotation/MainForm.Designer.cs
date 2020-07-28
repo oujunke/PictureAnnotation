@@ -36,8 +36,10 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pbMian = new System.Windows.Forms.PictureBox();
             this.palFoot = new System.Windows.Forms.Panel();
@@ -74,7 +76,8 @@
             // msMain
             // 
             this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem7});
             this.msMain.Location = new System.Drawing.Point(0, 0);
             this.msMain.Name = "msMain";
             this.msMain.Size = new System.Drawing.Size(1250, 25);
@@ -88,9 +91,7 @@
             this.toolStripMenuItem5,
             this.toolStripMenuItem3,
             this.toolStripMenuItem2,
-            this.toolStripSeparator1,
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem6});
+            this.toolStripSeparator1});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(44, 21);
             this.toolStripMenuItem1.Text = "文件";
@@ -98,39 +99,57 @@
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem5.Text = "加载Voc数据集";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem3.Text = "加载图片数据集";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem2.Text = "加载Voc-XML标注";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem6,
+            this.toolStripMenuItem8});
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(44, 21);
+            this.toolStripMenuItem7.Text = "导出";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(278, 22);
             this.toolStripMenuItem4.Text = "导出Voc数据集";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(278, 22);
             this.toolStripMenuItem6.Text = "导出EasyData数据集";
             this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripMenuItem6_Click);
+            // 
+            // toolStripMenuItem8
+            // 
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(278, 22);
+            this.toolStripMenuItem8.Text = "导出选中分类到ImageNet数据集格式";
+            this.toolStripMenuItem8.Click += new System.EventHandler(this.toolStripMenuItem8_Click);
             // 
             // splitContainer1
             // 
@@ -375,6 +394,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
     }
 }
 

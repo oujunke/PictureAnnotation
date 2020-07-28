@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace PictureAnnotation.Models
+namespace PictureAnnotationForm.Models
 {
     public class ImageItemModel
     {

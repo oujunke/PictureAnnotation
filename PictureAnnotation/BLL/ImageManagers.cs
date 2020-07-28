@@ -27,6 +27,11 @@ namespace PictureAnnotation.BLL
         {
             return GetImageModelList(index,size).Select(im=>GetImage(im)).ToList();
         }
+        /// <summary>
+        /// 获得图片(有缓存则获取缓存图片)
+        /// </summary>
+        /// <param name="itemModel"></param>
+        /// <returns></returns>
         public static Bitmap GetImage(ImageItemModel itemModel)
         {
             var img=MemoryCache.Default.Get(itemModel.Id);
@@ -47,7 +52,6 @@ namespace PictureAnnotation.BLL
             if (_kevImageData.ContainsKey(key))
             {
                 var result = _kevImageData[key];
-                result.Image = GetImage(result);
                 return result;
             }
             else

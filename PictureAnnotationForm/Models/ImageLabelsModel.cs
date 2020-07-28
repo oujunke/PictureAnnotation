@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
-namespace PictureAnnotation.Models
+namespace PictureAnnotationForm.Models
 {
     public class ImageLabelsModel
     {
@@ -45,15 +46,35 @@ namespace PictureAnnotation.Models
         /// <summary>
         /// 宽度
         /// </summary>
+        [JsonIgnore]
         public int Width { get => X2 - X1; }
         /// <summary>
         /// 高度
         /// </summary>
+        [JsonIgnore]
         public int Height { get => Y2 - Y1; }
         /// <summary>
         /// 父图片
         /// </summary>
         [JsonIgnore]
         public ImageItemModel ImageItemModel { set; get; }
-	}
+        /// <summary>
+        /// 显示缩放倍数
+        /// </summary>
+        [JsonIgnore]
+        public float ZoomMultiple { set; get; }
+        /// <summary>
+        /// 标签显示位置
+        /// </summary>
+        [JsonIgnore]
+        public Rectangle LabelShowRectangle { get => new Rectangle((int)(X1 * ZoomMultiple), (int)(Y1 * ZoomMultiple), (int)(Width * ZoomMultiple), (int)(Height * ZoomMultiple)); }
+        /// <summary>
+        /// 复制到新成员中
+        /// </summary>
+        /// <returns></returns>
+        public ImageLabelsModel Copy()
+        {
+            return null;
+        }
+    }
 }
