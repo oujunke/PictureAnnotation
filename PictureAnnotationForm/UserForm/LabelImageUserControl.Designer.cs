@@ -1,6 +1,6 @@
 ﻿namespace PictureAnnotationForm.UserForm
 {
-    partial class LabelImageUserForm
+    partial class LabelImageUserControl
     {
         /// <summary> 
         /// 必需的设计器变量。

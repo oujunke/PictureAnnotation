@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.liShow = new PictureAnnotationForm.UserForm.LabelImageUserForm();
+            this.liShow = new PictureAnnotationForm.UserForm.LabelImageUserControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lvMain = new System.Windows.Forms.ListView();
             this.ilMain = new System.Windows.Forms.ImageList(this.components);
@@ -51,7 +51,7 @@
             this.导出选中分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpLabelInfo = new System.Windows.Forms.TabPage();
-            this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserForm();
+            this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserControl();
             this.panel3 = new System.Windows.Forms.Panel();
             this.tpLabelSelect = new System.Windows.Forms.TabPage();
             this.lvLabels = new System.Windows.Forms.ListView();
@@ -60,6 +60,8 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel2 = new System.Windows.Forms.Panel();
             this.btOpenImg = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tbLabelId = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnOpenImg = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -68,8 +70,6 @@
             this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.timeAutoSave = new System.Windows.Forms.Timer(this.components);
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tbLabelId = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,9 +80,9 @@
             this.tpLabelInfo.SuspendLayout();
             this.tpLabelSelect.SuspendLayout();
             this.btOpenImg.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -380,6 +380,25 @@
             this.btOpenImg.Text = "图片搜索";
             this.btOpenImg.UseVisualStyleBackColor = true;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.tbLabelId);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox3.Location = new System.Drawing.Point(3, 49);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(232, 46);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "标签编号";
+            // 
+            // tbLabelId
+            // 
+            this.tbLabelId.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbLabelId.Location = new System.Drawing.Point(3, 17);
+            this.tbLabelId.Name = "tbLabelId";
+            this.tbLabelId.Size = new System.Drawing.Size(226, 21);
+            this.tbLabelId.TabIndex = 0;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnOpenImg);
@@ -430,25 +449,6 @@
             this.timeAutoSave.Interval = 30000;
             this.timeAutoSave.Tick += new System.EventHandler(this.timeAutoSave_Tick);
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.tbLabelId);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox3.Location = new System.Drawing.Point(3, 49);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(232, 46);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "标签编号";
-            // 
-            // tbLabelId
-            // 
-            this.tbLabelId.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbLabelId.Location = new System.Drawing.Point(3, 17);
-            this.tbLabelId.Name = "tbLabelId";
-            this.tbLabelId.Size = new System.Drawing.Size(226, 21);
-            this.tbLabelId.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -471,11 +471,11 @@
             this.tpLabelInfo.ResumeLayout(false);
             this.tpLabelSelect.ResumeLayout(false);
             this.btOpenImg.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -506,8 +506,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private UserForm.LabelImageUserForm liShow;
-        private UserForm.LabelInfoUserForm liMain;
+        private UserForm.LabelImageUserControl liShow;
+        private UserForm.LabelInfoUserControl liMain;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem 保存数据ToolStripMenuItem;

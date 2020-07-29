@@ -12,9 +12,9 @@ using PictureAnnotationForm.Utils;
 
 namespace PictureAnnotationForm.UserForm
 {
-    public partial class LabelImageUserForm : UserControl
+    public partial class LabelImageUserControl : UserControl
     {
-        public LabelImageUserForm()
+        public LabelImageUserControl()
         {
             InitializeComponent();
         }
