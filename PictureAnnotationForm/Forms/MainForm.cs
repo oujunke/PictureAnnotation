@@ -501,7 +501,6 @@ namespace PictureAnnotationForm.Forms
                     return;
                 }
                 liShow.SetImageItemModel(imageLabelsModel.ImageItemModel);
-                liShow.HighlightLabelImage(imageLabelsModel);
                 tcMain.SelectedTab = tpLabelInfo;
                 liMain.SetLabel(imageLabelsModel);
                 tbLabelId.Clear();

@@ -58,8 +58,9 @@ namespace PictureAnnotationForm.UserForm
         public void SetImageItemModel(ImageItemModel imageItemModel)
         {
             CurrentImageItemModel = imageItemModel;
-            ImageShowInfo = null;
             _currentBitmap = ImageManagers.GetImage(CurrentImageItemModel);
+            ImageShowInfo = pbMian.GetImageShowInfo(_currentBitmap);
+            imageItemModel.ZoomMultiple = ImageShowInfo.ZoomMultiple;
             UpdateDrawingBoard();
             LabelChange?.Invoke(null);
         }
@@ -99,15 +100,6 @@ namespace PictureAnnotationForm.UserForm
             pbMian.Image = CurrentDrawBitmap;
         }
         /// <summary>
-        /// 设置选中标签
-        /// </summary>
-        /// <param name="label"></param>
-        public void HighlightLabelImage(ImageLabelsModel label)
-        {
-            _lastMoveLabel = label;
-            pbMian.Image = HighlightLabelImage(label, CurrentDrawBitmap);
-        }
-        /// <summary>
         /// 触发选中标签事件
         /// </summary>
         /// <param name="label"></param>
@@ -127,17 +119,6 @@ namespace PictureAnnotationForm.UserForm
         {
             ImageLast?.Invoke();
         }
-        private void pbMian_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                var label = GetImageLabelsModelAtPoint(e.X, e.Y);
-                if (label != null)
-                {
-                    LabelChange?.Invoke(label);
-                }
-            }
-        }
         bool isDrag = false;
         ImageLabelsModel dragLabel;
         Rectangle dragLabelRectangle;
@@ -145,17 +126,23 @@ namespace PictureAnnotationForm.UserForm
         DateTime lastDragTime;
         private void pbMian_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Right)
             {
-                var label = GetImageLabelsModelAtPoint(e.X, e.Y);
-                if (label == null)
-                {
-                    return;
-                }
                 isDrag = true;
-                dragLabel = label;
+                var tempLabel = new ImageLabelsModel
+                {
+                    ImageItemModel = CurrentImageItemModel,
+                    LabelId = Guid.NewGuid().ToString("N"),
+                    Name = "未知",
+                    X1 = e.X,
+                    X2 = e.X+1,
+                    Y1 = e.Y,
+                    Y2 = e.Y+1,
+                };
+                CurrentImageItemModel.Labels.Add(tempLabel);
+                AddLabelControl(CurrentImageItemModel.Labels.Count-1);
+                dragLabel = tempLabel;
                 dragPoint = new Point(e.X, e.Y);
-                dragLabelRectangle = new Rectangle(dragLabel.X1, dragLabel.Y1, dragLabel.Width, dragLabel.Height);
             }
         }
 
@@ -179,57 +166,15 @@ namespace PictureAnnotationForm.UserForm
         {
             if (isDrag)
             {
-                if (e.Button != MouseButtons.Left)
+                if (e.Button == MouseButtons.Right)
                 {
-                    ClertDrag();
-                    return;
-                }
-                if ((DateTime.Now - lastDragTime).Milliseconds > 10)
-                {
-                    return;
-                }
-                lastDragTime = DateTime.Now;
-                var x = (int)((e.Location.X - dragPoint.X) / dragLabel.ZoomMultiple);
-                var y = (int)((e.Location.Y - dragPoint.Y) / dragLabel.ZoomMultiple);
-                dragLabel.X1 = dragLabelRectangle.X + x;
-                dragLabel.X2 = dragLabelRectangle.Right + x;
-                dragLabel.Y1 = dragLabelRectangle.Top + y;
-                dragLabel.Y2 = dragLabelRectangle.Bottom + y;
-                var bitmap = GetDrawBitamp();
-                pbMian.Image = HighlightLabelImage(dragLabel, bitmap);
-            }
-            else
-            {
-                var label = GetImageLabelsModelAtPoint(e.X, e.Y);
-                if (label == null || _lastMoveLabel == label)
-                {
-                    return;
-                }
-                _lastMoveLabel = label;
-                pbMian.Image = HighlightLabelImage(label, CurrentDrawBitmap);
-            }
-        }
-        /// <summary>
-        /// 突出标签图片
-        /// </summary>
-        /// <param name="label"></param>
-        /// <returns></returns>
-        private Bitmap HighlightLabelImage(ImageLabelsModel label, Bitmap bitmap)
-        {
-            var labelColor = LabelColorManagers.GetLabelColor(label.Name);
-            var colors = bitmap.ToColorArray();
-            var right = label.LabelShowRectangle.Right;
-            var bottom = label.LabelShowRectangle.Bottom;
-            for (int x = label.LabelShowRectangle.X; x < right; x++)
-            {
-                for (int y = label.LabelShowRectangle.Y; y < bottom; y++)
-                {
-                    var color = colors[x, y];
-                    colors[x, y] = Color.FromArgb((color.R + labelColor.Color.R) / 2, (color.G + labelColor.Color.G) / 2, (color.B + labelColor.Color.B) / 2);
+                    if ((DateTime.Now - lastDragTime).Milliseconds > 10)
+                    {
+                        return;
+                    }
+                    lastDragTime = DateTime.Now;
                 }
             }
-
-            return colors.ToBitmap();
         }
         #endregion
         #region 私有变量
@@ -271,26 +216,30 @@ namespace PictureAnnotationForm.UserForm
             }
             for (int i = 0; i < CurrentImageItemModel.Labels.Count; i++)
             {
-                var label = CurrentImageItemModel.Labels[i];
-                label.ZoomMultiple = ImageShowInfo.ZoomMultiple;
-                var labelColor = LabelColorManagers.GetLabelColor(label.Name);
-                if (labelColor.IsSelect)
-                {
-                    LabelShowDictionary.Add(label, _imageLabelShowUserControls[i]);
-                    _imageLabelShowUserControls[i].Init(label);
-                }
+                AddLabelControl(i);
             }
         }
+
+        private ImageLabelShowUserControl AddLabelControl(int i)
+        {
+            var label = CurrentImageItemModel.Labels[i];
+            var labelColor = LabelColorManagers.GetLabelColor(label.Name);
+            ImageLabelShowUserControl result = null;
+            if (labelColor.IsSelect)
+            {
+                result = _imageLabelShowUserControls[i];
+                LabelShowDictionary.Add(label, result);
+                _imageLabelShowUserControls[i].Init(label);
+            }
+            return result;
+        }
+
         /// <summary>
         /// 获得绘制图片
         /// </summary>
         /// <returns></returns>
         private Bitmap GetDrawBitamp()
         {
-            if (ImageShowInfo == null)
-            {
-                ImageShowInfo = pbMian.GetImageShowInfo(_currentBitmap);
-            }
             var newBit = new Bitmap(ImageShowInfo.Width, ImageShowInfo.Height);
             var graphics = Graphics.FromImage(newBit);
             graphics.DrawImage(_currentBitmap, new Rectangle(0, 0, newBit.Width, newBit.Height));

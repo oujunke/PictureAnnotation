@@ -68,7 +68,6 @@
             this.pbMian.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbMian.TabIndex = 4;
             this.pbMian.TabStop = false;
-            this.pbMian.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseClick);
             this.pbMian.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseDown);
             this.pbMian.MouseLeave += new System.EventHandler(this.pbMian_MouseLeave);
             this.pbMian.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseMove);

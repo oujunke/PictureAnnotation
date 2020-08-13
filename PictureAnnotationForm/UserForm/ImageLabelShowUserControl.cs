@@ -48,7 +48,6 @@ namespace PictureAnnotationForm.UserForm
                 return;
             }
             CurrentImageLabelsModel = imageLabelsModel;
-            CurrentImageLabelsModel.ZoomMultiple = LabelImageUserControl.ImageShowInfo.ZoomMultiple;
             _currentLabelColor = LabelColorManagers.GetLabelColor(CurrentImageLabelsModel.Name);
             SuspendLayout();
             Left = imageLabelsModel.LabelShowRectangle.Left + LabelImageUserControl.ImageShowInfo.X;
@@ -88,17 +87,22 @@ namespace PictureAnnotationForm.UserForm
             _currentDrawGraphics.FillRectangle(_currentLabelColor.Brush, BorderWidth, 0, Width - BorderWidth * 2, BorderWidth);
             _currentDrawGraphics.FillRectangle(_currentLabelColor.Brush, BorderWidth, Height - BorderWidth, Width - BorderWidth * 2, BorderWidth);
             var index = CurrentImageLabelsModel.ImageItemModel.Labels.IndexOf(CurrentImageLabelsModel);
-            var bitmapRectangle = new Rectangle(x, y, Width, Height);
+            var bitmapRectangle = CurrentImageLabelsModel.LabelShowRectangle; //new Rectangle(x, y, Width, Height);
             for (int i = 0; i < CurrentImageLabelsModel.ImageItemModel.Labels.Count; i++)
             {
                 if (i == index)
                 {
                     continue;
                 }
+               
                 var labelsModel = CurrentImageLabelsModel.ImageItemModel.Labels[i];
                 var rectangle = labelsModel.LabelShowRectangle;
                 var intersectRectangle = Rectangle.Intersect(rectangle, bitmapRectangle);
                 var labelColor = LabelColorManagers.GetLabelColor(labelsModel.Name);
+                if (CurrentImageLabelsModel.SubName == "z" && labelsModel.Name=="yt")//
+                {
+
+                }
                 if (!intersectRectangle.IsEmpty)
                 {
                     if (intersectRectangle.X > x)
@@ -161,6 +165,10 @@ namespace PictureAnnotationForm.UserForm
                 e.Graphics.FillRectangle(_currentLabelColor.Brush, e.ClipRectangle.X, Height - BorderWidth, e.ClipRectangle.Width, e.ClipRectangle.Bottom - Height + BorderWidth);
             }
             var index = CurrentImageLabelsModel.ImageItemModel.Labels.IndexOf(CurrentImageLabelsModel);
+            if (CurrentImageLabelsModel.SubName == "z")
+            {
+
+            }
             for (int i = 0; i < CurrentImageLabelsModel.ImageItemModel.Labels.Count; i++)
             {
                 if (i == index)
@@ -233,12 +241,16 @@ namespace PictureAnnotationForm.UserForm
         private void Clear()
         {
             Cursor = Cursors.Default;
+            if (_isDrag)
+            {
+                LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
+            }
             _isDrag = false;
             if (CurrentImageLabelsModel.IsHide)
             {
                 CurrentImageLabelsModel.IsHide = false;
-                var x = (int)Math.Round(((Left - LabelImageUserControl.ImageShowInfo.X) / CurrentImageLabelsModel.ZoomMultiple)) - CurrentImageLabelsModel.X1;
-                var y = (int)Math.Round((Top - LabelImageUserControl.ImageShowInfo.Y) / CurrentImageLabelsModel.ZoomMultiple) - CurrentImageLabelsModel.Y1;
+                var x = (int)Math.Round(((Left - LabelImageUserControl.ImageShowInfo.X) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple)) - CurrentImageLabelsModel.X1;
+                var y = (int)Math.Round((Top - LabelImageUserControl.ImageShowInfo.Y) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.Y1;
                 CurrentImageLabelsModel.X1 += x;
                 CurrentImageLabelsModel.X2 += x;
                 CurrentImageLabelsModel.Y1 += y;
@@ -246,7 +258,7 @@ namespace PictureAnnotationForm.UserForm
                 LabelImageUserControl.UpdateDrawingBoard();
             }
             this.DoubleBuffered = false;
-            LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
+            
         }
 
         private void ImageLabelShowUserControl_MouseUp(object sender, MouseEventArgs e)
@@ -339,7 +351,7 @@ namespace PictureAnnotationForm.UserForm
             }
             if ((int)e.KeyCode>=37&& (int)e.KeyCode<=40)
             {
-                var x = CurrentImageLabelShowUserControl.CurrentImageLabelsModel.ZoomMultiple;
+                var x = LabelImageUserControl.CurrentImageItemModel.ZoomMultiple;
                 if (e.KeyCode == Keys.Left)
                 {
                     Cursor.Position = new Point((int)Math.Round(Cursor.Position.X - x), Cursor.Position.Y);
@@ -387,9 +399,6 @@ namespace PictureAnnotationForm.UserForm
                     {
                         CurrentImageLabelShowUserControl.CurrentImageLabelsModel.Y2 += 1;
                     }
-                    
-                   
-                    
                 }
                 CurrentImageLabelShowUserControl.Init(CurrentImageLabelShowUserControl.CurrentImageLabelsModel);
                 this.LabelImageUserControl?.SelectLabel(CurrentImageLabelShowUserControl.CurrentImageLabelsModel);

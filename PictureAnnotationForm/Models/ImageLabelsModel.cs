@@ -62,12 +62,12 @@ namespace PictureAnnotationForm.Models
         /// 显示缩放倍数
         /// </summary>
         [JsonIgnore]
-        public float ZoomMultiple { set; get; }
+        public float ZoomMultiple { get=> ImageItemModel?.ZoomMultiple??0; }
         /// <summary>
         /// 标签显示位置
         /// </summary>
         [JsonIgnore]
-        public Rectangle LabelShowRectangle { get => new Rectangle((int)Math.Round(X1 * ZoomMultiple), (int)Math.Round(Y1 * ZoomMultiple), (int)Math.Round(Width * ZoomMultiple), (int)Math.Round(Height * ZoomMultiple)); }
+        public Rectangle LabelShowRectangle { get => new Rectangle((int)Math.Floor(X1 *ZoomMultiple), (int)Math.Floor(Y1 * ZoomMultiple), (int)Math.Floor(Width * ZoomMultiple), (int)Math.Floor(Height * ZoomMultiple)); }
         /// <summary>
         /// 是否隐藏
         /// </summary>
