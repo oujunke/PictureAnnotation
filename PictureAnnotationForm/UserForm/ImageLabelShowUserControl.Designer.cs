@@ -34,12 +34,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ImageLabelShowUserControl";
-            this.Size = new System.Drawing.Size(261, 195);
+            this.Size = new System.Drawing.Size(0, 0);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ImageLabelShowUserControl_Paint);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseDown);
+            this.MouseEnter += new System.EventHandler(this.ImageLabelShowUserControl_MouseEnter);
+            this.MouseLeave += new System.EventHandler(this.ImageLabelShowUserControl_MouseLeave);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseUp);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ImageLabelShowUserControl_PreviewKeyDown);
             this.ResumeLayout(false);
 
         }

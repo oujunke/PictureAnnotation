@@ -37,6 +37,18 @@ namespace PictureAnnotationForm.UserForm
         /// 当前的ImageItemModel
         /// </summary>
         public ImageItemModel CurrentImageItemModel { private set; get; }
+        /// <summary>
+        /// 当前绘制图片
+        /// </summary>
+        public Bitmap CurrentDrawBitmap;
+        /// <summary>
+        /// 图片显示信息
+        /// </summary>
+        public ImageShowInfo ImageShowInfo;
+        /// <summary>
+        /// 标签对应的显示控件
+        /// </summary>
+        public Dictionary<ImageLabelsModel, ImageLabelShowUserControl> LabelShowDictionary = new Dictionary<ImageLabelsModel, ImageLabelShowUserControl>();
         #endregion
         #region 对外方法
         /// <summary>
@@ -46,10 +58,9 @@ namespace PictureAnnotationForm.UserForm
         public void SetImageItemModel(ImageItemModel imageItemModel)
         {
             CurrentImageItemModel = imageItemModel;
+            ImageShowInfo = null;
             _currentBitmap = ImageManagers.GetImage(CurrentImageItemModel);
-            _currentLabelList.Clear();
-            _currentLabelList.AddRange(CurrentImageItemModel.Labels);
-            UpdateBitamp();
+            UpdateDrawingBoard();
             LabelChange?.Invoke(null);
         }
         /// <summary>
@@ -69,14 +80,23 @@ namespace PictureAnnotationForm.UserForm
         /// <summary>
         /// 更新图片画板
         /// </summary>
-        public void UpdateBitamp()
+        public void UpdateDrawingBoard()
         {
             if (CurrentImageItemModel == null)
             {
                 return;
             }
-            _currentDrawBitmap = GetDrawBitamp();
-            pbMian.Image = _currentDrawBitmap;
+            UpdateBitmap();
+            pbMian.Image = CurrentDrawBitmap;
+            InitImageLabelShowUserControl();
+        }
+        /// <summary>
+        /// 更新图片
+        /// </summary>
+        public void UpdateBitmap()
+        {
+            CurrentDrawBitmap = GetDrawBitamp();
+            pbMian.Image = CurrentDrawBitmap;
         }
         /// <summary>
         /// 设置选中标签
@@ -85,7 +105,15 @@ namespace PictureAnnotationForm.UserForm
         public void HighlightLabelImage(ImageLabelsModel label)
         {
             _lastMoveLabel = label;
-            pbMian.Image = HighlightLabelImage(label, _currentDrawBitmap);
+            pbMian.Image = HighlightLabelImage(label, CurrentDrawBitmap);
+        }
+        /// <summary>
+        /// 触发选中标签事件
+        /// </summary>
+        /// <param name="label"></param>
+        public void SelectLabel(ImageLabelsModel label)
+        {
+            LabelChange?.Invoke(label);
         }
         #endregion
 
@@ -156,7 +184,7 @@ namespace PictureAnnotationForm.UserForm
                     ClertDrag();
                     return;
                 }
-                if ((DateTime.Now- lastDragTime).Milliseconds>10)
+                if ((DateTime.Now - lastDragTime).Milliseconds > 10)
                 {
                     return;
                 }
@@ -178,7 +206,7 @@ namespace PictureAnnotationForm.UserForm
                     return;
                 }
                 _lastMoveLabel = label;
-                pbMian.Image = HighlightLabelImage(label, _currentDrawBitmap);
+                pbMian.Image = HighlightLabelImage(label, CurrentDrawBitmap);
             }
         }
         /// <summary>
@@ -210,43 +238,62 @@ namespace PictureAnnotationForm.UserForm
         /// </summary>
         private Bitmap _currentBitmap;
         /// <summary>
-        /// 当前绘制图片
-        /// </summary>
-        private Bitmap _currentDrawBitmap;
-        /// <summary>
-        /// 当前标签
-        /// </summary>
-        private List<ImageLabelsModel> _currentLabelList = new List<ImageLabelsModel>();
-        /// <summary>
-        /// 图片显示信息
-        /// </summary>
-        private ImageShowInfo _imageShowInfo;
-        /// <summary>
         /// 上次突出显示的Label
         /// </summary>
         private ImageLabelsModel _lastMoveLabel;
+        /// <summary>
+        /// 存放所有ImageLabel控件的集合
+        /// </summary>
+        private List<ImageLabelShowUserControl> _imageLabelShowUserControls = new List<ImageLabelShowUserControl>();
         #endregion
         #region 私有方法
-        private Bitmap GetDrawBitamp()
+        /// <summary>
+        /// 初始化标签
+        /// </summary>
+        private void InitImageLabelShowUserControl()
         {
-            return GetDrawBitamp(_currentLabelList);
-        }
-        private Bitmap GetDrawBitamp(List<ImageLabelsModel> imageLabelsModels)
-        {
-            _imageShowInfo = pbMian.GetImageShowInfo(_currentBitmap);
-            var newBit = new Bitmap(_imageShowInfo.Width, _imageShowInfo.Height);
-            var graphics = Graphics.FromImage(newBit);
-            graphics.DrawImage(_currentBitmap, new Rectangle(0, 0, newBit.Width, newBit.Height));
-            foreach (var label in imageLabelsModels)
+            LabelShowDictionary.Clear();
+            if (_imageLabelShowUserControls.Count < CurrentImageItemModel.Labels.Count)
             {
-                label.ZoomMultiple = _imageShowInfo.ZoomMultiple;
+                for (int i = _imageLabelShowUserControls.Count - 1; i < CurrentImageItemModel.Labels.Count; i++)
+                {
+                    var labelShowUserControl = new ImageLabelShowUserControl(this);
+                    pbMian.Controls.Add(labelShowUserControl);
+                    _imageLabelShowUserControls.Add(labelShowUserControl);
+                }
+            }
+            else if (_imageLabelShowUserControls.Count > CurrentImageItemModel.Labels.Count)
+            {
+                for (int i = CurrentImageItemModel.Labels.Count - 1; i < _imageLabelShowUserControls.Count; i++)
+                {
+                    _imageLabelShowUserControls[i].Delete();
+                }
+            }
+            for (int i = 0; i < CurrentImageItemModel.Labels.Count; i++)
+            {
+                var label = CurrentImageItemModel.Labels[i];
+                label.ZoomMultiple = ImageShowInfo.ZoomMultiple;
                 var labelColor = LabelColorManagers.GetLabelColor(label.Name);
                 if (labelColor.IsSelect)
                 {
-                    graphics.DrawRectangle(labelColor.Pen, label.LabelShowRectangle);
-                    graphics.DrawString(label.Name, LabelColor.DefaultFont, labelColor.Brush, label.LabelShowRectangle.X + 3, label.LabelShowRectangle.Y + 3);
+                    LabelShowDictionary.Add(label, _imageLabelShowUserControls[i]);
+                    _imageLabelShowUserControls[i].Init(label);
                 }
             }
+        }
+        /// <summary>
+        /// 获得绘制图片
+        /// </summary>
+        /// <returns></returns>
+        private Bitmap GetDrawBitamp()
+        {
+            if (ImageShowInfo == null)
+            {
+                ImageShowInfo = pbMian.GetImageShowInfo(_currentBitmap);
+            }
+            var newBit = new Bitmap(ImageShowInfo.Width, ImageShowInfo.Height);
+            var graphics = Graphics.FromImage(newBit);
+            graphics.DrawImage(_currentBitmap, new Rectangle(0, 0, newBit.Width, newBit.Height));
             graphics.Dispose();
             return newBit;
         }
@@ -262,9 +309,9 @@ namespace PictureAnnotationForm.UserForm
             {
                 return null;
             }
-            var x = px - _imageShowInfo.X;
-            var y = py - _imageShowInfo.Y;
-            foreach (var label in _currentLabelList.ToList())
+            var x = px - ImageShowInfo.X;
+            var y = py - ImageShowInfo.Y;
+            foreach (var label in CurrentImageItemModel.Labels.ToList())
             {
                 var rectangle = label.LabelShowRectangle;
                 if (rectangle.Left <= x && rectangle.Top <= y && rectangle.Right >= x && rectangle.Bottom >= y)

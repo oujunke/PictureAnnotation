@@ -227,7 +227,7 @@ namespace PictureAnnotationForm.Forms
             var item = lvLabels.Items[e.Index];
             var labelColor = LabelColorManagers.GetLabelColor(item.Text);
             labelColor.IsSelect = !item.Checked;
-            liShow.UpdateBitamp();
+            liShow.UpdateDrawingBoard();
         }
         #region 导出数据集
         private void 导出Voc数据集ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -353,7 +353,7 @@ namespace PictureAnnotationForm.Forms
 
         private void liMain_LabelChange(ImageLabelsModel obj)
         {
-            liShow.UpdateBitamp();
+            liShow.UpdateDrawingBoard();
         }
 
         private void 保存数据ToolStripMenuItem_Click(object sender, EventArgs e)

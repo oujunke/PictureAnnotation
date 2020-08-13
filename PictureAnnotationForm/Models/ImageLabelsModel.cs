@@ -67,7 +67,12 @@ namespace PictureAnnotationForm.Models
         /// 标签显示位置
         /// </summary>
         [JsonIgnore]
-        public Rectangle LabelShowRectangle { get => new Rectangle((int)(X1 * ZoomMultiple), (int)(Y1 * ZoomMultiple), (int)(Width * ZoomMultiple), (int)(Height * ZoomMultiple)); }
+        public Rectangle LabelShowRectangle { get => new Rectangle((int)Math.Round(X1 * ZoomMultiple), (int)Math.Round(Y1 * ZoomMultiple), (int)Math.Round(Width * ZoomMultiple), (int)Math.Round(Height * ZoomMultiple)); }
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        [JsonIgnore]
+        public bool IsHide { set; get; }
         /// <summary>
         /// 复制到新成员中
         /// </summary>
