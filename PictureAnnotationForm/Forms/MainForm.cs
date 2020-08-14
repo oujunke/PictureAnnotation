@@ -42,9 +42,14 @@ namespace PictureAnnotationForm.Forms
         /// 上次加载文件名称(自动备份名称)
         /// </summary>
         private string _lastFileName;
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public static string Tag = "繁星标注  V1.0";
         public MainForm()
         {
             InitializeComponent();
+            Text = Tag;
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -119,6 +124,7 @@ namespace PictureAnnotationForm.Forms
             {
                 lvMain.BeginUpdate();
                 _listImgIndex--;
+                Text = $"{Tag}-当前第{_listImgIndex+1}张,共{ImageManagers.ImageCount}张";
                 var image = ImageManagers.GetImage(imageItemModels[0]);
                 if (!ilMain.Images.ContainsKey(imageItemModels[0].Id))
                 {
@@ -160,6 +166,7 @@ namespace PictureAnnotationForm.Forms
                 AddImageItem(20);
             }
             _listImgIndex++;
+            Text = $"{Tag}-当前第{_listImgIndex + 1}张,共{ImageManagers.ImageCount}张";
             lvMain.Items.RemoveAt(0);
             if (_listSelectIndex < 0)
             {
@@ -415,6 +422,7 @@ namespace PictureAnnotationForm.Forms
                 liMain.SetLabel(label);
             }
             lvMain.Items[_listSelectIndex].Selected = true;
+            Text = $"{Tag}-当前第{_listImgIndex + 1}张,共{ImageManagers.ImageCount}张";
         }
         #region 加载数据集
         private void 加载图片数据集ToolStripMenuItem_Click(object sender, EventArgs e)

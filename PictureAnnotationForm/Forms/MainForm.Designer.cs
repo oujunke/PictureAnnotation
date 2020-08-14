@@ -457,7 +457,7 @@
             this.Controls.Add(this.splitContainer1);
             this.MainMenuStrip = this.msMain;
             this.Name = "MainForm";
-            this.Text = "繁星标注";
+            this.Text = "繁星标注  V1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();

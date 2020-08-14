@@ -116,6 +116,10 @@ namespace PictureAnnotationForm.UserForm
                 _currentDrawGraphics.DrawImage(LabelImageUserControl.CurrentDrawBitmap, new Rectangle(0, 0, Width, Height), new Rectangle(x, y, Width, Height), GraphicsUnit.Pixel);
             }
             _currentDrawGraphics.DrawString(_labelNewName, Font, _currentLabelColor.Brush, BorderWidth, BorderWidth);
+            if (!string.IsNullOrWhiteSpace(CurrentImageLabelsModel.SubName))
+            {
+                _currentDrawGraphics.DrawString(CurrentImageLabelsModel.SubName, Font, _currentLabelColor.Brush, BorderWidth, 20);
+            }
             _currentDrawGraphics.FillRectangle(_currentLabelColor.Brush, 0, 0, BorderWidth, Height);
             _currentDrawGraphics.FillRectangle(_currentLabelColor.Brush, Width - BorderWidth * 2, 0, BorderWidth, Height);
             _currentDrawGraphics.FillRectangle(_currentLabelColor.Brush, BorderWidth, 0, Width - BorderWidth * 2, BorderWidth);
@@ -182,6 +186,10 @@ namespace PictureAnnotationForm.UserForm
             var y = top + e.ClipRectangle.Y;
             e.Graphics.DrawImage(LabelImageUserControl.CurrentDrawBitmap, e.ClipRectangle, new Rectangle(x, y, e.ClipRectangle.Width, e.ClipRectangle.Height), GraphicsUnit.Pixel);
             e.Graphics.DrawString(_labelNewName, Font, _currentLabelColor.Brush, BorderWidth, BorderWidth);
+            if (!string.IsNullOrWhiteSpace(CurrentImageLabelsModel.SubName))
+            {
+                e.Graphics.DrawString(CurrentImageLabelsModel.SubName, Font, _currentLabelColor.Brush, BorderWidth, 20);
+            }
             if (e.ClipRectangle.X < BorderWidth)
             {
                 e.Graphics.FillRectangle(_currentLabelColor.Brush, e.ClipRectangle.X, e.ClipRectangle.Y, BorderWidth - e.ClipRectangle.X, e.ClipRectangle.Height);
@@ -258,7 +266,7 @@ namespace PictureAnnotationForm.UserForm
             _isDrag = true;
             LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
             _lastDownPoint = e.Location;
-            _initialRectangle = new Rectangle(0,0,Width,Height);
+            _initialRectangle = new Rectangle(0, 0, Width, Height);
             this.DoubleBuffered = true;
         }
         /// <summary>
@@ -281,6 +289,18 @@ namespace PictureAnnotationForm.UserForm
         private void Clear()
         {
             Cursor = Cursors.Default;
+            if (CurrentImageLabelsModel.Name != _labelNewName)
+            {
+                if (string.IsNullOrWhiteSpace(_labelNewName))
+                {
+                    _labelNewName = CurrentImageLabelsModel.Name;
+                }
+                else
+                {
+                    CurrentImageLabelsModel.Name = _labelNewName;
+                    ImageManagers.UpdateLabelName(CurrentImageLabelsModel);
+                }
+            }
             if (_isDrag)
             {
                 LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
@@ -291,10 +311,10 @@ namespace PictureAnnotationForm.UserForm
                 CurrentImageLabelsModel.IsHide = false;
                 var x = (int)Math.Round((Left - LabelImageUserControl.ImageShowInfo.X) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.X1;
                 var y = (int)Math.Round((Top - LabelImageUserControl.ImageShowInfo.Y) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.Y1;
-                var width= (int)Math.Round(Width / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
-                var heigth= (int)Math.Round(Height / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
+                var width = (int)Math.Round(Width / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
+                var heigth = (int)Math.Round(Height / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
                 CurrentImageLabelsModel.X1 += x;
-                CurrentImageLabelsModel.X2 = CurrentImageLabelsModel.X1+width;
+                CurrentImageLabelsModel.X2 = CurrentImageLabelsModel.X1 + width;
                 CurrentImageLabelsModel.Y1 += y;
                 CurrentImageLabelsModel.Y2 = CurrentImageLabelsModel.Y1 + heigth;
                 LabelImageUserControl.UpdateDrawingBoard();
@@ -329,17 +349,37 @@ namespace PictureAnnotationForm.UserForm
                 {
                     case 1:
                         Left += e.X - _lastDownPoint.X;
-                        Width-= e.X - _lastDownPoint.X;
-                        break;
-                    case 2:
+                        Width -= e.X - _lastDownPoint.X;
                         Top += e.Y - _lastDownPoint.Y;
                         Height -= e.Y - _lastDownPoint.Y;
                         break;
+                    case 2:
+                        Left += e.X - _lastDownPoint.X;
+                        Width -= e.X - _lastDownPoint.X;
+                        Height = _initialRectangle.Height + e.Y - _lastDownPoint.Y;
+                        break;
                     case 3:
-                        Width = _initialRectangle .Width+ e.X - _lastDownPoint.X;
+                        Top += e.Y - _lastDownPoint.Y;
+                        Height -= e.Y - _lastDownPoint.Y;
+                        Width = _initialRectangle.Width + e.X - _lastDownPoint.X;
                         break;
                     case 4:
-                        Height = _initialRectangle.Height+e.Y - _lastDownPoint.Y;
+                        Height = _initialRectangle.Height + e.Y - _lastDownPoint.Y;
+                        Width = _initialRectangle.Width + e.X - _lastDownPoint.X;
+                        break;
+                    case 5:
+                        Left += e.X - _lastDownPoint.X;
+                        Width -= e.X - _lastDownPoint.X;
+                        break;
+                    case 6:
+                        Top += e.Y - _lastDownPoint.Y;
+                        Height -= e.Y - _lastDownPoint.Y;
+                        break;
+                    case 7:
+                        Width = _initialRectangle.Width + e.X - _lastDownPoint.X;
+                        break;
+                    case 8:
+                        Height = _initialRectangle.Height + e.Y - _lastDownPoint.Y;
                         break;
                     default:
                         Left += e.X - _lastDownPoint.X;
@@ -350,24 +390,46 @@ namespace PictureAnnotationForm.UserForm
             }
             else
             {
-                if (e.X < 5)
-                {
+                if (e.X < 5 && e.Y < 5)
+                {//左上角
                     _currentOp = 1;
+                    Cursor = Cursors.SizeNWSE;
+                }
+                else if (e.X < 5 && e.Y > Height - 5)
+                { //左下角
+                    _currentOp = 2;
+                    Cursor = Cursors.SizeNESW; 
+                }
+                else if (e.X > Width - 5 && e.Y < 5)
+                {//右上角
+                    _currentOp = 3;
+                    Cursor = Cursors.SizeNESW;
+                }
+                else if (e.X > Width - 5&&e.Y > Height - 5)
+                { //右下角
+                    _currentOp = 4;
+                    Cursor = Cursors.SizeNWSE;
+                    
+                }
+                else if (e.X < 5)
+                {//左
+                    _currentOp = 5;
                     Cursor = Cursors.SizeWE;
                 }
                 else if (e.Y < 5)
-                {
-                    _currentOp = 2;
+                {//上
+                    _currentOp = 6;
                     Cursor = Cursors.SizeNS;
                 }
                 else if (e.X > Width - 5)
-                {
+                {//右
                     Cursor = Cursors.SizeWE;
-                    _currentOp =3;
-                }else if (e.Y > Height - 5)
-                {
+                    _currentOp = 7;
+                }
+                else if (e.Y > Height - 5)
+                {//下
                     Cursor = Cursors.SizeNS;
-                    _currentOp = 4;
+                    _currentOp = 8;
                 }
                 else
                 {
@@ -462,7 +524,7 @@ namespace PictureAnnotationForm.UserForm
             {
                 return;
             }
-            if ((int)e.KeyCode >= 37 && (int)e.KeyCode <= 40)
+            if (e.KeyValue >= 37 && e.KeyValue <= 40)
             {
                 var x = LabelImageUserControl.CurrentImageItemModel.ZoomMultiple;
                 if (e.KeyCode == Keys.Left)
@@ -536,14 +598,46 @@ namespace PictureAnnotationForm.UserForm
                 CurrentImageLabelShowUserControl.Init(CurrentImageLabelShowUserControl.CurrentImageLabelsModel);
                 this.LabelImageUserControl?.SelectLabel(CurrentImageLabelShowUserControl.CurrentImageLabelsModel);
             }
-            else if(e.KeyCode==Keys.Delete)
+            else if (e.Control)
             {
-                LabelImageUserControl.CurrentImageItemModel.Labels.Remove(CurrentImageLabelsModel);
-                this.Delete();
+                if ((e.KeyValue >= 48 && e.KeyValue <= 57) || (e.KeyValue >= 96 && e.KeyValue <= 105))
+                {
+                    var data = e.KeyCode.ToString();
+                    if (int.TryParse(data.Substring(data.Length - 1), out int num) && num < ImageManagers.LabelNames.Count)
+                    {
+                        if (num == 0)
+                        {
+                            num = 10;
+                        }
+                        _labelNewName = ImageManagers.LabelNames[num-1];
+                        this._currentLabelColor = LabelColorManagers.GetLabelColor(_labelNewName);
+                        UpdateDraw();
+                        this.LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
+                    }
+                }
             }
-            else if (e.KeyCode == Keys.Back)
+            else
             {
-                _labelNewName = _labelNewName.Remove(_labelNewName.Length-1);
+                if (e.KeyCode == Keys.Delete)
+                {
+                    LabelImageUserControl.CurrentImageItemModel.Labels.Remove(CurrentImageLabelsModel);
+                    this.Delete();
+                }
+                else if (e.KeyCode == Keys.Back)
+                {
+                    _labelNewName = _labelNewName.Remove(_labelNewName.Length - 1);
+                    UpdateDraw();
+                }
+                else if ((e.KeyValue >= 48 && e.KeyValue <= 57) || (e.KeyValue >= 65 && e.KeyValue <= 90) || (e.KeyValue >= 96 && e.KeyValue <= 105))
+                {
+                    var data = e.KeyCode.ToString();
+                    if ((Console.CapsLock && e.Shift) || (!Console.CapsLock && !e.Shift))
+                    {
+                        data = data.ToLower();
+                    }
+                    _labelNewName += data.Substring(data.Length - 1);
+                    UpdateDraw();
+                }
             }
         }
     }

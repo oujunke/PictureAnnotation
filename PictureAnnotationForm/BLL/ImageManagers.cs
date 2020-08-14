@@ -60,7 +60,7 @@ namespace PictureAnnotationForm.BLL
         /// </summary>
         /// <param name="itemModel"></param>
         /// <param name="oldName"></param>
-        public static void UpdateLabelName(ImageItemModel itemModel)
+        public static void UpdateLabelName(ImageLabelsModel itemModel)
         {
             if (!_labelNameData.ContainsKey(itemModel.Name))
             {
