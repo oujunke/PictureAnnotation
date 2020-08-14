@@ -371,6 +371,13 @@ namespace PictureAnnotationForm.Forms
         {
             if (ofdOpenFile.ShowDialog() == DialogResult.OK)
             {
+                if (ImageManagers.ImageCount > 0)
+                {
+                    if (MessageBox.Show("当前有数据,确定是否加载", "警告", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
                 _lastFileName = ofdOpenFile.SafeFileName.Substring(0, ofdOpenFile.SafeFileName.LastIndexOf('.'));
                 LoadData(ofdOpenFile.FileName);
             }
@@ -408,18 +415,6 @@ namespace PictureAnnotationForm.Forms
                 liMain.SetLabel(label);
             }
             lvMain.Items[_listSelectIndex].Selected = true;
-            //Task.Factory.StartNew(() =>
-            //{
-            //    Thread.Sleep(1000);
-            //    Invoke(new Action(
-            //        () =>
-            //    {
-            //        lvMain.Focus();
-            //        lvMain.Items[_listSelectIndex].Selected = true;
-            //        lvMain.Items[_listSelectIndex].Checked = true;
-            //        lvMain.Refresh();
-            //    }));
-            //});
         }
         #region 加载数据集
         private void 加载图片数据集ToolStripMenuItem_Click(object sender, EventArgs e)

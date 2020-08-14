@@ -121,9 +121,8 @@ namespace PictureAnnotationForm.UserForm
         }
         bool isDrag = false;
         ImageLabelsModel dragLabel;
-        Rectangle dragLabelRectangle;
+        ImageLabelShowUserControl dragImageLabelShowUserControl;
         Point dragPoint;
-        DateTime lastDragTime;
         private void pbMian_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -140,7 +139,7 @@ namespace PictureAnnotationForm.UserForm
                     Y2 = e.Y+1,
                 };
                 CurrentImageItemModel.Labels.Add(tempLabel);
-                AddLabelControl(CurrentImageItemModel.Labels.Count-1);
+                dragImageLabelShowUserControl=AddLabelControl(CurrentImageItemModel.Labels.Count-1);
                 dragLabel = tempLabel;
                 dragPoint = new Point(e.X, e.Y);
             }
@@ -158,8 +157,6 @@ namespace PictureAnnotationForm.UserForm
         private void ClertDrag()
         {
             isDrag = false;
-            dragLabel = null;
-            _lastMoveLabel = null;
         }
 
         private void pbMian_MouseMove(object sender, MouseEventArgs e)
@@ -168,11 +165,11 @@ namespace PictureAnnotationForm.UserForm
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    if ((DateTime.Now - lastDragTime).Milliseconds > 10)
+                    if (e.X > dragPoint.X+ ImageShowInfo.ZoomMultiple && e.Y > dragPoint.Y + ImageShowInfo.ZoomMultiple)
                     {
-                        return;
+                        dragLabel.LabelShowRectangle = new Rectangle(new Point(dragPoint.X-ImageShowInfo.X,dragPoint.Y-ImageShowInfo.Y), new Size(e.X - dragPoint.X, e.Y - dragPoint.Y));
+                        dragImageLabelShowUserControl.Init(dragLabel);
                     }
-                    lastDragTime = DateTime.Now;
                 }
             }
         }
@@ -227,6 +224,12 @@ namespace PictureAnnotationForm.UserForm
             ImageLabelShowUserControl result = null;
             if (labelColor.IsSelect)
             {
+                if (_imageLabelShowUserControls.Count <= i)
+                {
+                    var labelShowUserControl = new ImageLabelShowUserControl(this);
+                    pbMian.Controls.Add(labelShowUserControl);
+                    _imageLabelShowUserControls.Add(labelShowUserControl);
+                }
                 result = _imageLabelShowUserControls[i];
                 LabelShowDictionary.Add(label, result);
                 _imageLabelShowUserControls[i].Init(label);
