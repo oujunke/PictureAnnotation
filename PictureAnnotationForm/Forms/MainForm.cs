@@ -502,6 +502,120 @@ namespace PictureAnnotationForm.Forms
             }
         }
 
+        private void 导出子分类到ImageNet数据集ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fbdOpenFolder.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            var imageItemModelList = ImageManagers.GetImageModelList(0, ImageManagers.ImageCount);
+            Dictionary<string, int> labelIndexDictionary = new Dictionary<string, int>();
+            List<string> labelStringList = new List<string>();
+            Dictionary<string, int> imageLabelDictionary = new Dictionary<string, int>();
+            for (int i = 0; i < imageItemModelList.Count; i++)
+            {
+                var imageItemModel = imageItemModelList[i];
+                var bitmap = ImageManagers.GetImage(imageItemModel);
+                foreach (var label in imageItemModel.Labels.ToList())
+                {
+                    var labelColor = LabelColorManagers.GetLabelColor(label.Name);
+                    if (string.IsNullOrWhiteSpace(label.SubName))
+                    {
+                        continue;
+                    }
+                    else if (label.SubName == "删除")
+                    {
+                        imageItemModel.Labels.Remove(label);
+                        continue;
+                    }
+                    var width = label.Width;
+                    var height = label.Height;
+                    Bitmap saveBitmap = new Bitmap(width, height);
+                    Graphics graphics = Graphics.FromImage(saveBitmap);
+                    graphics.DrawImage(bitmap, new Rectangle(0, 0, width, height), new Rectangle(label.X1, label.Y1, width, height), GraphicsUnit.Pixel);
+                    graphics.Dispose();
+                    var path = Path.Combine(fbdOpenFolder.SelectedPath, label.SubName);
+                    Directory.CreateDirectory(path);
+                    string name = label.LabelId;
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = Guid.NewGuid().ToString("N");
+                    }
+                    saveBitmap.Save($"{path}/{name}.jpg");
+                    if (!labelIndexDictionary.ContainsKey(label.SubName))
+                    {
+                        //索引0开头的
+                        labelIndexDictionary.Add(label.SubName, labelStringList.Count);
+                        labelStringList.Add(label.SubName);
+                    }
+                    imageLabelDictionary.Add($"{label.SubName}/{name}.jpg", labelIndexDictionary[label.SubName]);
+                    saveBitmap.Dispose();
+                }
+            }
+            var trainDataSize = (int)(imageLabelDictionary.Count * 0.9);
+            var imageLabelList=imageLabelDictionary.ToList();
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "labels.txt"),labelStringList);
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "train_list.txt"), imageLabelList.Take(trainDataSize).Select(kv => $"{kv.Key}\t{kv.Value}"));
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "val_list.txt"), imageLabelList.Skip(trainDataSize).Select(kv => $"{kv.Key}\t{kv.Value}"));
+            MessageBox.Show("导出成功");
+        }
 
+        private void 导出子分类对错集ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fbdOpenFolder.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            var imageItemModelList = ImageManagers.GetImageModelList(0, ImageManagers.ImageCount);
+            Dictionary<string, int> labelIndexDictionary = new Dictionary<string, int>();
+            List<string> labelStringList = new List<string>();
+            Dictionary<string, int> imageLabelDictionary = new Dictionary<string, int>();
+            for (int i = 0; i < imageItemModelList.Count; i++)
+            {
+                var imageItemModel = imageItemModelList[i];
+                var bitmap = ImageManagers.GetImage(imageItemModel);
+                foreach (var label in imageItemModel.Labels.ToList())
+                {
+                    var labelColor = LabelColorManagers.GetLabelColor(label.Name);
+                    if (string.IsNullOrWhiteSpace(label.SubName))
+                    {
+                        continue;
+                    }
+                    else if (label.SubName == "删除")
+                    {
+                        imageItemModel.Labels.Remove(label);
+                        continue;
+                    }
+                    var width = label.Width;
+                    var height = label.Height;
+                    Bitmap saveBitmap = new Bitmap(width, height);
+                    Graphics graphics = Graphics.FromImage(saveBitmap);
+                    graphics.DrawImage(bitmap, new Rectangle(0, 0, width, height), new Rectangle(label.X1, label.Y1, width, height), GraphicsUnit.Pixel);
+                    graphics.Dispose();
+                    var path = Path.Combine(fbdOpenFolder.SelectedPath, label.SubName);
+                    Directory.CreateDirectory(path);
+                    string name = label.LabelId;
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = Guid.NewGuid().ToString("N");
+                    }
+                    saveBitmap.Save($"{path}/{name}.jpg");
+                    if (!labelIndexDictionary.ContainsKey(label.SubName))
+                    {
+                        //索引0开头的
+                        labelIndexDictionary.Add(label.SubName, labelStringList.Count);
+                        labelStringList.Add(label.SubName);
+                    }
+                    imageLabelDictionary.Add($"{label.SubName}/{name}.jpg", labelIndexDictionary[label.SubName]);
+                    saveBitmap.Dispose();
+                }
+            }
+            var trainDataSize = (int)(imageLabelDictionary.Count * 0.9);
+            var imageLabelList = imageLabelDictionary.ToList();
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "labels.txt"), labelStringList);
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "train_list.txt"), imageLabelList.Take(trainDataSize).Select(kv => $"{kv.Key}\t{kv.Value}"));
+            File.WriteAllLines(Path.Combine(fbdOpenFolder.SelectedPath, "val_list.txt"), imageLabelList.Skip(trainDataSize).Select(kv => $"{kv.Key}\t{kv.Value}"));
+            MessageBox.Show("导出成功");
+        }
     }
 }
