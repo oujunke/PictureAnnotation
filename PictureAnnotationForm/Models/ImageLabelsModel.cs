@@ -11,13 +11,13 @@ namespace PictureAnnotationForm.Models
         /// <summary>
         /// 标注id
         /// </summary>
-		[JsonProperty("label_id",NullValueHandling =NullValueHandling.Ignore)]
-		public string LabelId { get; set; }
+		[JsonProperty("label_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string LabelId { get; set; }
         /// <summary>
         /// 标注名称
         /// </summary>
 		[JsonProperty("name")]
-		public string Name { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 子分类
         /// </summary>
@@ -27,22 +27,22 @@ namespace PictureAnnotationForm.Models
         /// 框左上角Y
         /// </summary>
 		[JsonProperty("x1")]
-		public int X1 { get; set; }
+        public int X1 { get; set; }
         /// <summary>
         /// 框左上角Y
         /// </summary>
 		[JsonProperty("y1")]
-		public int Y1 { get; set; }
+        public int Y1 { get; set; }
         /// <summary>
         /// 框右下角X
         /// </summary>
 		[JsonProperty("x2")]
-		public int X2 { get; set; }
+        public int X2 { get; set; }
         /// <summary>
         /// 框右下角Y
         /// </summary>
 		[JsonProperty("y2")]
-		public int Y2 { get; set; }
+        public int Y2 { get; set; }
         /// <summary>
         /// 宽度
         /// </summary>
@@ -62,12 +62,30 @@ namespace PictureAnnotationForm.Models
         /// 显示缩放倍数
         /// </summary>
         [JsonIgnore]
-        public float ZoomMultiple { set; get; }
+        public float ZoomMultiple { get => ImageItemModel?.ZoomMultiple ?? 0; }
         /// <summary>
         /// 标签显示位置
         /// </summary>
         [JsonIgnore]
-        public Rectangle LabelShowRectangle { get => new Rectangle((int)(X1 * ZoomMultiple), (int)(Y1 * ZoomMultiple), (int)(Width * ZoomMultiple), (int)(Height * ZoomMultiple)); }
+        public Rectangle LabelShowRectangle
+        {
+            get
+            {
+                return new Rectangle((int)Math.Floor(X1 * ZoomMultiple), (int)Math.Floor(Y1 * ZoomMultiple), (int)Math.Floor(Width * ZoomMultiple), (int)Math.Floor(Height * ZoomMultiple));
+            }
+            set
+            {
+                X1 = (int)Math.Floor(value.X / ZoomMultiple);
+                Y1= (int)Math.Floor(value.Y / ZoomMultiple);
+                X2 = (int)Math.Floor(value.Right / ZoomMultiple);
+                Y2 = (int)Math.Floor(value.Bottom / ZoomMultiple);
+            }
+        }
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        [JsonIgnore]
+        public bool IsHide { set; get; }
         /// <summary>
         /// 复制到新成员中
         /// </summary>

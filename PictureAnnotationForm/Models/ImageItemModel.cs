@@ -34,6 +34,11 @@ namespace PictureAnnotationForm.Models
         [JsonProperty("height")]
         public int Height { set; get; }
         /// <summary>
+        /// 显示缩放倍数
+        /// </summary>
+        [JsonIgnore]
+        public float ZoomMultiple { set; get; }
+        /// <summary>
         /// 是否标注完成
         /// </summary>
         [JsonProperty("is_complete")]

@@ -10,9 +10,9 @@ using PictureAnnotationForm.Models;
 
 namespace PictureAnnotationForm.UserForm
 {
-    public partial class LabelInfoUserForm : UserControl
+    public partial class LabelInfoUserControl : UserControl
     {
-        public LabelInfoUserForm()
+        public LabelInfoUserControl()
         {
             InitializeComponent();
         }

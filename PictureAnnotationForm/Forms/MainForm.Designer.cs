@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.liShow = new PictureAnnotationForm.UserForm.LabelImageUserForm();
+            this.liShow = new PictureAnnotationForm.UserForm.LabelImageUserControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lvMain = new System.Windows.Forms.ListView();
             this.ilMain = new System.Windows.Forms.ImageList(this.components);
@@ -52,7 +52,7 @@
             this.导出子分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpLabelInfo = new System.Windows.Forms.TabPage();
-            this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserForm();
+            this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserControl();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.btnOpenImg = new System.Windows.Forms.Button();
@@ -66,11 +66,17 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btOpenImg = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tbLabelId = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnOpenImg = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbImgId = new System.Windows.Forms.TextBox();
             this.fbdOpenFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.timeAutoSave = new System.Windows.Forms.Timer(this.components);
-            this.导出子分类对错集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -84,6 +90,10 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tpLabelSelect.SuspendLayout();
+            this.btOpenImg.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -438,6 +448,78 @@
             this.panel2.Size = new System.Drawing.Size(232, 52);
             this.panel2.TabIndex = 0;
             // 
+            // btOpenImg
+            // 
+            this.btOpenImg.Controls.Add(this.groupBox3);
+            this.btOpenImg.Controls.Add(this.groupBox2);
+            this.btOpenImg.Controls.Add(this.groupBox1);
+            this.btOpenImg.Location = new System.Drawing.Point(4, 22);
+            this.btOpenImg.Name = "btOpenImg";
+            this.btOpenImg.Padding = new System.Windows.Forms.Padding(3);
+            this.btOpenImg.Size = new System.Drawing.Size(238, 526);
+            this.btOpenImg.TabIndex = 2;
+            this.btOpenImg.Text = "图片搜索";
+            this.btOpenImg.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.tbLabelId);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox3.Location = new System.Drawing.Point(3, 49);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(232, 46);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "标签编号";
+            // 
+            // tbLabelId
+            // 
+            this.tbLabelId.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbLabelId.Location = new System.Drawing.Point(3, 17);
+            this.tbLabelId.Name = "tbLabelId";
+            this.tbLabelId.Size = new System.Drawing.Size(226, 21);
+            this.tbLabelId.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnOpenImg);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox2.Location = new System.Drawing.Point(3, 423);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(232, 100);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "操作";
+            // 
+            // btnOpenImg
+            // 
+            this.btnOpenImg.Location = new System.Drawing.Point(7, 21);
+            this.btnOpenImg.Name = "btnOpenImg";
+            this.btnOpenImg.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenImg.TabIndex = 0;
+            this.btnOpenImg.Text = "打开图片";
+            this.btnOpenImg.UseVisualStyleBackColor = true;
+            this.btnOpenImg.Click += new System.EventHandler(this.btnOpenImg_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbImgId);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(232, 46);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "图片编号";
+            // 
+            // tbImgId
+            // 
+            this.tbImgId.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbImgId.Location = new System.Drawing.Point(3, 17);
+            this.tbImgId.Name = "tbImgId";
+            this.tbImgId.Size = new System.Drawing.Size(226, 21);
+            this.tbImgId.TabIndex = 0;
+            // 
             // ofdOpenFile
             // 
             this.ofdOpenFile.FileName = "Save";
@@ -447,13 +529,6 @@
             this.timeAutoSave.Enabled = true;
             this.timeAutoSave.Interval = 30000;
             this.timeAutoSave.Tick += new System.EventHandler(this.timeAutoSave_Tick);
-            // 
-            // 导出子分类对错集ToolStripMenuItem
-            // 
-            this.导出子分类对错集ToolStripMenuItem.Name = "导出子分类对错集ToolStripMenuItem";
-            this.导出子分类对错集ToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.导出子分类对错集ToolStripMenuItem.Text = "导出子分类对错集";
-            this.导出子分类对错集ToolStripMenuItem.Click += new System.EventHandler(this.导出子分类对错集ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -482,6 +557,12 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.tpLabelSelect.ResumeLayout(false);
+            this.btOpenImg.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -512,8 +593,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private UserForm.LabelImageUserForm liShow;
-        private UserForm.LabelInfoUserForm liMain;
+        private UserForm.LabelImageUserControl liShow;
+        private UserForm.LabelInfoUserControl liMain;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem 保存数据ToolStripMenuItem;

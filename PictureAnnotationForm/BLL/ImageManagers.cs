@@ -89,6 +89,8 @@ namespace PictureAnnotationForm.BLL
             {
                 _currentImageData = new List<ImageItemModel>();
             }
+            bool labelNameNull = saveModel.LabelNames == null || saveModel.LabelNames.Count == 0;
+            _labelNameData = new Dictionary<string, string>();
             foreach (var item in _currentImageData)
             {
                 if (string.IsNullOrWhiteSpace(item.Id))
@@ -99,21 +101,31 @@ namespace PictureAnnotationForm.BLL
                 foreach (var labelsModel in item.Labels)
                 {
                     labelsModel.ImageItemModel = item;
+                    if (labelNameNull)
+                    {
+                        if (!_labelNameData.ContainsKey(labelsModel.Name))
+                        {
+                            _labelNameData.Add(labelsModel.Name, null);
+                            LabelNames.Add(labelsModel.Name);
+                        }
+                    }
                     if (!string.IsNullOrWhiteSpace(labelsModel.LabelId))
                     {
                         _labelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
                     }
                 }
             }
-            saveModel.LabelNames = LabelNames;
-            _labelNameData = new Dictionary<string, string>();
             if (saveModel.LabelNames == null)
             {
                 saveModel.LabelNames = new List<string>();
             }
-            foreach (var item in saveModel.LabelNames)
+            if (!labelNameNull)
             {
-                _labelNameData.Add(item, null);
+                LabelNames = saveModel.LabelNames;
+                foreach (var item in saveModel.LabelNames)
+                {
+                    _labelNameData.Add(item, null);
+                }
             }
         }
         /// <summary>
@@ -300,8 +312,8 @@ namespace PictureAnnotationForm.BLL
                     var num = path.IndexOf('.');
                     if (num > 0)
                     {
-                        var startIndex = path.LastIndexOf('\\')+1;
-                        imageItemModel.Id = path.Substring(startIndex, num- startIndex);
+                        var startIndex = path.LastIndexOf('\\') + 1;
+                        imageItemModel.Id = path.Substring(startIndex, num - startIndex);
                     }
                     else
                     {
@@ -312,7 +324,7 @@ namespace PictureAnnotationForm.BLL
                 {
                     imageItemModel.Id = Guid.NewGuid().ToString("N");
                 }
-                imageItemModel.Path = Path.Combine(directoryPath,path);
+                imageItemModel.Path = Path.Combine(directoryPath, path);
                 foreach (var dataModel in boxWordModel.Data)
                 {
                     if (dataModel.Score < 0.3)
@@ -334,14 +346,14 @@ namespace PictureAnnotationForm.BLL
                             _labelKeyDictionary.Add(imageLabels.LabelId, imageLabels);
                         }
                     }
-                    var x1= (int)dataModel.Bbox[0];
+                    var x1 = (int)dataModel.Bbox[0];
                     var y1 = (int)dataModel.Bbox[1];
-                    var x2= (int)dataModel.Bbox[2];
-                    var y2= (int)dataModel.Bbox[3];
+                    var x2 = (int)dataModel.Bbox[2];
+                    var y2 = (int)dataModel.Bbox[3];
                     imageLabels.X1 = x1;
-                    imageLabels.Y1 =y1;
-                    imageLabels.X2 = x1+x2;
-                    imageLabels.Y2 = y1+y2;
+                    imageLabels.Y1 = y1;
+                    imageLabels.X2 = x1 + x2;
+                    imageLabels.Y2 = y1 + y2;
                     imageLabels.SubName = dataModel.SubName;
                     imageLabels.ImageItemModel = imageItemModel;
                     imageItemModel.Labels.Add(imageLabels);

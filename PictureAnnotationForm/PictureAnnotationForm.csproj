@@ -73,17 +73,23 @@
     <Compile Include="Models\SaveModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserForm\LabelImageUserForm.cs">
+    <Compile Include="UserForm\ImageLabelShowUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserForm\LabelImageUserForm.Designer.cs">
-      <DependentUpon>LabelImageUserForm.cs</DependentUpon>
+    <Compile Include="UserForm\ImageLabelShowUserControl.Designer.cs">
+      <DependentUpon>ImageLabelShowUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserForm\LabelInfoUserForm.cs">
+    <Compile Include="UserForm\LabelImageUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserForm\LabelInfoUserForm.Designer.cs">
-      <DependentUpon>LabelInfoUserForm.cs</DependentUpon>
+    <Compile Include="UserForm\LabelImageUserControl.Designer.cs">
+      <DependentUpon>LabelImageUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserForm\LabelInfoUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserForm\LabelInfoUserControl.Designer.cs">
+      <DependentUpon>LabelInfoUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\LogUtils.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
@@ -101,11 +107,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UserForm\LabelImageUserForm.resx">
-      <DependentUpon>LabelImageUserForm.cs</DependentUpon>
+    <EmbeddedResource Include="UserForm\ImageLabelShowUserControl.resx">
+      <DependentUpon>ImageLabelShowUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserForm\LabelInfoUserForm.resx">
-      <DependentUpon>LabelInfoUserForm.cs</DependentUpon>
+    <EmbeddedResource Include="UserForm\LabelImageUserControl.resx">
+      <DependentUpon>LabelImageUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserForm\LabelInfoUserControl.resx">
+      <DependentUpon>LabelInfoUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
