@@ -53,6 +53,8 @@
             this.tpLabelInfo = new System.Windows.Forms.TabPage();
             this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserControl();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btnSonEmpty = new System.Windows.Forms.Button();
+            this.btnLabelOverlapping = new System.Windows.Forms.Button();
             this.tpLabelSelect = new System.Windows.Forms.TabPage();
             this.lvLabels = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -70,6 +72,7 @@
             this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.timeAutoSave = new System.Windows.Forms.Timer(this.components);
+            this.btnUnknown = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -78,6 +81,7 @@
             this.msMain.SuspendLayout();
             this.tcMain.SuspendLayout();
             this.tpLabelInfo.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.tpLabelSelect.SuspendLayout();
             this.btOpenImg.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -309,11 +313,34 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.btnUnknown);
+            this.panel3.Controls.Add(this.btnSonEmpty);
+            this.panel3.Controls.Add(this.btnLabelOverlapping);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(232, 77);
             this.panel3.TabIndex = 0;
+            // 
+            // btnSonEmpty
+            // 
+            this.btnSonEmpty.Location = new System.Drawing.Point(117, 3);
+            this.btnSonEmpty.Name = "btnSonEmpty";
+            this.btnSonEmpty.Size = new System.Drawing.Size(110, 23);
+            this.btnSonEmpty.TabIndex = 3;
+            this.btnSonEmpty.Text = "打开子标签为空";
+            this.btnSonEmpty.UseVisualStyleBackColor = true;
+            this.btnSonEmpty.Click += new System.EventHandler(this.btnSonEmpty_Click);
+            // 
+            // btnLabelOverlapping
+            // 
+            this.btnLabelOverlapping.Location = new System.Drawing.Point(3, 3);
+            this.btnLabelOverlapping.Name = "btnLabelOverlapping";
+            this.btnLabelOverlapping.Size = new System.Drawing.Size(110, 23);
+            this.btnLabelOverlapping.TabIndex = 2;
+            this.btnLabelOverlapping.Text = "打开标签重叠图片";
+            this.btnLabelOverlapping.UseVisualStyleBackColor = true;
+            this.btnLabelOverlapping.Click += new System.EventHandler(this.btnLabelOverlapping_Click);
             // 
             // tpLabelSelect
             // 
@@ -449,16 +476,28 @@
             this.timeAutoSave.Interval = 30000;
             this.timeAutoSave.Tick += new System.EventHandler(this.timeAutoSave_Tick);
             // 
+            // btnUnknown
+            // 
+            this.btnUnknown.Location = new System.Drawing.Point(3, 32);
+            this.btnUnknown.Name = "btnUnknown";
+            this.btnUnknown.Size = new System.Drawing.Size(110, 23);
+            this.btnUnknown.TabIndex = 4;
+            this.btnUnknown.Text = "打开未命名标签";
+            this.btnUnknown.UseVisualStyleBackColor = true;
+            this.btnUnknown.Click += new System.EventHandler(this.btnUnknown_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1250, 552);
             this.Controls.Add(this.splitContainer1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.msMain;
             this.Name = "MainForm";
             this.Text = "繁星标注  V1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -469,6 +508,7 @@
             this.msMain.PerformLayout();
             this.tcMain.ResumeLayout(false);
             this.tpLabelInfo.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.tpLabelSelect.ResumeLayout(false);
             this.btOpenImg.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -523,6 +563,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox tbLabelId;
+        private System.Windows.Forms.Button btnLabelOverlapping;
+        private System.Windows.Forms.Button btnSonEmpty;
+        private System.Windows.Forms.Button btnUnknown;
     }
 }
 

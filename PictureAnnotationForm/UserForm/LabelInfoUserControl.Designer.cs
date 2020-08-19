@@ -111,6 +111,11 @@
             0,
             0,
             0});
+            this.nudY1.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudY1.Name = "nudY1";
             this.nudY1.Size = new System.Drawing.Size(82, 21);
             this.nudY1.TabIndex = 3;
@@ -124,6 +129,11 @@
             0,
             0,
             0});
+            this.nudX1.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudX1.Name = "nudX1";
             this.nudX1.Size = new System.Drawing.Size(82, 21);
             this.nudX1.TabIndex = 2;
@@ -149,6 +159,11 @@
             0,
             0,
             0});
+            this.nudY2.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudY2.Name = "nudY2";
             this.nudY2.Size = new System.Drawing.Size(82, 21);
             this.nudY2.TabIndex = 5;
@@ -162,6 +177,11 @@
             0,
             0,
             0});
+            this.nudX2.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudX2.Name = "nudX2";
             this.nudX2.Size = new System.Drawing.Size(82, 21);
             this.nudX2.TabIndex = 4;
@@ -189,6 +209,11 @@
             0,
             0,
             0});
+            this.nudDown.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudDown.Name = "nudDown";
             this.nudDown.Size = new System.Drawing.Size(82, 21);
             this.nudDown.TabIndex = 7;
@@ -202,6 +227,11 @@
             0,
             0,
             0});
+            this.nudTop.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudTop.Name = "nudTop";
             this.nudTop.Size = new System.Drawing.Size(82, 21);
             this.nudTop.TabIndex = 6;
@@ -215,6 +245,11 @@
             0,
             0,
             0});
+            this.nudRight.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudRight.Name = "nudRight";
             this.nudRight.Size = new System.Drawing.Size(82, 21);
             this.nudRight.TabIndex = 5;
@@ -228,12 +263,17 @@
             0,
             0,
             0});
+            this.nudLeft.Minimum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            -2147483648});
             this.nudLeft.Name = "nudLeft";
             this.nudLeft.Size = new System.Drawing.Size(82, 21);
             this.nudLeft.TabIndex = 4;
             this.nudLeft.ValueChanged += new System.EventHandler(this.nudLeft_ValueChanged);
             // 
-            // LabelInfoUserForm
+            // LabelInfoUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -241,7 +281,7 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "LabelInfoUserForm";
+            this.Name = "LabelInfoUserControl";
             this.Size = new System.Drawing.Size(181, 263);
             this.Resize += new System.EventHandler(this.LabelInfoUserForm_Resize);
             this.groupBox1.ResumeLayout(false);

@@ -75,7 +75,6 @@ namespace PictureAnnotationForm.BLL
         public static void SaveData(SaveModel saveModel)
         {
             saveModel.CurrentImageData = _currentImageData;
-            saveModel.LabelNames = LabelNames;
         }
         /// <summary>
         /// 加载数据
@@ -89,7 +88,6 @@ namespace PictureAnnotationForm.BLL
             {
                 _currentImageData = new List<ImageItemModel>();
             }
-            bool labelNameNull = saveModel.LabelNames == null || saveModel.LabelNames.Count == 0;
             _labelNameData = new Dictionary<string, string>();
             foreach (var item in _currentImageData)
             {
@@ -101,30 +99,15 @@ namespace PictureAnnotationForm.BLL
                 foreach (var labelsModel in item.Labels)
                 {
                     labelsModel.ImageItemModel = item;
-                    if (labelNameNull)
+                    if (!_labelNameData.ContainsKey(labelsModel.Name))
                     {
-                        if (!_labelNameData.ContainsKey(labelsModel.Name))
-                        {
-                            _labelNameData.Add(labelsModel.Name, null);
-                            LabelNames.Add(labelsModel.Name);
-                        }
+                        _labelNameData.Add(labelsModel.Name, null);
+                        LabelNames.Add(labelsModel.Name);
                     }
                     if (!string.IsNullOrWhiteSpace(labelsModel.LabelId))
                     {
                         _labelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
                     }
-                }
-            }
-            if (saveModel.LabelNames == null)
-            {
-                saveModel.LabelNames = new List<string>();
-            }
-            if (!labelNameNull)
-            {
-                LabelNames = saveModel.LabelNames;
-                foreach (var item in saveModel.LabelNames)
-                {
-                    _labelNameData.Add(item, null);
                 }
             }
         }
@@ -182,7 +165,101 @@ namespace PictureAnnotationForm.BLL
                 return null;
             }
         }
+        /// <summary>
+        /// 获得重叠的标签
+        /// </summary>
+        /// <param name="startIndex">开始索引</param>
+        /// <param name="currentIndex">当前索引</param>
+        /// <returns>找到的标签</returns>
+        public static ImageLabelsModel GetOverlappingLabel(int startIndex, out int currentIndex)
+        {
+            List<ImageLabelsModel> imageLabelsModelList = new List<ImageLabelsModel>();
+            for (int i = startIndex; i < _currentImageData.Count; i++)
+            {
+                var imageItemModel = _currentImageData[i];
+                imageLabelsModelList.Clear();
+                foreach (var labelsModel in imageItemModel.Labels)
+                {
+                    var labelsModelRectangle = new Rectangle(labelsModel.X1, labelsModel.Y1, labelsModel.Width, labelsModel.Height);
+                    var area = labelsModelRectangle.Width * labelsModelRectangle.Height;
+                    foreach (var imageLabel in imageLabelsModelList)
+                    {
+                        //获取两个位置的交集
+                        var intersectRectangle = Rectangle.Intersect(labelsModelRectangle, new Rectangle(imageLabel.X1, imageLabel.Y1, imageLabel.Width, imageLabel.Height));
+                        var currArea = intersectRectangle.Width * intersectRectangle.Height;
+                        //如果80%面积重复则认定是重复框
+                        if (currArea > area * 0.8 || currArea > imageLabel.Width * imageLabel.Height * 0.8)
+                        {
+                            currentIndex = i;
+                            return labelsModel;
+                        }
+                    }
+                    imageLabelsModelList.Add(labelsModel);
+                }
 
+            }
+            currentIndex = _currentImageData.Count;
+            return null;
+        }
+        /// <summary>
+        /// 获得重叠的标签
+        /// </summary>
+        /// <param name="index">开始索引</param>
+        /// <returns>找到的标签</returns>
+        public static ImageLabelsModel GetOverlappingLabel(ref int index)
+        {
+            var result = GetOverlappingLabel(index, out int currIndex);
+            index = currIndex;
+            return result;
+        }
+        /// <summary>
+        /// 打开子标签为空
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static ImageLabelsModel GetSonEmptyLabel(ref int index)
+        {
+            for (int i = index; i < _currentImageData.Count; i++)
+            {
+                foreach (var item in _currentImageData[i].Labels)
+                {
+                    if ((item.Name == "cd" || item.Name == "zd") && string.IsNullOrWhiteSpace(item.SubName))
+                    {
+                        index = i;
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 打开子标签为空
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static ImageLabelsModel GetUnknownLabel(ref int index)
+        {
+            for (int i = index; i < _currentImageData.Count; i++)
+            {
+                foreach (var item in _currentImageData[i].Labels)
+                {
+                    if (item.Name == "未知")
+                    {
+                        if (item.Width < 3)
+                        {
+                            item.X2 = item.X1 + 20;
+                        }
+                        if (item.Height < 3)
+                        {
+                            item.Y2 = item.Y1 + 20;
+                        }
+                        index = i;
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
         /// <summary>
         /// 加载Voc数据集文件夹,返回加入数据条数
         /// </summary>

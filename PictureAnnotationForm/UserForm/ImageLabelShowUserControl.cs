@@ -77,6 +77,7 @@ namespace PictureAnnotationForm.UserForm
                 Delete();
                 return;
             }
+            _isHighlight = false;
             CurrentImageLabelsModel = imageLabelsModel;
             _currentLabelColor = LabelColorManagers.GetLabelColor(CurrentImageLabelsModel.Name);
             SuspendLayout();
@@ -98,6 +99,15 @@ namespace PictureAnnotationForm.UserForm
             Width = 0;
             Height = 0;
             ResumeLayout(true);
+        }
+        /// <summary>
+        /// 设置当前标签突出显示
+        /// </summary>
+        public void SetHighlight()
+        {
+            _isHighlight = true;
+            this.BringToFront();
+            UpdateDraw();
         }
         /// <summary>
         /// 更新绘制图片
@@ -398,18 +408,18 @@ namespace PictureAnnotationForm.UserForm
                 else if (e.X < 5 && e.Y > Height - 5)
                 { //左下角
                     _currentOp = 2;
-                    Cursor = Cursors.SizeNESW; 
+                    Cursor = Cursors.SizeNESW;
                 }
                 else if (e.X > Width - 5 && e.Y < 5)
                 {//右上角
                     _currentOp = 3;
                     Cursor = Cursors.SizeNESW;
                 }
-                else if (e.X > Width - 5&&e.Y > Height - 5)
+                else if (e.X > Width - 5 && e.Y > Height - 5)
                 { //右下角
                     _currentOp = 4;
                     Cursor = Cursors.SizeNWSE;
-                    
+
                 }
                 else if (e.X < 5)
                 {//左
@@ -466,7 +476,7 @@ namespace PictureAnnotationForm.UserForm
         private void ImageLabelShowUserControl_MouseEnter(object sender, EventArgs e)
         {
             _isHighlight = true;
-            this.BringToFront();
+            BringToFront();
             Cursor = Cursors.Hand;
             UpdateDraw();
         }
@@ -603,13 +613,18 @@ namespace PictureAnnotationForm.UserForm
                 if ((e.KeyValue >= 48 && e.KeyValue <= 57) || (e.KeyValue >= 96 && e.KeyValue <= 105))
                 {
                     var data = e.KeyCode.ToString();
-                    if (int.TryParse(data.Substring(data.Length - 1), out int num) && num < ImageManagers.LabelNames.Count)
+                    if (int.TryParse(data.Substring(data.Length - 1), out int num))
                     {
                         if (num == 0)
                         {
                             num = 10;
                         }
-                        _labelNewName = ImageManagers.LabelNames[num-1];
+                        if (num > ImageManagers.LabelNames.Count)
+                        {
+                            return;
+                        }
+                        _labelNewName = ImageManagers.LabelNames[num - 1];
+                        CurrentImageLabelsModel.Name = _labelNewName;
                         this._currentLabelColor = LabelColorManagers.GetLabelColor(_labelNewName);
                         UpdateDraw();
                         this.LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);

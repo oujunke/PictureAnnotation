@@ -73,7 +73,7 @@
             this.pbMian.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseMove);
             this.pbMian.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMian_MouseUp);
             // 
-            // LabelImageUserForm
+            // LabelImageUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -81,7 +81,7 @@
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnLast);
             this.DoubleBuffered = true;
-            this.Name = "LabelImageUserForm";
+            this.Name = "LabelImageUserControl";
             this.Size = new System.Drawing.Size(528, 317);
             ((System.ComponentModel.ISupportInitialize)(this.pbMian)).EndInit();
             this.ResumeLayout(false);

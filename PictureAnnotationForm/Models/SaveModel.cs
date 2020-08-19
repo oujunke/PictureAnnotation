@@ -27,9 +27,5 @@ namespace PictureAnnotationForm.Models
         /// Label标签对应的信息
         /// </summary>
         public Dictionary<string, LabelColor> LabelNameToLabelColor { set; get; }
-        /// <summary>
-        /// 当前所有的Label
-        /// </summary>
-        public List<string> LabelNames { set; get; }
     }
 }

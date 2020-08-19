@@ -67,6 +67,15 @@ namespace PictureAnnotationForm.UserForm
         /// <summary>
         /// 设置当前的标签模型
         /// </summary>
+        /// <param name="imageItemModel"></param>
+        public void SetImageItemModel(ImageLabelsModel imageLabelsModel)
+        {
+            SetImageItemModel(imageLabelsModel.ImageItemModel);
+            LabelShowDictionary[imageLabelsModel].SetHighlight();
+        }
+        /// <summary>
+        /// 设置当前的标签模型
+        /// </summary>
         /// <param name="key"></param>
         public void SetImageItemModel(string key)
         {
@@ -140,6 +149,7 @@ namespace PictureAnnotationForm.UserForm
                 };
                 CurrentImageItemModel.Labels.Add(tempLabel);
                 dragImageLabelShowUserControl=AddLabelControl(CurrentImageItemModel.Labels.Count-1);
+                dragImageLabelShowUserControl.BringToFront();
                 dragLabel = tempLabel;
                 dragPoint = new Point(e.X, e.Y);
             }

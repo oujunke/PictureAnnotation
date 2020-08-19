@@ -43,45 +43,22 @@ namespace PictureAnnotationForm.Forms
         /// </summary>
         private string _lastFileName;
         /// <summary>
+        /// 上次保存路径
+        /// </summary>
+        private string _lastSavePath;
+        /// <summary>
         /// 标题
         /// </summary>
-        public static string Tag = "繁星标注  V1.0";
+        public static new string Tag = "繁星标注  V1.0";
         public MainForm()
         {
             InitializeComponent();
             Text = Tag;
+            BubbleReminderForm.InitForm(this,false);
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //var fileInfos = File.ReadAllLines("ImageNet/train_list.txt");
-            //List<string> paths = new List<string>();
-            //foreach (var item in fileInfos)
-            //{
-            //    var items = item.Split('\t');
-            //    var path = $"ImageNet/{items[0]}";
-            //    if (!File.Exists(path))
-            //    {
-            //        paths.Add(path);
-            //    }
-            //}
-            //foreach (var item in File.ReadAllLines("ImageNet/val_list.txt"))
-            //{
-            //    var items = item.Split('\t');
-            //    var path = $"ImageNet/{items[0]}";
-            //    if (!File.Exists(path))
-            //    {
-            //        paths.Add(path);
-            //    }
-            //}
-            _showImgNum = lvMain.Width / 283;
-            //var num = ImageManagers.LoadVocDirectory(@"VOCYolo100");
-            //RefreshLabel();
-            //if (num > 20 && ilMain.Images.Count < 10)
-            //{
-            //    AddImageItem(60 - ilMain.Images.Count);
-            //}
-            //pbMian.Image = GetDrawBitamp("01d1990a30a62459dda5b8611c62ffccc3878b4682a6ea478408b6752c52a0d8");
-            //pbMian.Image = ImageManagers.GetImageList()[0].Image;
+            _showImgNum = lvMain.Width / 283;            
         }
         private void RefreshLabel()
         {
@@ -124,7 +101,7 @@ namespace PictureAnnotationForm.Forms
             {
                 lvMain.BeginUpdate();
                 _listImgIndex--;
-                Text = $"{Tag}-当前第{_listImgIndex+1}张,共{ImageManagers.ImageCount}张";
+                Text = $"{Tag}-当前第{_listImgIndex + 1}张,共{ImageManagers.ImageCount}张";
                 var image = ImageManagers.GetImage(imageItemModels[0]);
                 if (!ilMain.Images.ContainsKey(imageItemModels[0].Id))
                 {
@@ -184,40 +161,6 @@ namespace PictureAnnotationForm.Forms
             {
                 _listSelectIndex = item.Index;
                 liShow.SetImageItemModel(item.ImageKey);
-            }
-        }
-        bool isRightMouseDown;
-        DateTime lastRightMouseDownDateTime;
-        Point lastRightMouseDownPoint;
-        Graphics bpGraphics;
-        private void pbMian_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Clicks == 1 && e.Button == MouseButtons.Right)
-            {
-                lastRightMouseDownDateTime = DateTime.Now;
-                lastRightMouseDownPoint = e.Location;
-                isRightMouseDown = true;
-            }
-        }
-
-        private void pbMian_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isRightMouseDown && (DateTime.Now - lastRightMouseDownDateTime).TotalSeconds > 0.5 && Math.Abs(e.X - lastRightMouseDownPoint.X) + Math.Abs(e.Y - lastRightMouseDownPoint.Y) > 10)
-            {
-                if (bpGraphics == null)
-                {
-                    //bpGraphics = Graphics.FromImage(pbMian.Image);
-                }
-                bpGraphics.DrawRectangle(Pens.Red, lastRightMouseDownPoint.X, lastRightMouseDownPoint.Y, e.X - lastRightMouseDownPoint.X, e.Y - lastRightMouseDownPoint.Y);
-            }
-        }
-
-        private void pbMian_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                isRightMouseDown = false;
-                bpGraphics?.Dispose();
             }
         }
 
@@ -369,6 +312,7 @@ namespace PictureAnnotationForm.Forms
             sfdSaveFile.DefaultExt = "data";
             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
             {
+                _lastSavePath = sfdSaveFile.FileName;
                 SaveData(sfdSaveFile.FileName);
             }
 
@@ -386,6 +330,7 @@ namespace PictureAnnotationForm.Forms
                     }
                 }
                 _lastFileName = ofdOpenFile.SafeFileName.Substring(0, ofdOpenFile.SafeFileName.LastIndexOf('.'));
+                _lastSavePath = ofdOpenFile.FileName;
                 LoadData(ofdOpenFile.FileName);
             }
         }
@@ -418,8 +363,11 @@ namespace PictureAnnotationForm.Forms
             if (saveModel.SelectLabelIndex > -1)
             {
                 var imageItemModel = ImageManagers.GetImageItemModel(lvMain.Items[_listSelectIndex].ImageKey);
-                var label = imageItemModel.Labels[saveModel.SelectLabelIndex];
-                liMain.SetLabel(label);
+                if(saveModel.SelectLabelIndex< imageItemModel.Labels.Count)
+                {
+                    var label = imageItemModel.Labels[saveModel.SelectLabelIndex];
+                    liMain.SetLabel(label);
+                }
             }
             lvMain.Items[_listSelectIndex].Selected = true;
             Text = $"{Tag}-当前第{_listImgIndex + 1}张,共{ImageManagers.ImageCount}张";
@@ -503,13 +451,68 @@ namespace PictureAnnotationForm.Forms
                     MessageBox.Show("Id不存在");
                     return;
                 }
-                liShow.SetImageItemModel(imageLabelsModel.ImageItemModel);
-                tcMain.SelectedTab = tpLabelInfo;
-                liMain.SetLabel(imageLabelsModel);
-                tbLabelId.Clear();
+                SetImageLabel(imageLabelsModel);
             }
         }
 
+        private void SetImageLabel(ImageLabelsModel imageLabelsModel)
+        {
+            liShow.SetImageItemModel(imageLabelsModel);
+            tcMain.SelectedTab = tpLabelInfo;
+            liMain.SetLabel(imageLabelsModel);
+            tbLabelId.Clear();
+        }
 
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                if (_lastSavePath == null)
+                {
+                    return;
+                }
+                SaveData(_lastSavePath);
+                BubbleReminderForm.ShowMsg($"数据保存成功");
+            }
+        }
+        private int _currentOverlappingLabelIndex = 0;
+        private void btnLabelOverlapping_Click(object sender, EventArgs e)
+        {
+            var imageLabelsModel = ImageManagers.GetOverlappingLabel(ref _currentOverlappingLabelIndex);
+            if (imageLabelsModel == null)
+            {
+                MessageBox.Show("重叠标签已查找完毕");
+                _currentOverlappingLabelIndex = 0;
+                return;
+            }
+            _currentOverlappingLabelIndex++;
+            SetImageLabel(imageLabelsModel);
+        }
+        private int _currentSonEmptyLabelIndex = 0;
+        private void btnSonEmpty_Click(object sender, EventArgs e)
+        {
+            var imageLabelsModel = ImageManagers.GetSonEmptyLabel(ref _currentSonEmptyLabelIndex);
+            if (imageLabelsModel == null)
+            {
+                MessageBox.Show("二级未分类标签已查找完毕");
+                _currentSonEmptyLabelIndex = 0;
+                return;
+            }
+            _currentSonEmptyLabelIndex++;
+            SetImageLabel(imageLabelsModel);
+        }
+
+        private void btnUnknown_Click(object sender, EventArgs e)
+        {
+            var imageLabelsModel = ImageManagers.GetUnknownLabel(ref _currentSonEmptyLabelIndex);
+            if (imageLabelsModel == null)
+            {
+                MessageBox.Show("二级未分类标签已查找完毕");
+                _currentSonEmptyLabelIndex = 0;
+                return;
+            }
+            _currentSonEmptyLabelIndex++;
+            SetImageLabel(imageLabelsModel);
+        }
     }
 }

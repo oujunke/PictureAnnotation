@@ -1,5 +1,6 @@
 # PictureAnnotation
 ## 繁星标注 V1.0
+# 禁止作用于商业用途
 ### 目前支持数据保存和读取，自动保存标注进度
 ### 支持导入Voc文件夹
 ### 支持导出Voc,EasyData,ImageNet数据集
