@@ -54,16 +54,17 @@ namespace PictureAnnotationForm.Forms
         {
             InitializeComponent();
             Text = Tag;
-            BubbleReminderForm.InitForm(this,false);
+            BubbleReminderForm.InitForm(this, false);
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _showImgNum = lvMain.Width / 283;            
+            _showImgNum = lvMain.Width / 283;
         }
         private void RefreshLabel()
         {
             _lvLabelUpdate = true;
             lvLabels.BeginUpdate();
+            lvLabels.SuspendLayout();
             lvLabels.Items.Clear();
             foreach (var name in ImageManagers.LabelNames)
             {
@@ -74,6 +75,7 @@ namespace PictureAnnotationForm.Forms
                 listViewItem.Checked = labelColor.IsSelect;
             }
             lvLabels.EndUpdate();
+            lvLabels.ResumeLayout();
             _lvLabelUpdate = false;
         }
 
@@ -363,7 +365,7 @@ namespace PictureAnnotationForm.Forms
             if (saveModel.SelectLabelIndex > -1)
             {
                 var imageItemModel = ImageManagers.GetImageItemModel(lvMain.Items[_listSelectIndex].ImageKey);
-                if(saveModel.SelectLabelIndex< imageItemModel.Labels.Count)
+                if (saveModel.SelectLabelIndex < imageItemModel.Labels.Count)
                 {
                     var label = imageItemModel.Labels[saveModel.SelectLabelIndex];
                     liMain.SetLabel(label);
@@ -410,6 +412,26 @@ namespace PictureAnnotationForm.Forms
             }
             var num = ImageManagers.LoadBoxWordDirectory(fbdOpenFolder.SelectedPath);
             _lastFileName = fbdOpenFolder.SelectedPath.Substring(fbdOpenFolder.SelectedPath.LastIndexOf('\\') + 1) + "_BoxWord";
+            RefreshLabel();
+            if (num > 10 && ilMain.Images.Count < 10)
+            {
+                AddImageItem(20 - ilMain.Images.Count);
+            }
+            MessageBox.Show($"数据集加载成功,当前加载数据{num}条,共{ImageManagers.ImageCount}条");
+        }
+        /// <summary>
+        /// 加载PaddleOcrDet数据集
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            if (ofdOpenFile.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            var num = ImageManagers.LoadPaddleOcrDetData(ofdOpenFile.FileName);
+            _lastFileName = fbdOpenFolder.SelectedPath.Substring(fbdOpenFolder.SelectedPath.LastIndexOf('\\') + 1) + "_PaddleOcrDet";
             RefreshLabel();
             if (num > 10 && ilMain.Images.Count < 10)
             {
@@ -513,6 +535,12 @@ namespace PictureAnnotationForm.Forms
             }
             _currentSonEmptyLabelIndex++;
             SetImageLabel(imageLabelsModel);
+        }
+
+        private void tcMain_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            _lvLabelUpdate = true;
+            Task.Delay(5000).ContinueWith(r => _lvLabelUpdate = false);
         }
     }
 }

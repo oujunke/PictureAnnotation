@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.Caching;
 using PictureAnnotationForm.Utils;
 using PictureAnnotationForm.Models;
+using System.Diagnostics;
 
 namespace PictureAnnotationForm.BLL
 {
@@ -359,6 +360,96 @@ namespace PictureAnnotationForm.BLL
                 }
             }
 
+            return success;
+        }
+        public static int LoadPaddleOcrDetData(string filePath)
+        {
+            int success = 0;
+            FileInfo fileInfo = new FileInfo(filePath);
+            DirectoryInfo directory = null;
+            foreach (var row in File.ReadAllLines(filePath))
+            {
+                if (string.IsNullOrEmpty(row))
+                {
+                    continue;
+                }
+                var cols = row.Split('\t');
+                if (cols.Length == 2)
+                {
+                    var ps = cols[0].Split(new[] {"\\","/" },StringSplitOptions.RemoveEmptyEntries);
+                    if (directory == null)
+                    {
+                        if (ps.Length==4&&ps[ps.Length - 3] == fileInfo.Directory.Name)
+                        {
+                            directory = fileInfo.Directory.GetDirectories().FirstOrDefault(d => d.Name == ps[ps.Length - 2]);
+                        }
+                        else
+                        {
+                            Debugger.Break();
+                        }
+                    }
+                    var data = JsonConvert.DeserializeObject<List<PaddleOcrDetData>>(cols[1]);
+                    ImageItemModel imageItemModel = new ImageItemModel();
+                    var path = ps[ps.Length - 1];
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        var num = path.IndexOf('.');
+                        if (num > 0)
+                        {
+                            var startIndex = path.LastIndexOf('\\') + 1;
+                            imageItemModel.Id = path.Substring(startIndex, num - startIndex);
+                        }
+                        else
+                        {
+                            imageItemModel.Id = path;
+                        }
+                    }
+                    else
+                    {
+                        imageItemModel.Id = Guid.NewGuid().ToString("N");
+                    }
+                    imageItemModel.Path = Path.Combine(directory.FullName, path);
+                    Image image=Image.FromFile(imageItemModel.Path);
+                    imageItemModel.Width = image.Width;
+                    imageItemModel.Height= image.Height;
+                    image.Dispose();
+                    foreach (var dataModel in data)
+                    {
+                        ImageLabelsModel imageLabels = new ImageLabelsModel();
+                        imageLabels.Name = dataModel.Transcription;
+                        if (!_labelNameData.ContainsKey(imageLabels.Name))
+                        {
+                            _labelNameData.Add(imageLabels.Name, null);
+                            LabelNames.Add(imageLabels.Name);
+                        }
+                        var x1 = (int)dataModel.Points[0,0];
+                        var y1 = (int)dataModel.Points[0,1];
+                        var x2 = (int)dataModel.Points[2,0];
+                        var y2 = (int)dataModel.Points[2,1];
+                        imageLabels.X1 = x1;
+                        imageLabels.Y1 = y1;
+                        imageLabels.X2 = x2;
+                        imageLabels.Y2 =y2;
+                        imageLabels.ImageItemModel = imageItemModel;
+                        imageItemModel.Labels.Add(imageLabels);
+                    }
+                    imageItemModel.IsComplete = imageItemModel.Labels.Count > 0;
+                    if (_kevImageData.ContainsKey(imageItemModel.Id))
+                    {
+                        LogUtils.Log($"编号为{imageItemModel.Id}在列表中已拥有");
+                    }
+                    else
+                    {
+                        _kevImageData.Add(imageItemModel.Id, imageItemModel);
+                        _currentImageData.Add(imageItemModel);
+                        success++;
+                    }
+                }
+                else
+                {
+                    Debugger.Break();
+                }
+            }
             return success;
         }
         /// <summary>

@@ -71,14 +71,14 @@ namespace PictureAnnotationForm.Models
         {
             get
             {
-                return new Rectangle((int)Math.Floor(X1 * ZoomMultiple), (int)Math.Floor(Y1 * ZoomMultiple), (int)Math.Floor(Width * ZoomMultiple), (int)Math.Floor(Height * ZoomMultiple));
+                return new Rectangle((int)Math.Ceiling(X1 * ZoomMultiple), (int)Math.Ceiling(Y1 * ZoomMultiple), (int)Math.Ceiling(Width * ZoomMultiple), (int)Math.Ceiling(Height * ZoomMultiple));
             }
             set
             {
-                X1 = (int)Math.Floor(value.X / ZoomMultiple);
-                Y1= (int)Math.Floor(value.Y / ZoomMultiple);
-                X2 = (int)Math.Floor(value.Right / ZoomMultiple);
-                Y2 = (int)Math.Floor(value.Bottom / ZoomMultiple);
+                X1 = (int)Math.Ceiling(value.X / ZoomMultiple);
+                Y1= (int)Math.Ceiling(value.Y / ZoomMultiple);
+                X2 = (int)Math.Ceiling(value.Right / ZoomMultiple);
+                Y2 = (int)Math.Ceiling(value.Bottom / ZoomMultiple);
             }
         }
         /// <summary>
