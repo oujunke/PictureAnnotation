@@ -28,535 +28,517 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.liShow = new PictureAnnotationForm.UserForm.LabelImageUserControl();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lvMain = new System.Windows.Forms.ListView();
-            this.ilMain = new System.Windows.Forms.ImageList(this.components);
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnLast = new System.Windows.Forms.Button();
-            this.msMain = new System.Windows.Forms.MenuStrip();
-            this.文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.加载Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.加载图片数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.加载VocXml标注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.保存数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.加载数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.导出Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.导出EasyData数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tcMain = new System.Windows.Forms.TabControl();
-            this.tpLabelInfo = new System.Windows.Forms.TabPage();
-            this.liMain = new PictureAnnotationForm.UserForm.LabelInfoUserControl();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.btnUnknown = new System.Windows.Forms.Button();
-            this.btnSonEmpty = new System.Windows.Forms.Button();
-            this.btnLabelOverlapping = new System.Windows.Forms.Button();
-            this.tpLabelSelect = new System.Windows.Forms.TabPage();
-            this.lvLabels = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.btOpenImg = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tbLabelId = new System.Windows.Forms.TextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnOpenImg = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tbImgId = new System.Windows.Forms.TextBox();
-            this.fbdOpenFolder = new System.Windows.Forms.FolderBrowserDialog();
-            this.sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
-            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
-            this.timeAutoSave = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.msMain.SuspendLayout();
-            this.tcMain.SuspendLayout();
-            this.tpLabelInfo.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.tpLabelSelect.SuspendLayout();
-            this.btOpenImg.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            splitContainer1 = new System.Windows.Forms.SplitContainer();
+            liShow = new UserForm.LabelImageUserControl();
+            panel1 = new System.Windows.Forms.Panel();
+            lvMain = new System.Windows.Forms.ListView();
+            ilMain = new System.Windows.Forms.ImageList(components);
+            btnNext = new System.Windows.Forms.Button();
+            btnLast = new System.Windows.Forms.Button();
+            msMain = new System.Windows.Forms.MenuStrip();
+            文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            加载Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            加载图片数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            加载VocXml标注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            保存数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            加载数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导出Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导出EasyData数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导出选中分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            tcMain = new System.Windows.Forms.TabControl();
+            tpLabelInfo = new System.Windows.Forms.TabPage();
+            liMain = new UserForm.LabelInfoUserControl();
+            panel3 = new System.Windows.Forms.Panel();
+            btnUnknown = new System.Windows.Forms.Button();
+            btnSonEmpty = new System.Windows.Forms.Button();
+            btnLabelOverlapping = new System.Windows.Forms.Button();
+            tpLabelSelect = new System.Windows.Forms.TabPage();
+            lvLabels = new System.Windows.Forms.ListView();
+            columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            panel2 = new System.Windows.Forms.Panel();
+            btOpenImg = new System.Windows.Forms.TabPage();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            tbLabelId = new System.Windows.Forms.TextBox();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            btnOpenImg = new System.Windows.Forms.Button();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            tbImgId = new System.Windows.Forms.TextBox();
+            fbdOpenFolder = new System.Windows.Forms.FolderBrowserDialog();
+            sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
+            ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
+            timeAutoSave = new System.Windows.Forms.Timer(components);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            panel1.SuspendLayout();
+            msMain.SuspendLayout();
+            tcMain.SuspendLayout();
+            tpLabelInfo.SuspendLayout();
+            panel3.SuspendLayout();
+            tpLabelSelect.SuspendLayout();
+            btOpenImg.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox1.SuspendLayout();
+            SuspendLayout();
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
-            this.splitContainer1.Name = "splitContainer1";
+            splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitContainer1.Location = new System.Drawing.Point(0, 0);
+            splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.liShow);
-            this.splitContainer1.Panel1.Controls.Add(this.panel1);
-            this.splitContainer1.Panel1.Controls.Add(this.msMain);
+            splitContainer1.Panel1.Controls.Add(liShow);
+            splitContainer1.Panel1.Controls.Add(panel1);
+            splitContainer1.Panel1.Controls.Add(msMain);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.tcMain);
-            this.splitContainer1.Size = new System.Drawing.Size(1667, 690);
-            this.splitContainer1.SplitterDistance = 1333;
-            this.splitContainer1.SplitterWidth = 5;
-            this.splitContainer1.TabIndex = 0;
+            splitContainer1.Panel2.Controls.Add(tcMain);
+            splitContainer1.Size = new System.Drawing.Size(1875, 920);
+            splitContainer1.SplitterDistance = 1499;
+            splitContainer1.SplitterWidth = 6;
+            splitContainer1.TabIndex = 0;
             // 
             // liShow
             // 
-            this.liShow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.liShow.Location = new System.Drawing.Point(0, 28);
-            this.liShow.Margin = new System.Windows.Forms.Padding(5);
-            this.liShow.Name = "liShow";
-            this.liShow.Size = new System.Drawing.Size(1333, 512);
-            this.liShow.TabIndex = 2;
-            this.liShow.ImageLast += new System.Action(this.liShow_ImageLast);
-            this.liShow.ImageNext += new System.Action(this.liShow_ImageNext);
-            this.liShow.LabelChange += new System.Action<PictureAnnotationForm.Models.ImageLabelsModel>(this.liShow_LabelChange);
+            liShow.Dock = System.Windows.Forms.DockStyle.Fill;
+            liShow.Location = new System.Drawing.Point(0, 30);
+            liShow.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            liShow.Name = "liShow";
+            liShow.Size = new System.Drawing.Size(1499, 690);
+            liShow.TabIndex = 2;
+            liShow.ImageLast += liShow_ImageLast;
+            liShow.ImageNext += liShow_ImageNext;
+            liShow.LabelChange += liShow_LabelChange;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.lvMain);
-            this.panel1.Controls.Add(this.btnNext);
-            this.panel1.Controls.Add(this.btnLast);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 540);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1333, 150);
-            this.panel1.TabIndex = 1;
+            panel1.Controls.Add(lvMain);
+            panel1.Controls.Add(btnNext);
+            panel1.Controls.Add(btnLast);
+            panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            panel1.Location = new System.Drawing.Point(0, 720);
+            panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(1499, 200);
+            panel1.TabIndex = 1;
             // 
             // lvMain
             // 
-            this.lvMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvMain.HideSelection = false;
-            this.lvMain.LargeImageList = this.ilMain;
-            this.lvMain.Location = new System.Drawing.Point(60, 0);
-            this.lvMain.Margin = new System.Windows.Forms.Padding(4);
-            this.lvMain.MultiSelect = false;
-            this.lvMain.Name = "lvMain";
-            this.lvMain.Scrollable = false;
-            this.lvMain.Size = new System.Drawing.Size(1213, 150);
-            this.lvMain.TabIndex = 2;
-            this.lvMain.UseCompatibleStateImageBehavior = false;
-            this.lvMain.SizeChanged += new System.EventHandler(this.lvMain_SizeChanged);
-            this.lvMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvMain_MouseClick);
+            lvMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            lvMain.LargeImageList = ilMain;
+            lvMain.Location = new System.Drawing.Point(68, 0);
+            lvMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            lvMain.MultiSelect = false;
+            lvMain.Name = "lvMain";
+            lvMain.Scrollable = false;
+            lvMain.Size = new System.Drawing.Size(1363, 200);
+            lvMain.TabIndex = 2;
+            lvMain.UseCompatibleStateImageBehavior = false;
+            lvMain.SizeChanged += lvMain_SizeChanged;
+            lvMain.MouseClick += lvMain_MouseClick;
             // 
             // ilMain
             // 
-            this.ilMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
-            this.ilMain.ImageSize = new System.Drawing.Size(240, 120);
-            this.ilMain.TransparentColor = System.Drawing.Color.Transparent;
+            ilMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
+            ilMain.ImageSize = new System.Drawing.Size(240, 120);
+            ilMain.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btnNext
             // 
-            this.btnNext.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnNext.Font = new System.Drawing.Font("宋体", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnNext.Location = new System.Drawing.Point(1273, 0);
-            this.btnNext.Margin = new System.Windows.Forms.Padding(4);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(60, 150);
-            this.btnNext.TabIndex = 1;
-            this.btnNext.Text = ">";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            btnNext.Dock = System.Windows.Forms.DockStyle.Right;
+            btnNext.Font = new System.Drawing.Font("宋体", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+            btnNext.Location = new System.Drawing.Point(1431, 0);
+            btnNext.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new System.Drawing.Size(68, 200);
+            btnNext.TabIndex = 1;
+            btnNext.Text = ">";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
             // 
             // btnLast
             // 
-            this.btnLast.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnLast.Font = new System.Drawing.Font("宋体", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnLast.Location = new System.Drawing.Point(0, 0);
-            this.btnLast.Margin = new System.Windows.Forms.Padding(4);
-            this.btnLast.Name = "btnLast";
-            this.btnLast.Size = new System.Drawing.Size(60, 150);
-            this.btnLast.TabIndex = 0;
-            this.btnLast.Text = "<";
-            this.btnLast.UseVisualStyleBackColor = true;
-            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
+            btnLast.Dock = System.Windows.Forms.DockStyle.Left;
+            btnLast.Font = new System.Drawing.Font("宋体", 42F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+            btnLast.Location = new System.Drawing.Point(0, 0);
+            btnLast.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnLast.Name = "btnLast";
+            btnLast.Size = new System.Drawing.Size(68, 200);
+            btnLast.TabIndex = 0;
+            btnLast.Text = "<";
+            btnLast.UseVisualStyleBackColor = true;
+            btnLast.Click += btnLast_Click;
             // 
             // msMain
             // 
-            this.msMain.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.文件ToolStripMenuItem,
-            this.导出ToolStripMenuItem});
-            this.msMain.Location = new System.Drawing.Point(0, 0);
-            this.msMain.Name = "msMain";
-            this.msMain.Size = new System.Drawing.Size(1333, 28);
-            this.msMain.TabIndex = 0;
-            this.msMain.Text = "menuStrip1";
+            msMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { 文件ToolStripMenuItem, 导出ToolStripMenuItem });
+            msMain.Location = new System.Drawing.Point(0, 0);
+            msMain.Name = "msMain";
+            msMain.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
+            msMain.Size = new System.Drawing.Size(1499, 30);
+            msMain.TabIndex = 0;
+            msMain.Text = "menuStrip1";
             // 
             // 文件ToolStripMenuItem
             // 
-            this.文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.加载Voc数据集ToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.加载图片数据集ToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.加载VocXml标注ToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.保存数据ToolStripMenuItem,
-            this.加载数据ToolStripMenuItem});
-            this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-            this.文件ToolStripMenuItem.Text = "文件";
+            文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 加载Voc数据集ToolStripMenuItem, toolStripMenuItem1, 加载图片数据集ToolStripMenuItem, toolStripMenuItem2, 加载VocXml标注ToolStripMenuItem, toolStripSeparator1, 保存数据ToolStripMenuItem, 加载数据ToolStripMenuItem });
+            文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
+            文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            文件ToolStripMenuItem.Text = "文件";
             // 
             // 加载Voc数据集ToolStripMenuItem
             // 
-            this.加载Voc数据集ToolStripMenuItem.Name = "加载Voc数据集ToolStripMenuItem";
-            this.加载Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.加载Voc数据集ToolStripMenuItem.Text = "加载Voc数据集";
-            this.加载Voc数据集ToolStripMenuItem.Click += new System.EventHandler(this.加载Voc数据集ToolStripMenuItem_Click);
+            加载Voc数据集ToolStripMenuItem.Name = "加载Voc数据集ToolStripMenuItem";
+            加载Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            加载Voc数据集ToolStripMenuItem.Text = "加载Voc数据集";
+            加载Voc数据集ToolStripMenuItem.Click += 加载Voc数据集ToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(269, 26);
-            this.toolStripMenuItem1.Text = "加载BoxWord数据集";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new System.Drawing.Size(269, 26);
+            toolStripMenuItem1.Text = "加载BoxWord数据集";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // 加载图片数据集ToolStripMenuItem
             // 
-            this.加载图片数据集ToolStripMenuItem.Name = "加载图片数据集ToolStripMenuItem";
-            this.加载图片数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.加载图片数据集ToolStripMenuItem.Text = "加载图片数据集";
-            this.加载图片数据集ToolStripMenuItem.Click += new System.EventHandler(this.加载图片数据集ToolStripMenuItem_Click);
+            加载图片数据集ToolStripMenuItem.Name = "加载图片数据集ToolStripMenuItem";
+            加载图片数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            加载图片数据集ToolStripMenuItem.Text = "加载图片数据集";
+            加载图片数据集ToolStripMenuItem.Click += 加载图片数据集ToolStripMenuItem_Click;
             // 
             // toolStripMenuItem2
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(269, 26);
-            this.toolStripMenuItem2.Text = "加载PaddleOcrDet数据集";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new System.Drawing.Size(269, 26);
+            toolStripMenuItem2.Text = "加载PaddleOcrDet数据集";
+            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
             // 
             // 加载VocXml标注ToolStripMenuItem
             // 
-            this.加载VocXml标注ToolStripMenuItem.Name = "加载VocXml标注ToolStripMenuItem";
-            this.加载VocXml标注ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.加载VocXml标注ToolStripMenuItem.Text = "加载Voc-Xml标注";
-            this.加载VocXml标注ToolStripMenuItem.Click += new System.EventHandler(this.加载VocXml标注ToolStripMenuItem_Click);
+            加载VocXml标注ToolStripMenuItem.Name = "加载VocXml标注ToolStripMenuItem";
+            加载VocXml标注ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            加载VocXml标注ToolStripMenuItem.Text = "加载Voc-Xml标注";
+            加载VocXml标注ToolStripMenuItem.Click += 加载VocXml标注ToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
             // 
             // 保存数据ToolStripMenuItem
             // 
-            this.保存数据ToolStripMenuItem.Name = "保存数据ToolStripMenuItem";
-            this.保存数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.保存数据ToolStripMenuItem.Text = "保存数据";
-            this.保存数据ToolStripMenuItem.Click += new System.EventHandler(this.保存数据ToolStripMenuItem_Click);
+            保存数据ToolStripMenuItem.Name = "保存数据ToolStripMenuItem";
+            保存数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            保存数据ToolStripMenuItem.Text = "保存数据";
+            保存数据ToolStripMenuItem.Click += 保存数据ToolStripMenuItem_Click;
             // 
             // 加载数据ToolStripMenuItem
             // 
-            this.加载数据ToolStripMenuItem.Name = "加载数据ToolStripMenuItem";
-            this.加载数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.加载数据ToolStripMenuItem.Text = "加载数据";
-            this.加载数据ToolStripMenuItem.Click += new System.EventHandler(this.加载数据ToolStripMenuItem_Click);
+            加载数据ToolStripMenuItem.Name = "加载数据ToolStripMenuItem";
+            加载数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            加载数据ToolStripMenuItem.Text = "加载数据";
+            加载数据ToolStripMenuItem.Click += 加载数据ToolStripMenuItem_Click;
             // 
             // 导出ToolStripMenuItem
             // 
-            this.导出ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导出Voc数据集ToolStripMenuItem,
-            this.导出EasyData数据集ToolStripMenuItem,
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem});
-            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-            this.导出ToolStripMenuItem.Text = "导出";
+            导出ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 导出Voc数据集ToolStripMenuItem, 导出EasyData数据集ToolStripMenuItem, 导出选中分类到ImageNet数据集ToolStripMenuItem });
+            导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
+            导出ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            导出ToolStripMenuItem.Text = "导出";
             // 
             // 导出Voc数据集ToolStripMenuItem
             // 
-            this.导出Voc数据集ToolStripMenuItem.Name = "导出Voc数据集ToolStripMenuItem";
-            this.导出Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
-            this.导出Voc数据集ToolStripMenuItem.Text = "导出Voc数据集";
-            this.导出Voc数据集ToolStripMenuItem.Click += new System.EventHandler(this.导出Voc数据集ToolStripMenuItem_Click);
+            导出Voc数据集ToolStripMenuItem.Name = "导出Voc数据集ToolStripMenuItem";
+            导出Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
+            导出Voc数据集ToolStripMenuItem.Text = "导出Voc数据集";
+            导出Voc数据集ToolStripMenuItem.Click += 导出Voc数据集ToolStripMenuItem_Click;
             // 
             // 导出EasyData数据集ToolStripMenuItem
             // 
-            this.导出EasyData数据集ToolStripMenuItem.Name = "导出EasyData数据集ToolStripMenuItem";
-            this.导出EasyData数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
-            this.导出EasyData数据集ToolStripMenuItem.Text = "导出EsayData数据集";
-            this.导出EasyData数据集ToolStripMenuItem.Click += new System.EventHandler(this.导出EasyData数据集ToolStripMenuItem_Click);
+            导出EasyData数据集ToolStripMenuItem.Name = "导出EasyData数据集ToolStripMenuItem";
+            导出EasyData数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
+            导出EasyData数据集ToolStripMenuItem.Text = "导出EsayData数据集";
+            导出EasyData数据集ToolStripMenuItem.Click += 导出EasyData数据集ToolStripMenuItem_Click;
             // 
             // 导出选中分类到ImageNet数据集ToolStripMenuItem
             // 
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem.Name = "导出选中分类到ImageNet数据集ToolStripMenuItem";
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem.Text = "导出选中分类到ImageNet数据集";
-            this.导出选中分类到ImageNet数据集ToolStripMenuItem.Click += new System.EventHandler(this.导出选中分类到ImageNet数据集ToolStripMenuItem_Click);
+            导出选中分类到ImageNet数据集ToolStripMenuItem.Name = "导出选中分类到ImageNet数据集ToolStripMenuItem";
+            导出选中分类到ImageNet数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
+            导出选中分类到ImageNet数据集ToolStripMenuItem.Text = "导出选中分类到ImageNet数据集";
+            导出选中分类到ImageNet数据集ToolStripMenuItem.Click += 导出选中分类到ImageNet数据集ToolStripMenuItem_Click;
             // 
             // tcMain
             // 
-            this.tcMain.Controls.Add(this.tpLabelInfo);
-            this.tcMain.Controls.Add(this.tpLabelSelect);
-            this.tcMain.Controls.Add(this.btOpenImg);
-            this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcMain.Location = new System.Drawing.Point(0, 0);
-            this.tcMain.Margin = new System.Windows.Forms.Padding(4);
-            this.tcMain.Name = "tcMain";
-            this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(329, 690);
-            this.tcMain.TabIndex = 0;
-            this.tcMain.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tcMain_Selecting);
+            tcMain.Controls.Add(tpLabelInfo);
+            tcMain.Controls.Add(tpLabelSelect);
+            tcMain.Controls.Add(btOpenImg);
+            tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            tcMain.Location = new System.Drawing.Point(0, 0);
+            tcMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tcMain.Name = "tcMain";
+            tcMain.SelectedIndex = 0;
+            tcMain.Size = new System.Drawing.Size(370, 920);
+            tcMain.TabIndex = 0;
+            tcMain.Selecting += tcMain_Selecting;
             // 
             // tpLabelInfo
             // 
-            this.tpLabelInfo.Controls.Add(this.liMain);
-            this.tpLabelInfo.Controls.Add(this.panel3);
-            this.tpLabelInfo.Location = new System.Drawing.Point(4, 25);
-            this.tpLabelInfo.Margin = new System.Windows.Forms.Padding(4);
-            this.tpLabelInfo.Name = "tpLabelInfo";
-            this.tpLabelInfo.Padding = new System.Windows.Forms.Padding(4);
-            this.tpLabelInfo.Size = new System.Drawing.Size(321, 661);
-            this.tpLabelInfo.TabIndex = 1;
-            this.tpLabelInfo.Text = "标签设置";
-            this.tpLabelInfo.UseVisualStyleBackColor = true;
+            tpLabelInfo.Controls.Add(liMain);
+            tpLabelInfo.Controls.Add(panel3);
+            tpLabelInfo.Location = new System.Drawing.Point(4, 29);
+            tpLabelInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tpLabelInfo.Name = "tpLabelInfo";
+            tpLabelInfo.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tpLabelInfo.Size = new System.Drawing.Size(362, 887);
+            tpLabelInfo.TabIndex = 1;
+            tpLabelInfo.Text = "标签设置";
+            tpLabelInfo.UseVisualStyleBackColor = true;
             // 
             // liMain
             // 
-            this.liMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.liMain.Location = new System.Drawing.Point(4, 100);
-            this.liMain.Margin = new System.Windows.Forms.Padding(5);
-            this.liMain.Name = "liMain";
-            this.liMain.Size = new System.Drawing.Size(313, 557);
-            this.liMain.TabIndex = 1;
-            this.liMain.LabelChange += new System.Action<PictureAnnotationForm.Models.ImageLabelsModel>(this.liMain_LabelChange);
+            liMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            liMain.Location = new System.Drawing.Point(4, 161);
+            liMain.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            liMain.Name = "liMain";
+            liMain.Size = new System.Drawing.Size(354, 721);
+            liMain.TabIndex = 1;
+            liMain.LabelChange += liMain_LabelChange;
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.btnUnknown);
-            this.panel3.Controls.Add(this.btnSonEmpty);
-            this.panel3.Controls.Add(this.btnLabelOverlapping);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(4, 4);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(313, 96);
-            this.panel3.TabIndex = 0;
+            panel3.Controls.Add(btnUnknown);
+            panel3.Controls.Add(btnSonEmpty);
+            panel3.Controls.Add(btnLabelOverlapping);
+            panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            panel3.Location = new System.Drawing.Point(4, 5);
+            panel3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            panel3.Name = "panel3";
+            panel3.Size = new System.Drawing.Size(354, 156);
+            panel3.TabIndex = 0;
             // 
             // btnUnknown
             // 
-            this.btnUnknown.Location = new System.Drawing.Point(4, 40);
-            this.btnUnknown.Margin = new System.Windows.Forms.Padding(4);
-            this.btnUnknown.Name = "btnUnknown";
-            this.btnUnknown.Size = new System.Drawing.Size(147, 29);
-            this.btnUnknown.TabIndex = 4;
-            this.btnUnknown.Text = "打开未命名标签";
-            this.btnUnknown.UseVisualStyleBackColor = true;
-            this.btnUnknown.Click += new System.EventHandler(this.btnUnknown_Click);
+            btnUnknown.Location = new System.Drawing.Point(4, 53);
+            btnUnknown.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnUnknown.Name = "btnUnknown";
+            btnUnknown.Size = new System.Drawing.Size(165, 39);
+            btnUnknown.TabIndex = 4;
+            btnUnknown.Text = "打开未命名标签";
+            btnUnknown.UseVisualStyleBackColor = true;
+            btnUnknown.Click += btnUnknown_Click;
             // 
             // btnSonEmpty
             // 
-            this.btnSonEmpty.Location = new System.Drawing.Point(156, 4);
-            this.btnSonEmpty.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSonEmpty.Name = "btnSonEmpty";
-            this.btnSonEmpty.Size = new System.Drawing.Size(147, 29);
-            this.btnSonEmpty.TabIndex = 3;
-            this.btnSonEmpty.Text = "打开子标签为空";
-            this.btnSonEmpty.UseVisualStyleBackColor = true;
-            this.btnSonEmpty.Click += new System.EventHandler(this.btnSonEmpty_Click);
+            btnSonEmpty.Location = new System.Drawing.Point(176, 5);
+            btnSonEmpty.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnSonEmpty.Name = "btnSonEmpty";
+            btnSonEmpty.Size = new System.Drawing.Size(165, 39);
+            btnSonEmpty.TabIndex = 3;
+            btnSonEmpty.Text = "打开子标签为空";
+            btnSonEmpty.UseVisualStyleBackColor = true;
+            btnSonEmpty.Click += btnSonEmpty_Click;
             // 
             // btnLabelOverlapping
             // 
-            this.btnLabelOverlapping.Location = new System.Drawing.Point(4, 4);
-            this.btnLabelOverlapping.Margin = new System.Windows.Forms.Padding(4);
-            this.btnLabelOverlapping.Name = "btnLabelOverlapping";
-            this.btnLabelOverlapping.Size = new System.Drawing.Size(147, 29);
-            this.btnLabelOverlapping.TabIndex = 2;
-            this.btnLabelOverlapping.Text = "打开标签重叠图片";
-            this.btnLabelOverlapping.UseVisualStyleBackColor = true;
-            this.btnLabelOverlapping.Click += new System.EventHandler(this.btnLabelOverlapping_Click);
+            btnLabelOverlapping.Location = new System.Drawing.Point(4, 5);
+            btnLabelOverlapping.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnLabelOverlapping.Name = "btnLabelOverlapping";
+            btnLabelOverlapping.Size = new System.Drawing.Size(165, 39);
+            btnLabelOverlapping.TabIndex = 2;
+            btnLabelOverlapping.Text = "打开标签重叠图片";
+            btnLabelOverlapping.UseVisualStyleBackColor = true;
+            btnLabelOverlapping.Click += btnLabelOverlapping_Click;
             // 
             // tpLabelSelect
             // 
-            this.tpLabelSelect.Controls.Add(this.lvLabels);
-            this.tpLabelSelect.Controls.Add(this.panel2);
-            this.tpLabelSelect.Location = new System.Drawing.Point(4, 25);
-            this.tpLabelSelect.Margin = new System.Windows.Forms.Padding(4);
-            this.tpLabelSelect.Name = "tpLabelSelect";
-            this.tpLabelSelect.Padding = new System.Windows.Forms.Padding(4);
-            this.tpLabelSelect.Size = new System.Drawing.Size(321, 661);
-            this.tpLabelSelect.TabIndex = 0;
-            this.tpLabelSelect.Text = "标签筛选";
-            this.tpLabelSelect.UseVisualStyleBackColor = true;
+            tpLabelSelect.Controls.Add(lvLabels);
+            tpLabelSelect.Controls.Add(panel2);
+            tpLabelSelect.Location = new System.Drawing.Point(4, 29);
+            tpLabelSelect.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tpLabelSelect.Name = "tpLabelSelect";
+            tpLabelSelect.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tpLabelSelect.Size = new System.Drawing.Size(362, 887);
+            tpLabelSelect.TabIndex = 0;
+            tpLabelSelect.Text = "标签筛选";
+            tpLabelSelect.UseVisualStyleBackColor = true;
             // 
             // lvLabels
             // 
-            this.lvLabels.CheckBoxes = true;
-            this.lvLabels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.lvLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvLabels.HideSelection = false;
-            this.lvLabels.Location = new System.Drawing.Point(4, 69);
-            this.lvLabels.Margin = new System.Windows.Forms.Padding(4);
-            this.lvLabels.MultiSelect = false;
-            this.lvLabels.Name = "lvLabels";
-            this.lvLabels.Size = new System.Drawing.Size(313, 588);
-            this.lvLabels.TabIndex = 1;
-            this.lvLabels.UseCompatibleStateImageBehavior = false;
-            this.lvLabels.View = System.Windows.Forms.View.Details;
-            this.lvLabels.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lvLabels_ItemCheck);
-            this.lvLabels.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvLabels_MouseClick);
+            lvLabels.CheckBoxes = true;
+            lvLabels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            lvLabels.Dock = System.Windows.Forms.DockStyle.Fill;
+            lvLabels.Location = new System.Drawing.Point(4, 92);
+            lvLabels.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            lvLabels.MultiSelect = false;
+            lvLabels.Name = "lvLabels";
+            lvLabels.Size = new System.Drawing.Size(354, 790);
+            lvLabels.TabIndex = 1;
+            lvLabels.UseCompatibleStateImageBehavior = false;
+            lvLabels.View = System.Windows.Forms.View.Details;
+            lvLabels.ItemCheck += lvLabels_ItemCheck;
+            lvLabels.MouseClick += lvLabels_MouseClick;
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "标签名";
-            this.columnHeader1.Width = 100;
+            columnHeader1.Text = "标签名";
+            columnHeader1.Width = 100;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "标签颜色";
+            columnHeader2.Text = "标签颜色";
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "填充";
+            columnHeader3.Text = "填充";
             // 
             // panel2
             // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(4, 4);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(313, 65);
-            this.panel2.TabIndex = 0;
+            panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            panel2.Location = new System.Drawing.Point(4, 5);
+            panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            panel2.Name = "panel2";
+            panel2.Size = new System.Drawing.Size(354, 87);
+            panel2.TabIndex = 0;
             // 
             // btOpenImg
             // 
-            this.btOpenImg.Controls.Add(this.groupBox3);
-            this.btOpenImg.Controls.Add(this.groupBox2);
-            this.btOpenImg.Controls.Add(this.groupBox1);
-            this.btOpenImg.Location = new System.Drawing.Point(4, 25);
-            this.btOpenImg.Margin = new System.Windows.Forms.Padding(4);
-            this.btOpenImg.Name = "btOpenImg";
-            this.btOpenImg.Padding = new System.Windows.Forms.Padding(4);
-            this.btOpenImg.Size = new System.Drawing.Size(321, 661);
-            this.btOpenImg.TabIndex = 2;
-            this.btOpenImg.Text = "图片搜索";
-            this.btOpenImg.UseVisualStyleBackColor = true;
+            btOpenImg.Controls.Add(groupBox3);
+            btOpenImg.Controls.Add(groupBox2);
+            btOpenImg.Controls.Add(groupBox1);
+            btOpenImg.Location = new System.Drawing.Point(4, 29);
+            btOpenImg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btOpenImg.Name = "btOpenImg";
+            btOpenImg.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btOpenImg.Size = new System.Drawing.Size(362, 887);
+            btOpenImg.TabIndex = 2;
+            btOpenImg.Text = "图片搜索";
+            btOpenImg.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.tbLabelId);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox3.Location = new System.Drawing.Point(4, 62);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(313, 58);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "标签编号";
+            groupBox3.Controls.Add(tbLabelId);
+            groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            groupBox3.Location = new System.Drawing.Point(4, 82);
+            groupBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox3.Size = new System.Drawing.Size(354, 77);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "标签编号";
             // 
             // tbLabelId
             // 
-            this.tbLabelId.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbLabelId.Location = new System.Drawing.Point(4, 22);
-            this.tbLabelId.Margin = new System.Windows.Forms.Padding(4);
-            this.tbLabelId.Name = "tbLabelId";
-            this.tbLabelId.Size = new System.Drawing.Size(305, 25);
-            this.tbLabelId.TabIndex = 0;
+            tbLabelId.Dock = System.Windows.Forms.DockStyle.Fill;
+            tbLabelId.Location = new System.Drawing.Point(4, 25);
+            tbLabelId.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tbLabelId.Name = "tbLabelId";
+            tbLabelId.Size = new System.Drawing.Size(346, 27);
+            tbLabelId.TabIndex = 0;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnOpenImg);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox2.Location = new System.Drawing.Point(4, 532);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(313, 125);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "操作";
+            groupBox2.Controls.Add(btnOpenImg);
+            groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            groupBox2.Location = new System.Drawing.Point(4, 715);
+            groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox2.Size = new System.Drawing.Size(354, 167);
+            groupBox2.TabIndex = 1;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "操作";
             // 
             // btnOpenImg
             // 
-            this.btnOpenImg.Location = new System.Drawing.Point(9, 26);
-            this.btnOpenImg.Margin = new System.Windows.Forms.Padding(4);
-            this.btnOpenImg.Name = "btnOpenImg";
-            this.btnOpenImg.Size = new System.Drawing.Size(100, 29);
-            this.btnOpenImg.TabIndex = 0;
-            this.btnOpenImg.Text = "打开图片";
-            this.btnOpenImg.UseVisualStyleBackColor = true;
-            this.btnOpenImg.Click += new System.EventHandler(this.btnOpenImg_Click);
+            btnOpenImg.Location = new System.Drawing.Point(10, 35);
+            btnOpenImg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnOpenImg.Name = "btnOpenImg";
+            btnOpenImg.Size = new System.Drawing.Size(112, 39);
+            btnOpenImg.TabIndex = 0;
+            btnOpenImg.Text = "打开图片";
+            btnOpenImg.UseVisualStyleBackColor = true;
+            btnOpenImg.Click += btnOpenImg_Click;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.tbImgId);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(4, 4);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(313, 58);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "图片编号";
+            groupBox1.Controls.Add(tbImgId);
+            groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            groupBox1.Location = new System.Drawing.Point(4, 5);
+            groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            groupBox1.Size = new System.Drawing.Size(354, 77);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "图片编号";
             // 
             // tbImgId
             // 
-            this.tbImgId.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbImgId.Location = new System.Drawing.Point(4, 22);
-            this.tbImgId.Margin = new System.Windows.Forms.Padding(4);
-            this.tbImgId.Name = "tbImgId";
-            this.tbImgId.Size = new System.Drawing.Size(305, 25);
-            this.tbImgId.TabIndex = 0;
+            tbImgId.Dock = System.Windows.Forms.DockStyle.Fill;
+            tbImgId.Location = new System.Drawing.Point(4, 25);
+            tbImgId.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tbImgId.Name = "tbImgId";
+            tbImgId.Size = new System.Drawing.Size(346, 27);
+            tbImgId.TabIndex = 0;
             // 
             // ofdOpenFile
             // 
-            this.ofdOpenFile.FileName = "Save";
+            ofdOpenFile.FileName = "Save";
             // 
             // timeAutoSave
             // 
-            this.timeAutoSave.Enabled = true;
-            this.timeAutoSave.Interval = 30000;
-            this.timeAutoSave.Tick += new System.EventHandler(this.timeAutoSave_Tick);
+            timeAutoSave.Enabled = true;
+            timeAutoSave.Interval = 30000;
+            timeAutoSave.Tick += timeAutoSave_Tick;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1667, 690);
-            this.Controls.Add(this.splitContainer1);
-            this.KeyPreview = true;
-            this.MainMenuStrip = this.msMain;
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "MainForm";
-            this.Text = "繁星标注  V1.0";
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.msMain.ResumeLayout(false);
-            this.msMain.PerformLayout();
-            this.tcMain.ResumeLayout(false);
-            this.tpLabelInfo.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.tpLabelSelect.ResumeLayout(false);
-            this.btOpenImg.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1875, 920);
+            Controls.Add(splitContainer1);
+            KeyPreview = true;
+            MainMenuStrip = msMain;
+            Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            Name = "MainForm";
+            Text = "繁星标注  V1.0";
+            Load += MainForm_Load;
+            KeyDown += MainForm_KeyDown;
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            msMain.ResumeLayout(false);
+            msMain.PerformLayout();
+            tcMain.ResumeLayout(false);
+            tpLabelInfo.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            tpLabelSelect.ResumeLayout(false);
+            btOpenImg.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

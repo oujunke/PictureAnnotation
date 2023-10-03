@@ -310,8 +310,7 @@ namespace PictureAnnotationForm.Forms
 
         private void 保存数据ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sfdSaveFile.AddExtension = true;
-            sfdSaveFile.DefaultExt = "data";
+            sfdSaveFile.Filter = "Data Files (*.data)|*.data";
             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
             {
                 _lastSavePath = sfdSaveFile.FileName;
@@ -322,6 +321,7 @@ namespace PictureAnnotationForm.Forms
 
         private void 加载数据ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ofdOpenFile.Filter = "Data Files (*.data)|*.data";
             if (ofdOpenFile.ShowDialog() == DialogResult.OK)
             {
                 if (ImageManagers.ImageCount > 0)
@@ -353,7 +353,7 @@ namespace PictureAnnotationForm.Forms
             var data = File.ReadAllText(path);
             SaveModel saveModel = JsonConvert.DeserializeObject<SaveModel>(data);
             _listImgIndex = saveModel.ListImgIndex;
-            _listSelectIndex = saveModel.ListSelectIndex;
+            _listSelectIndex = saveModel.ListSelectIndex<0?0: saveModel.ListSelectIndex;
             _loadImgIndex = _listImgIndex;
             ImageManagers.LoadData(saveModel);
             LabelColorManagers.LoadData(saveModel);

@@ -77,14 +77,31 @@ namespace PictureAnnotationForm.UserForm
                 Delete();
                 return;
             }
+            var l= (int)Math.Round(imageLabelsModel.LabelShowRectangle.Left + LabelImageUserControl.ImageShowInfo.X -LabelImageUserControl.LeftPoint.X*LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
+            var t = (int)Math.Round(imageLabelsModel.LabelShowRectangle.Top + LabelImageUserControl.ImageShowInfo.Y - LabelImageUserControl.LeftPoint.Y*LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
+            var w= imageLabelsModel.LabelShowRectangle.Width;
+            var h = imageLabelsModel.LabelShowRectangle.Height;
+            var rec = new Rectangle(l, t,w,h);
+            var irec = new Rectangle(LabelImageUserControl.ImageShowInfo.X, LabelImageUserControl.ImageShowInfo.Y, LabelImageUserControl.ImageShowInfo.Width, LabelImageUserControl.ImageShowInfo.Height);
+            if (!rec.IntersectsWith(irec))
+            {
+                Delete();
+                return;
+            }
             _isHighlight = false;
             CurrentImageLabelsModel = imageLabelsModel;
             _currentLabelColor = LabelColorManagers.GetLabelColor(CurrentImageLabelsModel.Name);
             SuspendLayout();
-            Left = imageLabelsModel.LabelShowRectangle.Left + LabelImageUserControl.ImageShowInfo.X;
-            Top = imageLabelsModel.LabelShowRectangle.Top + LabelImageUserControl.ImageShowInfo.Y;
-            Width = imageLabelsModel.LabelShowRectangle.Width;
-            Height = imageLabelsModel.LabelShowRectangle.Height;
+            Left = l;
+
+            Top = t;
+            Width = w;
+            Height = h;
+            /*if (Left>)
+            {
+                Delete();
+                return;
+            }*/
             _currentDrawBitmap = new Bitmap(Width, Height);
             _currentDrawGraphics = Graphics.FromImage(_currentDrawBitmap);
             _labelNewName = CurrentImageLabelsModel.Name;
