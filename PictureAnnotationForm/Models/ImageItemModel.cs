@@ -42,7 +42,7 @@ namespace PictureAnnotationForm.Models
         /// 是否标注完成
         /// </summary>
         [JsonProperty("is_complete")]
-        public bool IsComplete { set; get; }
+        public int CompleteLevel { set; get; }
         /// <summary>
         /// 图片标注
         /// </summary>

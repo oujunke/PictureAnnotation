@@ -138,6 +138,12 @@ namespace PictureAnnotationForm.UserForm
             }
             var x = Left - LabelImageUserControl.ImageShowInfo.X;
             var y = Top - LabelImageUserControl.ImageShowInfo.Y;
+            if(LabelImageUserControl.IsFullLabel|| _currentLabelColor.IsFill)
+            {
+                _currentDrawGraphics.Clear(_currentLabelColor.Color);
+                _bitmapUpdateSuccess = true;
+                return;
+            }
             lock (LabelImageUserControl.CurrentDrawBitmap)
             {
                 _currentDrawGraphics.DrawImage(LabelImageUserControl.CurrentDrawBitmap, new Rectangle(0, 0, Width, Height), new Rectangle(x, y, Width, Height), GraphicsUnit.Pixel);
@@ -294,7 +300,6 @@ namespace PictureAnnotationForm.UserForm
             LabelImageUserControl?.SelectLabel(CurrentImageLabelsModel);
             _lastDownPoint = e.Location;
             _initialRectangle = new Rectangle(0, 0, Width, Height);
-            this.DoubleBuffered = true;
         }
         /// <summary>
         /// 鼠标离开
@@ -336,8 +341,8 @@ namespace PictureAnnotationForm.UserForm
             if (CurrentImageLabelsModel.IsHide)
             {
                 CurrentImageLabelsModel.IsHide = false;
-                var x = (int)Math.Round((Left - LabelImageUserControl.ImageShowInfo.X) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.X1;
-                var y = (int)Math.Round((Top - LabelImageUserControl.ImageShowInfo.Y) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.Y1;
+                var x = (int)Math.Round((Left - LabelImageUserControl.ImageShowInfo.X) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.X1+ LabelImageUserControl.LeftPoint.X;
+                var y = (int)Math.Round((Top - LabelImageUserControl.ImageShowInfo.Y ) / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple) - CurrentImageLabelsModel.Y1 + LabelImageUserControl.LeftPoint.Y;
                 var width = (int)Math.Round(Width / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
                 var heigth = (int)Math.Round(Height / LabelImageUserControl.CurrentImageItemModel.ZoomMultiple);
                 CurrentImageLabelsModel.X1 += x;
@@ -346,8 +351,7 @@ namespace PictureAnnotationForm.UserForm
                 CurrentImageLabelsModel.Y2 = CurrentImageLabelsModel.Y1 + heigth;
                 LabelImageUserControl.UpdateDrawingBoard();
             }
-            this.DoubleBuffered = false;
-
+            LabelImageUserControl.LabelUpdate();
         }
         /// <summary>
         /// 鼠标抬起

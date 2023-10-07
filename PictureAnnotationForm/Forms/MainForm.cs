@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PictureAnnotationForm.BLL;
+using PictureAnnotationForm.Datas;
 using PictureAnnotationForm.Models;
 using PictureAnnotationForm.Utils;
 using System;
@@ -39,14 +40,6 @@ namespace PictureAnnotationForm.Forms
         /// </summary>
         private int _showImgNum;
         /// <summary>
-        /// 上次加载文件名称(自动备份名称)
-        /// </summary>
-        private string _lastFileName;
-        /// <summary>
-        /// 上次保存路径
-        /// </summary>
-        private string _lastSavePath;
-        /// <summary>
         /// 标题
         /// </summary>
         public static new string Tag = "繁星标注  V1.0";
@@ -59,6 +52,7 @@ namespace PictureAnnotationForm.Forms
         private void MainForm_Load(object sender, EventArgs e)
         {
             _showImgNum = lvMain.Width / 283;
+            timeAutoSave.Interval = SystemSetting.Default.AutoBackInterval * 1000;
         }
         private void RefreshLabel()
         {
@@ -305,69 +299,44 @@ namespace PictureAnnotationForm.Forms
 
         private void liMain_LabelChange(ImageLabelsModel obj)
         {
-            liShow.UpdateDrawingBoard();
+            liShow.UpdateLabelChange(obj);
         }
 
-        private void 保存数据ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveData(string path = null)
         {
-            sfdSaveFile.Filter = "Data Files (*.data)|*.data";
-            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+            DataSets dataSets = ImageManagers.CurrentImageData;
+            dataSets.DatasetProperties.ListImgIndex = _listImgIndex;
+            dataSets.DatasetProperties.ListSelectIndex = _listSelectIndex;
+            LabelColorManagers.SaveData();
+            liMain.SaveData();
+            if (path == null)
             {
-                _lastSavePath = sfdSaveFile.FileName;
-                SaveData(sfdSaveFile.FileName);
+                ImageManagers.SaveDataSets();
             }
-
-        }
-
-        private void 加载数据ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ofdOpenFile.Filter = "Data Files (*.data)|*.data";
-            if (ofdOpenFile.ShowDialog() == DialogResult.OK)
+            else
             {
-                if (ImageManagers.ImageCount > 0)
-                {
-                    if (MessageBox.Show("当前有数据,确定是否加载", "警告", MessageBoxButtons.YesNo) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                }
-                _lastFileName = ofdOpenFile.SafeFileName.Substring(0, ofdOpenFile.SafeFileName.LastIndexOf('.'));
-                _lastSavePath = ofdOpenFile.FileName;
-                LoadData(ofdOpenFile.FileName);
+                ImageManagers.SaveDataSets(path);
             }
         }
-
-        private void SaveData(string path)
+        private void LoadData(string name)
         {
-            SaveModel saveModel = new SaveModel();
-            saveModel.ListImgIndex = _listImgIndex;
-            saveModel.ListSelectIndex = _listSelectIndex;
-            ImageManagers.SaveData(saveModel);
-            LabelColorManagers.SaveData(saveModel);
-            liMain.SaveData(saveModel);
-            var data = JsonConvert.SerializeObject(saveModel);
-            File.WriteAllText(path, data);
-        }
-        private void LoadData(string path)
-        {
-            var data = File.ReadAllText(path);
-            SaveModel saveModel = JsonConvert.DeserializeObject<SaveModel>(data);
-            _listImgIndex = saveModel.ListImgIndex;
-            _listSelectIndex = saveModel.ListSelectIndex<0?0: saveModel.ListSelectIndex;
+            ImageManagers.LoadDataSets(name);
+            _listImgIndex = ImageManagers.CurrentImageData.DatasetProperties.ListImgIndex;
+            _listSelectIndex = ImageManagers.CurrentImageData.DatasetProperties.ListSelectIndex < 0 ? 0 : ImageManagers.CurrentImageData.DatasetProperties.ListSelectIndex;
             _loadImgIndex = _listImgIndex;
-            ImageManagers.LoadData(saveModel);
-            LabelColorManagers.LoadData(saveModel);
+
+            LabelColorManagers.LoadData();
             lvMain.Items.Clear();
             ilMain.Images.Clear();
             RefreshLabel();
             AddImageItem(60);
             liShow.SetImageItemModel(lvMain.Items[_listSelectIndex].ImageKey);
-            if (saveModel.SelectLabelIndex > -1)
+            if (ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex > -1)
             {
                 var imageItemModel = ImageManagers.GetImageItemModel(lvMain.Items[_listSelectIndex].ImageKey);
-                if (saveModel.SelectLabelIndex < imageItemModel.Labels.Count)
+                if (ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex < imageItemModel.Labels.Count)
                 {
-                    var label = imageItemModel.Labels[saveModel.SelectLabelIndex];
+                    var label = imageItemModel.Labels[ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex];
                     liMain.SetLabel(label);
                 }
             }
@@ -375,23 +344,22 @@ namespace PictureAnnotationForm.Forms
             Text = $"{Tag}-当前第{_listImgIndex + 1}张,共{ImageManagers.ImageCount}张";
         }
         #region 加载数据集
-        private void 加载图片数据集ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 导入图片数据集ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void 加载VocXml标注ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 导入VocXml标注ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
-        private void 加载Voc数据集ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 导入Voc数据集ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (fbdOpenFolder.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
             var num = ImageManagers.LoadVocDirectory(fbdOpenFolder.SelectedPath);
-            _lastFileName = fbdOpenFolder.SelectedPath.Substring(fbdOpenFolder.SelectedPath.LastIndexOf('\\') + 1) + "_VOC";
             RefreshLabel();
             if (num > 10 && ilMain.Images.Count < 10)
             {
@@ -411,7 +379,6 @@ namespace PictureAnnotationForm.Forms
                 return;
             }
             var num = ImageManagers.LoadBoxWordDirectory(fbdOpenFolder.SelectedPath);
-            _lastFileName = fbdOpenFolder.SelectedPath.Substring(fbdOpenFolder.SelectedPath.LastIndexOf('\\') + 1) + "_BoxWord";
             RefreshLabel();
             if (num > 10 && ilMain.Images.Count < 10)
             {
@@ -431,7 +398,6 @@ namespace PictureAnnotationForm.Forms
                 return;
             }
             var num = ImageManagers.LoadPaddleOcrDetData(ofdOpenFile.FileName);
-            _lastFileName = fbdOpenFolder.SelectedPath.Substring(fbdOpenFolder.SelectedPath.LastIndexOf('\\') + 1) + "_PaddleOcrDet";
             RefreshLabel();
             if (num > 10 && ilMain.Images.Count < 10)
             {
@@ -443,13 +409,13 @@ namespace PictureAnnotationForm.Forms
 
         private void timeAutoSave_Tick(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_lastFileName))
+            if (ImageManagers.CurrentImageData == null)
             {
                 return;
             }
-            var path = $"back\\{DateTime.Now:yyyy-MM-dd}";
+            var path = Path.Combine(SystemSetting.Default.DataSetDir, ImageManagers.CurrentImageData.DatasetProperties.Name, DataSets.BackDir);
             Directory.CreateDirectory(path);
-            SaveData($"{path}\\{_lastFileName}-AutoSave.data");
+            SaveData($"{path}\\{DateTime.Now:yyyy-MM-dd HH}-AutoSave.data");
         }
 
         private void btnOpenImg_Click(object sender, EventArgs e)
@@ -489,11 +455,7 @@ namespace PictureAnnotationForm.Forms
         {
             if (e.Control && e.KeyCode == Keys.S)
             {
-                if (_lastSavePath == null)
-                {
-                    return;
-                }
-                SaveData(_lastSavePath);
+                SaveData();
                 BubbleReminderForm.ShowMsg($"数据保存成功");
             }
         }
@@ -541,6 +503,103 @@ namespace PictureAnnotationForm.Forms
         {
             _lvLabelUpdate = true;
             Task.Delay(5000).ContinueWith(r => _lvLabelUpdate = false);
+        }
+
+        private void 打开数据集ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //fbdOpenFolder.InitialDirectory = SystemSetting.Default.DataSetDir;
+            fbdOpenFolder.SelectedPath = SystemSetting.Default.DataSetDir;
+            if (fbdOpenFolder.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            var name = Path.GetDirectoryName(fbdOpenFolder.SelectedPath);
+            LoadData(name);
+        }
+
+        private void 修改程序集属性ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AutoEditForm.ShowEdit(ImageManagers.CurrentImageData);
+        }
+
+        private void 系统设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AutoEditForm.ShowEdit(SystemSetting.Default);
+        }
+
+        private void btnRevert_Click(object sender, EventArgs e)
+        {
+            liShow.InitZoomMultiple();
+        }
+
+        private void btnFullLabel_Click(object sender, EventArgs e)
+        {
+            liShow.FullLabel();
+        }
+
+        private void btnCheckBox_Click(object sender, EventArgs e)
+        {
+            liShow.CheckBox();
+        }
+
+        private void btnShowLabel_Click(object sender, EventArgs e)
+        {
+            liShow.ShowLabel();
+        }
+
+        private void btnSetAllLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(SystemSetting.Default.LastDataSet) || !Directory.Exists(Path.Combine(SystemSetting.Default.DataSetDir, SystemSetting.Default.LastDataSet)))
+            {
+                var dataSets = AutoEditForm.ShowEdit<DataSets>(null);
+                if (dataSets == null)
+                {
+                    MessageBox.Show("请创建或选择数据集");
+                    Close();
+                    return;
+                }
+                DataSets.Init(dataSets);
+                SystemSetting.Default.LastDataSet = dataSets.DatasetProperties.Name;
+                LoadData(SystemSetting.Default.LastDataSet);
+                SystemSetting.SaveDefault();
+            }
+            else
+            {
+
+                LoadData(SystemSetting.Default.LastDataSet);
+            }
+        }
+
+        private void liShow_LabelUpdateEvent()
+        {
+            liMain.LabelsUodate();
+        }
+
+        private void 减少标注图片等级ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var item in ImageManagers.CurrentImageDataList)
+            {
+                if (item.CompleteLevel > 0)
+                {
+                    item.CompleteLevel--;
+                }
+            }
+        }
+
+        private void 增加标注图片等级ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var item in ImageManagers.CurrentImageDataList)
+            {
+                if (item.CompleteLevel > 0)
+                {
+                    item.CompleteLevel++;
+                }
+            }
         }
     }
 }

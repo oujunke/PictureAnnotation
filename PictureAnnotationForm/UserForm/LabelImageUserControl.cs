@@ -18,8 +18,11 @@ namespace PictureAnnotationForm.UserForm
         public LabelImageUserControl()
         {
             InitializeComponent();
-            pbMian.MouseWheel += PbMian_MouseWheel;
+            pbMain.MouseWheel += PbMian_MouseWheel;
+            pbMain.KeyDown += PbMian_KeyDown;
         }
+
+
         #region 对外事件
         /// <summary>
         /// 触发上一张图片
@@ -33,6 +36,10 @@ namespace PictureAnnotationForm.UserForm
         /// 选择标签变动
         /// </summary>
         public event Action<ImageLabelsModel> LabelChange;
+        /// <summary>
+        /// 选择标签修改
+        /// </summary>
+        public event Action LabelUpdateEvent;
         #endregion
         #region 对外属性
         /// <summary>
@@ -51,7 +58,30 @@ namespace PictureAnnotationForm.UserForm
         /// 标签对应的显示控件
         /// </summary>
         public Dictionary<ImageLabelsModel, ImageLabelShowUserControl> LabelShowDictionary = new Dictionary<ImageLabelsModel, ImageLabelShowUserControl>();
+        /// <summary>
+        /// 图片左坐标
+        /// </summary>
         public Point LeftPoint = Point.Empty;
+        /// <summary>
+        /// 是否填充所有标签
+        /// </summary>
+        public bool IsFullLabel;
+        /// <summary>
+        /// 是否检查边框(显示原图边框(固定边框))
+        /// </summary>
+        public bool IsCheckBox;
+        /// <summary>
+        /// 是否显示单项标签
+        /// </summary>
+        public bool IsShowLabel;
+        /// <summary>
+        /// 显示单项标签索引
+        /// </summary>
+        public int ShowLabelIndex;
+        /// <summary>
+        /// 当前单项显示的标签
+        /// </summary>
+        public ImageLabelsModel ShowLabels;
         #endregion
         #region 对外方法
         /// <summary>
@@ -62,12 +92,19 @@ namespace PictureAnnotationForm.UserForm
         {
             CurrentImageItemModel = imageItemModel;
             _currentBitmap = ImageManagers.GetImage(CurrentImageItemModel);
-            ImageShowInfo = pbMian.GetImageShowInfo(_currentBitmap);
-            imageItemModel.ZoomMultiple = ImageShowInfo.ZoomMultiple;
+            _currentLabelBitmap = null;
             LeftPoint = Point.Empty;
-            UpdateDrawingBoard();
+            UpdatePbMain();
             LabelChange?.Invoke(null);
         }
+
+        private void UpdatePbMain()
+        {
+            ImageShowInfo = pbMain.GetImageShowInfo(_currentBitmap);
+            CurrentImageItemModel.ZoomMultiple = ImageShowInfo.ZoomMultiple;
+            UpdateDrawingBoard();
+        }
+
         /// <summary>
         /// 设置当前的标签模型
         /// </summary>
@@ -101,8 +138,31 @@ namespace PictureAnnotationForm.UserForm
                 return;
             }
             UpdateBitmap();
-            pbMian.Image = CurrentDrawBitmap;
+            pbMain.Image = CurrentDrawBitmap;
             InitImageLabelShowUserControl();
+        }
+        public void UpdateLabelChange(ImageLabelsModel imageLabels)
+        {
+            if (CurrentImageItemModel == null)
+            {
+                return;
+            }
+            if (IsShowLabel&&imageLabels==ShowLabels)
+            {
+                ShowMaxLabel(imageLabels);
+            }
+            else
+            {
+                UpdateDrawingBoard();
+            }
+        }
+        public void LabelUpdate()
+        {
+            if (CurrentImageItemModel == null)
+            {
+                return;
+            }
+            LabelUpdateEvent?.Invoke();
         }
         /// <summary>
         /// 更新图片
@@ -110,7 +170,7 @@ namespace PictureAnnotationForm.UserForm
         public void UpdateBitmap()
         {
             CurrentDrawBitmap = GetDrawBitamp();
-            pbMian.Image = CurrentDrawBitmap;
+            pbMain.Image = CurrentDrawBitmap;
         }
         /// <summary>
         /// 触发选中标签事件
@@ -120,28 +180,122 @@ namespace PictureAnnotationForm.UserForm
         {
             LabelChange?.Invoke(label);
         }
+        /// <summary>
+        /// 初始化倍数和坐标
+        /// </summary>
+        public void InitZoomMultiple()
+        {
+            CurrentImageItemModel.ZoomMultiple = ImageShowInfo.ZoomMultiple;
+            LeftPoint = Point.Empty;
+            UpdateDrawingBoard();
+        }
+        /// <summary>
+        /// 标签是否填充
+        /// </summary>
+        public void FullLabel()
+        {
+            IsFullLabel = !IsFullLabel;
+            UpdateDrawingBoard();
+        }
+        /// <summary>
+        /// 检查边框
+        /// </summary>
+        public void CheckBox()
+        {
+            IsCheckBox = !IsCheckBox;
+            UpdateDrawingBoard();
+        }
+        /// <summary>
+        /// 是否单项显示
+        /// </summary>
+        public void ShowLabel()
+        {
+            IsShowLabel = !IsShowLabel;
+            UpdateDrawingBoard();
+        }
         #endregion
 
         #region 控件触发事件
         private void btnNext_Click(object sender, EventArgs e)
         {
-            ImageNext?.Invoke();
+            if (IsShowLabel)
+            {
+                if(ShowLabelIndex>= CurrentImageItemModel.Labels.Count - 1)
+                {
+                    ShowLabelIndex = 0;
+                    if (CurrentImageItemModel.Labels.Count > 0 && CurrentImageItemModel.CompleteLevel == 0)
+                    {
+                        CurrentImageItemModel.CompleteLevel = 1;
+                    }
+                    ImageNext?.Invoke();
+                }
+                else
+                {
+                    var lable = CurrentImageItemModel.Labels[ShowLabelIndex++];
+                    ShowMaxLabel(lable);
+                    SelectLabel(lable);
+                }
+            }
+            else
+            {
+                if (CurrentImageItemModel.Labels.Count > 0 && CurrentImageItemModel.CompleteLevel == 0)
+                {
+                    CurrentImageItemModel.CompleteLevel = 1;
+                }
+                ImageNext?.Invoke();
+            }
+        }
+
+        private void ShowMaxLabel(ImageLabelsModel lable)
+        {
+            ShowLabels=lable;
+            LeftPoint = new Point(lable.X1, lable.Y1);
+            var zm = Math.Min(ImageShowInfo.Width*1.0 / lable.Width, ImageShowInfo.Height * 1.0 / lable.Height);
+            CurrentImageItemModel.ZoomMultiple = (float)zm;
+            UpdateDrawingBoard();
         }
 
         private void btnLast_Click(object sender, EventArgs e)
         {
-            ImageLast?.Invoke();
+            if (IsShowLabel)
+            {
+                if (ShowLabelIndex < 0)
+                {
+                    ShowLabelIndex = CurrentImageItemModel.Labels.Count-1;
+                    if (CurrentImageItemModel.Labels.Count > 0 && CurrentImageItemModel.CompleteLevel == 0)
+                    {
+                        CurrentImageItemModel.CompleteLevel = 1;
+                    }
+                    ImageLast?.Invoke();
+                }
+                else
+                {
+                    var lable = CurrentImageItemModel.Labels[ShowLabelIndex--];
+                    ShowMaxLabel(lable);
+                    SelectLabel(lable);
+                }
+            }
+            else
+            {
+                if (CurrentImageItemModel.Labels.Count > 0&& CurrentImageItemModel.CompleteLevel==0)
+                {
+                    CurrentImageItemModel.CompleteLevel = 1;
+                }
+                ImageLast?.Invoke();
+            }
         }
         bool isDrag = false;
         ImageLabelsModel dragLabel;
         ImageLabelShowUserControl dragImageLabelShowUserControl;
         Point dragPoint;
         bool isControl = false;
+        DateTime lastControlDt = DateTime.MinValue;
+        DateTime lastAltDt = DateTime.MinValue;
         bool isAlt = false;
         DateTime lastDt = DateTime.MinValue;
         private void PbMian_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (isControl && e.Delta != 0&&(DateTime.Now- lastDt).TotalMilliseconds>50)
+            if (isControl && e.Delta != 0 && (DateTime.Now - lastControlDt).TotalMilliseconds < 50 && (DateTime.Now - lastDt).TotalMilliseconds > 50)
             {
                 lastDt = DateTime.Now;
                 var ox = (e.X - ImageShowInfo.X) / CurrentImageItemModel.ZoomMultiple;
@@ -156,13 +310,28 @@ namespace PictureAnnotationForm.UserForm
                 }
                 var nx = (e.X - ImageShowInfo.X) / CurrentImageItemModel.ZoomMultiple;
                 var ny = (e.Y - ImageShowInfo.Y) / CurrentImageItemModel.ZoomMultiple;
-                LeftPoint-=new Size((int)Math.Ceiling(nx -ox),(int)Math.Ceiling(ny-oy));
+                LeftPoint -= new Size((int)Math.Ceiling(nx - ox), (int)Math.Ceiling(ny - oy));
                 UpdateDrawingBoard();
             }
         }
+        private void PbMian_KeyDown(object sender, KeyEventArgs e)
+        {
+            isControl = e.Control;
+            if (isControl)
+            {
+                lastControlDt = DateTime.Now;
+            }
+            isAlt = e.Alt;
+            if (isAlt)
+            {
+                lastAltDt = DateTime.Now;
+            }
+        }
+        Point dragLeftPoint = Point.Empty;
+        DateTime lastDragLeftDt = DateTime.Now;
         private void pbMian_MouseDown(object sender, MouseEventArgs e)
         {
-            pbMian.Focus();
+            pbMain.Focus();
             if (e.Button == MouseButtons.Right && CurrentImageItemModel != null)
             {
                 isDrag = true;
@@ -181,6 +350,12 @@ namespace PictureAnnotationForm.UserForm
                 dragImageLabelShowUserControl.BringToFront();
                 dragLabel = tempLabel;
                 dragPoint = new Point(e.X, e.Y);
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                isDrag = true;
+                dragPoint = new Point(e.X, e.Y);
+                dragLeftPoint = LeftPoint;
             }
         }
 
@@ -210,6 +385,14 @@ namespace PictureAnnotationForm.UserForm
                         dragImageLabelShowUserControl.Init(dragLabel);
                     }
                 }
+                else if (e.Button == MouseButtons.Left && (DateTime.Now - lastDragLeftDt).TotalMilliseconds > 100)
+                {
+                    var x = (e.X - dragPoint.X) / CurrentImageItemModel.ZoomMultiple;
+                    var y = (e.Y - dragPoint.Y) / CurrentImageItemModel.ZoomMultiple;
+                    LeftPoint = new Point(dragLeftPoint.X - (int)Math.Round(x), dragLeftPoint.Y - (int)Math.Round(y));
+                    UpdateDrawingBoard();
+                    pbMain.Update();
+                }
             }
         }
         #endregion
@@ -218,6 +401,10 @@ namespace PictureAnnotationForm.UserForm
         /// 当前图片
         /// </summary>
         private Bitmap _currentBitmap;
+        /// <summary>
+        /// 当前带标签的图片
+        /// </summary>
+        private Bitmap _currentLabelBitmap;
         /// <summary>
         /// 上次突出显示的Label
         /// </summary>
@@ -234,12 +421,20 @@ namespace PictureAnnotationForm.UserForm
         private void InitImageLabelShowUserControl()
         {
             LabelShowDictionary.Clear();
+            if (IsCheckBox)
+            {
+                for (int i = 0; i < _imageLabelShowUserControls.Count; i++)
+                {
+                    _imageLabelShowUserControls[i].Delete();
+                }
+                return;
+            }
             if (_imageLabelShowUserControls.Count < CurrentImageItemModel.Labels.Count)
             {
                 for (int i = _imageLabelShowUserControls.Count - 1; i < CurrentImageItemModel.Labels.Count; i++)
                 {
                     var labelShowUserControl = new ImageLabelShowUserControl(this);
-                    pbMian.Controls.Add(labelShowUserControl);
+                    pbMain.Controls.Add(labelShowUserControl);
                     _imageLabelShowUserControls.Add(labelShowUserControl);
                 }
             }
@@ -266,7 +461,7 @@ namespace PictureAnnotationForm.UserForm
                 if (_imageLabelShowUserControls.Count <= i)
                 {
                     var labelShowUserControl = new ImageLabelShowUserControl(this);
-                    pbMian.Controls.Add(labelShowUserControl);
+                    pbMain.Controls.Add(labelShowUserControl);
                     _imageLabelShowUserControls.Add(labelShowUserControl);
                 }
                 result = _imageLabelShowUserControls[i];
@@ -284,16 +479,44 @@ namespace PictureAnnotationForm.UserForm
         {
             var newBit = new Bitmap(ImageShowInfo.Width, ImageShowInfo.Height);
             var graphics = Graphics.FromImage(newBit);
+            var bit = _currentBitmap;
+            if (IsCheckBox)
+            {
+                if (_currentLabelBitmap == null)
+                {
+                    _currentLabelBitmap = new Bitmap(_currentBitmap);
+                    Graphics graphics1 = Graphics.FromImage(_currentLabelBitmap);
+                    for (int i = 0; i < CurrentImageItemModel.Labels.Count; i++)
+                    {
+                        var label = CurrentImageItemModel.Labels[i];
+                        var labelColor = LabelColorManagers.GetLabelColor(label.Name);
+                        graphics1.DrawString(label.Name, Font, labelColor.Brush, label.X1 + ImageLabelShowUserControl.BorderWidth, label.Y1 + ImageLabelShowUserControl.BorderWidth);
+
+                        graphics1.FillRectangle(labelColor.Brush, label.X1, label.Y1, label.Width, ImageLabelShowUserControl.BorderWidth);
+
+                        graphics1.FillRectangle(labelColor.Brush, label.X1 + label.Width - ImageLabelShowUserControl.BorderWidth, label.Y1, ImageLabelShowUserControl.BorderWidth, label.Height);
+
+                        graphics1.FillRectangle(labelColor.Brush, label.X1, label.Y2 - ImageLabelShowUserControl.BorderWidth, label.Width - ImageLabelShowUserControl.BorderWidth * 2, ImageLabelShowUserControl.BorderWidth);
+
+                        graphics1.FillRectangle(labelColor.Brush,
+                            label.X1,
+                            label.Y1 + ImageLabelShowUserControl.BorderWidth,
+                            ImageLabelShowUserControl.BorderWidth, label.Height - ImageLabelShowUserControl.BorderWidth * 2);
+                    }
+                }
+                bit = _currentLabelBitmap;
+            }
             if (!LeftPoint.IsEmpty || ImageShowInfo.ZoomMultiple != CurrentImageItemModel.ZoomMultiple)
             {
                 Size newSize = new Size((int)Math.Ceiling(newBit.Width / CurrentImageItemModel.ZoomMultiple), (int)Math.Ceiling(newBit.Height / CurrentImageItemModel.ZoomMultiple));
-                graphics.DrawImage(_currentBitmap, new Rectangle(Point.Empty, newBit.Size), new Rectangle(LeftPoint, newSize), GraphicsUnit.Pixel);
+                graphics.DrawImage(bit, new Rectangle(Point.Empty, newBit.Size), new Rectangle(LeftPoint, newSize), GraphicsUnit.Pixel);
             }
             else
             {
-                graphics.DrawImage(_currentBitmap, new Rectangle(0, 0, newBit.Width, newBit.Height));
+                graphics.DrawImage(bit, new Rectangle(0, 0, newBit.Width, newBit.Height));
             }
             graphics.Dispose();
+
             return newBit;
         }
         /// <summary>
@@ -324,8 +547,21 @@ namespace PictureAnnotationForm.UserForm
 
         private void pbMian_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            isControl = e.Control;
-            isAlt = e.Alt;
+
+        }
+
+        private void pbMian_MouseEnter(object sender, EventArgs e)
+        {
+            pbMain.Focus();
+        }
+
+        private void pbMian_SizeChanged(object sender, EventArgs e)
+        {
+            if (CurrentImageItemModel == null)
+            {
+                return;
+            }
+            UpdatePbMain();
         }
     }
 }

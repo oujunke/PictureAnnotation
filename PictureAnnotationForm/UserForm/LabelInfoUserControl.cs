@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using PictureAnnotationForm.Models;
+using PictureAnnotationForm.BLL;
 
 namespace PictureAnnotationForm.UserForm
 {
@@ -34,10 +35,10 @@ namespace PictureAnnotationForm.UserForm
         public void SetLabel(ImageLabelsModel imageLabels)
         {
             UpdateLabel();
-            _isUpdate = true;
             _currentLabel = imageLabels;
             if (imageLabels == null)
             {
+                _isUpdate = true;
                 tbName.Text = string.Empty;
                 tbSubName.Text = string.Empty;
                 nudX1.Value = 0;
@@ -48,35 +49,46 @@ namespace PictureAnnotationForm.UserForm
                 nudDown.Value = 0;
                 nudRight.Value = 0;
                 nudTop.Value = 0;
+                _isUpdate = false;
             }
             else
             {
-                tbName.Text = _currentLabel.Name;
-                tbSubName.Text = _currentLabel.SubName;
-                nudX1.Value = _currentLabel.X1;
-                nudX2.Value = _currentLabel.X2;
-                nudY1.Value = _currentLabel.Y1;
-                nudY2.Value = _currentLabel.Y2;
-                nudLeft.Value = nudX1.Value;
-                nudRight.Value = nudX2.Value;
-                nudTop.Value = nudY1.Value;
-                nudDown.Value = nudY2.Value;
+                LabelsUodate();
             }
+
+        }
+        public void LabelsUodate()
+        {
+            if (_currentLabel == null || _isUpdate)
+            {
+                return;
+            }
+            _isUpdate = true;
+            tbName.Text = _currentLabel.Name;
+            tbSubName.Text = _currentLabel.SubName;
+            nudX1.Value = _currentLabel.X1;
+            nudX2.Value = _currentLabel.X2;
+            nudY1.Value = _currentLabel.Y1;
+            nudY2.Value = _currentLabel.Y2;
+            nudLeft.Value = nudX1.Value;
+            nudRight.Value = nudX2.Value;
+            nudTop.Value = nudY1.Value;
+            nudDown.Value = nudY2.Value;
             _isUpdate = false;
         }
         /// <summary>
         /// 保存数据
         /// </summary>
         /// <param name="saveModel"></param>
-        public void SaveData(SaveModel saveModel)
+        public void SaveData()
         {
             if (_currentLabel == null)
             {
-                saveModel.SelectLabelIndex = -1;
+                ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex = -1;
             }
             else
             {
-                saveModel.SelectLabelIndex = _currentLabel.ImageItemModel.Labels.IndexOf(_currentLabel);
+                ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex = _currentLabel.ImageItemModel.Labels.IndexOf(_currentLabel);
             }
         }
         private void tbName_TextChanged(object sender, EventArgs e)

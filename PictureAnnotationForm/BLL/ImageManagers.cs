@@ -10,32 +10,36 @@ using System.Runtime.Caching;
 using PictureAnnotationForm.Utils;
 using PictureAnnotationForm.Models;
 using System.Diagnostics;
+using PictureAnnotationForm.Datas;
+using PictureAnnotationForm.Datas.Imports;
+
 
 namespace PictureAnnotationForm.BLL
 {
     public class ImageManagers
     {
+        public static DataSets CurrentImageData { set; get; }
         /// <summary>
         /// 当前图片标注数据
         /// </summary>
-        private static List<ImageItemModel> _currentImageData = new List<ImageItemModel>();
+        public static List<ImageItemModel> CurrentImageDataList { get => CurrentImageData.Images; }
         /// <summary>
         /// 当前图片编号对应的图片数据
         /// </summary>
-        private static Dictionary<string, ImageItemModel> _kevImageData = new Dictionary<string, ImageItemModel>();
+        public static Dictionary<string, ImageItemModel> KevImageData = new Dictionary<string, ImageItemModel>();
         /// <summary>
         /// 当前所有的Label
         /// </summary>
-        private static Dictionary<string, string> _labelNameData = new Dictionary<string, string>();
+        public static Dictionary<string, string> LabelNameData = new Dictionary<string, string>();
         /// <summary>
         /// 标签Id对应的标签
         /// </summary>
-        private static Dictionary<string, ImageLabelsModel> _labelKeyDictionary = new Dictionary<string, ImageLabelsModel>();
+        public static Dictionary<string, ImageLabelsModel> LabelKeyDictionary = new Dictionary<string, ImageLabelsModel>();
         /// <summary>
         /// 当前所有的Label
         /// </summary>
         public static List<string> LabelNames = new List<string>();
-        public static int ImageCount { get => _currentImageData.Count; }
+        public static int ImageCount { get => CurrentImageDataList.Count; }
         /// <summary>
         /// 获得图片对象列表
         /// </summary>
@@ -44,7 +48,7 @@ namespace PictureAnnotationForm.BLL
         /// <returns></returns>
         public static List<ImageItemModel> GetImageModelList(int index = 0, int size = 10)
         {
-            return _currentImageData.Skip(index).Take(size).ToList();
+            return CurrentImageDataList.Skip(index).Take(size).ToList();
         }
         /// <summary>
         /// 获得图片列表
@@ -63,54 +67,97 @@ namespace PictureAnnotationForm.BLL
         /// <param name="oldName"></param>
         public static void UpdateLabelName(ImageLabelsModel itemModel)
         {
-            if (!_labelNameData.ContainsKey(itemModel.Name))
+            if (!LabelNameData.ContainsKey(itemModel.Name))
             {
-                _labelNameData.Add(itemModel.Name, null);
+                LabelNameData.Add(itemModel.Name, null);
                 LabelNames.Add(itemModel.Name);
             }
         }
         /// <summary>
-        /// 保存数据
+        /// 加载数据集
         /// </summary>
         /// <param name="saveModel"></param>
-        public static void SaveData(SaveModel saveModel)
+        public static void LoadDataSets(string name)
         {
-            saveModel.CurrentImageData = _currentImageData;
+            var filePath=Path.Combine(SystemSetting.Default.DataSetDir, name, $"{name}.ds");
+            if (File.Exists(filePath))
+            {
+                DataSets dataSets = JsonConvert.DeserializeObject<DataSets>(File.ReadAllText(filePath));
+                LoadDataSets(dataSets);
+            }
         }
         /// <summary>
-        /// 加载数据
+        /// 加载数据集
         /// </summary>
         /// <param name="saveModel"></param>
-        public static void LoadData(SaveModel saveModel)
+        public static void LoadDataSets()
         {
-            _currentImageData = saveModel.CurrentImageData;
-            _kevImageData = new Dictionary<string, ImageItemModel>();
-            if (_currentImageData == null)
-            {
-                _currentImageData = new List<ImageItemModel>();
-            }
-            _labelNameData = new Dictionary<string, string>();
-            foreach (var item in _currentImageData)
+            DataSets dataSets = JsonConvert.DeserializeObject<DataSets>(File.ReadAllText(Path.Combine(SystemSetting.Default.DataSetDir, SystemSetting.Default.LastDataSet, $"{SystemSetting.Default.LastDataSet}.ds")));
+            LoadDataSets(dataSets);
+        }
+        /// <summary>
+        /// 保存数据集
+        /// </summary>
+        /// <param name="saveModel"></param>
+        public static void SaveDataSets()
+        {
+            var dir = Path.Combine(SystemSetting.Default.DataSetDir, CurrentImageData.DatasetProperties.Name);
+            var path = Path.Combine(dir, $"{CurrentImageData.DatasetProperties.Name}.ds");
+            SaveDataSets(path);
+        }
+        /// <summary>
+        /// 保存数据集
+        /// </summary>
+        /// <param name="saveModel"></param>
+        public static void SaveDataSets(string path)
+        {
+            File.WriteAllText(path, JsonConvert.SerializeObject(CurrentImageData));
+        }
+        /// <summary>
+        /// 加载数据集
+        /// </summary>
+        /// <param name="saveModel"></param>
+        public static void LoadDataSets(DataSets dataSets)
+        {
+            CurrentImageData = dataSets;
+            LabelNameData = new Dictionary<string, string>();
+            foreach (var item in CurrentImageDataList)
             {
                 if (string.IsNullOrWhiteSpace(item.Id))
                 {
                     item.Id = Guid.NewGuid().ToString("N");
                 }
-                _kevImageData.Add(item.Id, item);
+                KevImageData.Add(item.Id, item);
                 foreach (var labelsModel in item.Labels)
                 {
                     labelsModel.ImageItemModel = item;
-                    if (!_labelNameData.ContainsKey(labelsModel.Name))
+                    if (!LabelNameData.ContainsKey(labelsModel.Name))
                     {
-                        _labelNameData.Add(labelsModel.Name, null);
+                        LabelNameData.Add(labelsModel.Name, null);
                         LabelNames.Add(labelsModel.Name);
                     }
                     if (!string.IsNullOrWhiteSpace(labelsModel.LabelId))
                     {
-                        _labelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
+                        LabelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
                     }
                 }
             }
+        }
+        /// <summary>
+        /// 获得文件完整路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetImgPath(string path)
+        {
+            var fullPath = MemoryCache.Default.Get(path);
+            if(fullPath == null)
+            {
+                var newPath = Path.Combine(SystemSetting.Default.DataSetDir, ImageManagers.CurrentImageData.DatasetProperties.Name, DataSets.ImgDir, path);
+                MemoryCache.Default.Add(path, newPath, new DateTimeOffset(DateTime.Now.AddMinutes(20)));
+                return newPath;
+            }
+            return fullPath.ToString();
         }
         /// <summary>
         /// 获得图片(有缓存则获取缓存图片)
@@ -123,7 +170,7 @@ namespace PictureAnnotationForm.BLL
             Bitmap image = null;
             if (img == null)
             {
-                image = Image.FromFile(itemModel.Path) as Bitmap;
+                image = Image.FromFile(GetImgPath(itemModel.Path)) as Bitmap;
                 MemoryCache.Default.Add(itemModel.Id, image, new DateTimeOffset(DateTime.Now.AddMinutes(20)));
             }
             else
@@ -139,9 +186,9 @@ namespace PictureAnnotationForm.BLL
         /// <returns></returns>
         public static ImageItemModel GetImageItemModel(string key)
         {
-            if (_kevImageData.ContainsKey(key))
+            if (KevImageData.ContainsKey(key))
             {
-                var result = _kevImageData[key];
+                var result = KevImageData[key];
                 return result;
             }
             else
@@ -156,9 +203,9 @@ namespace PictureAnnotationForm.BLL
         /// <returns></returns>
         public static ImageLabelsModel GetImageLabelsModel(string key)
         {
-            if (_labelKeyDictionary.ContainsKey(key))
+            if (LabelKeyDictionary.ContainsKey(key))
             {
-                var result = _labelKeyDictionary[key];
+                var result = LabelKeyDictionary[key];
                 return result;
             }
             else
@@ -175,9 +222,9 @@ namespace PictureAnnotationForm.BLL
         public static ImageLabelsModel GetOverlappingLabel(int startIndex, out int currentIndex)
         {
             List<ImageLabelsModel> imageLabelsModelList = new List<ImageLabelsModel>();
-            for (int i = startIndex; i < _currentImageData.Count; i++)
+            for (int i = startIndex; i < CurrentImageDataList.Count; i++)
             {
-                var imageItemModel = _currentImageData[i];
+                var imageItemModel = CurrentImageDataList[i];
                 imageLabelsModelList.Clear();
                 foreach (var labelsModel in imageItemModel.Labels)
                 {
@@ -199,7 +246,7 @@ namespace PictureAnnotationForm.BLL
                 }
 
             }
-            currentIndex = _currentImageData.Count;
+            currentIndex = CurrentImageDataList.Count;
             return null;
         }
         /// <summary>
@@ -220,9 +267,9 @@ namespace PictureAnnotationForm.BLL
         /// <returns></returns>
         public static ImageLabelsModel GetSonEmptyLabel(ref int index)
         {
-            for (int i = index; i < _currentImageData.Count; i++)
+            for (int i = index; i < CurrentImageDataList.Count; i++)
             {
-                foreach (var item in _currentImageData[i].Labels)
+                foreach (var item in CurrentImageDataList[i].Labels)
                 {
                     if ((item.Name == "cd" || item.Name == "zd") && string.IsNullOrWhiteSpace(item.SubName))
                     {
@@ -240,9 +287,9 @@ namespace PictureAnnotationForm.BLL
         /// <returns></returns>
         public static ImageLabelsModel GetUnknownLabel(ref int index)
         {
-            for (int i = index; i < _currentImageData.Count; i++)
+            for (int i = index; i < CurrentImageDataList.Count; i++)
             {
-                foreach (var item in _currentImageData[i].Labels)
+                foreach (var item in CurrentImageDataList[i].Labels)
                 {
                     if (item.Name == "未知")
                     {
@@ -333,9 +380,9 @@ namespace PictureAnnotationForm.BLL
                     {
                         ImageLabelsModel imageLabels = new ImageLabelsModel();
                         imageLabels.Name = objectElement.Element("name").Value;
-                        if (!_labelNameData.ContainsKey(imageLabels.Name))
+                        if (!LabelNameData.ContainsKey(imageLabels.Name))
                         {
-                            _labelNameData.Add(imageLabels.Name, null);
+                            LabelNameData.Add(imageLabels.Name, null);
                             LabelNames.Add(imageLabels.Name);
                         }
                         var bndboxElement = objectElement.Element("bndbox");
@@ -346,15 +393,15 @@ namespace PictureAnnotationForm.BLL
                         imageLabels.ImageItemModel = imageItemModel;
                         imageItemModel.Labels.Add(imageLabels);
                     }
-                    imageItemModel.IsComplete = imageItemModel.Labels.Count > 0;
-                    if (_kevImageData.ContainsKey(imageItemModel.Id))
+                    imageItemModel.CompleteLevel = imageItemModel.Labels.Count > 0?1:0;
+                    if (KevImageData.ContainsKey(imageItemModel.Id))
                     {
                         LogUtils.Log($"编号为{imageItemModel.Id}在列表中已拥有");
                     }
                     else
                     {
-                        _kevImageData.Add(imageItemModel.Id, imageItemModel);
-                        _currentImageData.Add(imageItemModel);
+                        KevImageData.Add(imageItemModel.Id, imageItemModel);
+                        CurrentImageDataList.Add(imageItemModel);
                         success++;
                     }
                 }
@@ -364,93 +411,7 @@ namespace PictureAnnotationForm.BLL
         }
         public static int LoadPaddleOcrDetData(string filePath)
         {
-            int success = 0;
-            FileInfo fileInfo = new FileInfo(filePath);
-            DirectoryInfo directory = null;
-            foreach (var row in File.ReadAllLines(filePath))
-            {
-                if (string.IsNullOrEmpty(row))
-                {
-                    continue;
-                }
-                var cols = row.Split('\t');
-                if (cols.Length == 2)
-                {
-                    var ps = cols[0].Split(new[] {"\\","/" },StringSplitOptions.RemoveEmptyEntries);
-                    if (directory == null)
-                    {
-                        if (ps.Length==4&&ps[ps.Length - 3] == fileInfo.Directory.Name)
-                        {
-                            directory = fileInfo.Directory.GetDirectories().FirstOrDefault(d => d.Name == ps[ps.Length - 2]);
-                        }
-                        else
-                        {
-                            Debugger.Break();
-                        }
-                    }
-                    var data = JsonConvert.DeserializeObject<List<PaddleOcrDetData>>(cols[1]);
-                    ImageItemModel imageItemModel = new ImageItemModel();
-                    var path = ps[ps.Length - 1];
-                    if (!string.IsNullOrWhiteSpace(path))
-                    {
-                        var num = path.IndexOf('.');
-                        if (num > 0)
-                        {
-                            var startIndex = path.LastIndexOf('\\') + 1;
-                            imageItemModel.Id = path.Substring(startIndex, num - startIndex);
-                        }
-                        else
-                        {
-                            imageItemModel.Id = path;
-                        }
-                    }
-                    else
-                    {
-                        imageItemModel.Id = Guid.NewGuid().ToString("N");
-                    }
-                    imageItemModel.Path = Path.Combine(directory.FullName, path);
-                    Image image=Image.FromFile(imageItemModel.Path);
-                    imageItemModel.Width = image.Width;
-                    imageItemModel.Height= image.Height;
-                    image.Dispose();
-                    foreach (var dataModel in data)
-                    {
-                        ImageLabelsModel imageLabels = new ImageLabelsModel();
-                        imageLabels.Name = dataModel.Transcription;
-                        if (!_labelNameData.ContainsKey(imageLabels.Name))
-                        {
-                            _labelNameData.Add(imageLabels.Name, null);
-                            LabelNames.Add(imageLabels.Name);
-                        }
-                        var x1 = (int)dataModel.Points[0,0];
-                        var y1 = (int)dataModel.Points[0,1];
-                        var x2 = (int)dataModel.Points[2,0];
-                        var y2 = (int)dataModel.Points[2,1];
-                        imageLabels.X1 = x1;
-                        imageLabels.Y1 = y1;
-                        imageLabels.X2 = x2;
-                        imageLabels.Y2 =y2;
-                        imageLabels.ImageItemModel = imageItemModel;
-                        imageItemModel.Labels.Add(imageLabels);
-                    }
-                    imageItemModel.IsComplete = imageItemModel.Labels.Count > 0;
-                    if (_kevImageData.ContainsKey(imageItemModel.Id))
-                    {
-                        LogUtils.Log($"编号为{imageItemModel.Id}在列表中已拥有");
-                    }
-                    else
-                    {
-                        _kevImageData.Add(imageItemModel.Id, imageItemModel);
-                        _currentImageData.Add(imageItemModel);
-                        success++;
-                    }
-                }
-                else
-                {
-                    Debugger.Break();
-                }
-            }
-            return success;
+            return new ImportPaddleOcrDet().ImportLabelName(filePath);
         }
         /// <summary>
         /// 加载BoxWord数据集文件夹,返回加入数据条数
@@ -501,17 +462,17 @@ namespace PictureAnnotationForm.BLL
                     }
                     ImageLabelsModel imageLabels = new ImageLabelsModel();
                     imageLabels.Name = dataModel.Category;
-                    if (!_labelNameData.ContainsKey(imageLabels.Name))
+                    if (!LabelNameData.ContainsKey(imageLabels.Name))
                     {
-                        _labelNameData.Add(imageLabels.Name, null);
+                        LabelNameData.Add(imageLabels.Name, null);
                         LabelNames.Add(imageLabels.Name);
                     }
                     if (!string.IsNullOrWhiteSpace(dataModel.LabelId))
                     {
                         imageLabels.LabelId = dataModel.LabelId;
-                        if (!_labelKeyDictionary.ContainsKey(imageLabels.LabelId))
+                        if (!LabelKeyDictionary.ContainsKey(imageLabels.LabelId))
                         {
-                            _labelKeyDictionary.Add(imageLabels.LabelId, imageLabels);
+                            LabelKeyDictionary.Add(imageLabels.LabelId, imageLabels);
                         }
                     }
                     var x1 = (int)dataModel.Bbox[0];
@@ -526,15 +487,15 @@ namespace PictureAnnotationForm.BLL
                     imageLabels.ImageItemModel = imageItemModel;
                     imageItemModel.Labels.Add(imageLabels);
                 }
-                imageItemModel.IsComplete = imageItemModel.Labels.Count > 0;
-                if (_kevImageData.ContainsKey(imageItemModel.Id))
+                imageItemModel.CompleteLevel = imageItemModel.Labels.Count > 0 ? 1 : 0;
+                if (KevImageData.ContainsKey(imageItemModel.Id))
                 {
                     LogUtils.Log($"编号为{imageItemModel.Id}在列表中已拥有");
                 }
                 else
                 {
-                    _kevImageData.Add(imageItemModel.Id, imageItemModel);
-                    _currentImageData.Add(imageItemModel);
+                    KevImageData.Add(imageItemModel.Id, imageItemModel);
+                    CurrentImageDataList.Add(imageItemModel);
                     success++;
                 }
             }
@@ -546,7 +507,7 @@ namespace PictureAnnotationForm.BLL
         /// <param name="saveDirectoryPath"></param>
         public static void ExportEasyData(string saveDirectoryPath)
         {
-            foreach (var item in _currentImageData.Where(cid => cid.IsComplete))
+            foreach (var item in CurrentImageDataList.Where(cid => cid.CompleteLevel>0))
             {
                 var imagePath = Path.Combine(saveDirectoryPath, $"{item.Id}.jpg");
                 File.Copy(item.Path, imagePath);
@@ -560,7 +521,7 @@ namespace PictureAnnotationForm.BLL
             var root = "image";
             if (File.Exists("data.ini"))
             {
-                _kevImageData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("data.ini"));
+                KevImageData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("data.ini"));
             }
         }
     }

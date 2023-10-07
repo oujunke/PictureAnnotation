@@ -37,23 +37,32 @@
             btnNext = new System.Windows.Forms.Button();
             btnLast = new System.Windows.Forms.Button();
             msMain = new System.Windows.Forms.MenuStrip();
-            文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            加载Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            打开数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            历史数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            修改程序集属性ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导入Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            加载图片数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导入图片数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            加载VocXml标注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            保存数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            加载数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            导入VocXml标注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             导出Voc数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             导出EasyData数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             导出选中分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            减少标注图片等级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tcMain = new System.Windows.Forms.TabControl();
             tpLabelInfo = new System.Windows.Forms.TabPage();
             liMain = new UserForm.LabelInfoUserControl();
             panel3 = new System.Windows.Forms.Panel();
+            btnSetAllLabel = new System.Windows.Forms.Button();
+            btnShowLabel = new System.Windows.Forms.Button();
+            btnCheckBox = new System.Windows.Forms.Button();
+            btnFullLabel = new System.Windows.Forms.Button();
+            btnRevert = new System.Windows.Forms.Button();
             btnUnknown = new System.Windows.Forms.Button();
             btnSonEmpty = new System.Windows.Forms.Button();
             btnLabelOverlapping = new System.Windows.Forms.Button();
@@ -74,6 +83,7 @@
             sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             timeAutoSave = new System.Windows.Forms.Timer(components);
+            增加标注图片等级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -122,6 +132,7 @@
             liShow.ImageLast += liShow_ImageLast;
             liShow.ImageNext += liShow_ImageNext;
             liShow.LabelChange += liShow_LabelChange;
+            liShow.LabelUpdateEvent += liShow_LabelUpdateEvent;
             // 
             // panel1
             // 
@@ -185,7 +196,7 @@
             // msMain
             // 
             msMain.ImageScalingSize = new System.Drawing.Size(20, 20);
-            msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { 文件ToolStripMenuItem, 导出ToolStripMenuItem });
+            msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItem3, 导入ToolStripMenuItem, 导出ToolStripMenuItem, 操作ToolStripMenuItem });
             msMain.Location = new System.Drawing.Point(0, 0);
             msMain.Name = "msMain";
             msMain.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
@@ -193,66 +204,81 @@
             msMain.TabIndex = 0;
             msMain.Text = "menuStrip1";
             // 
-            // 文件ToolStripMenuItem
+            // toolStripMenuItem3
             // 
-            文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 加载Voc数据集ToolStripMenuItem, toolStripMenuItem1, 加载图片数据集ToolStripMenuItem, toolStripMenuItem2, 加载VocXml标注ToolStripMenuItem, toolStripSeparator1, 保存数据ToolStripMenuItem, 加载数据ToolStripMenuItem });
-            文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-            文件ToolStripMenuItem.Text = "文件";
+            toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 打开数据集ToolStripMenuItem, 历史数据集ToolStripMenuItem, 修改程序集属性ToolStripMenuItem, 系统设置ToolStripMenuItem });
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            toolStripMenuItem3.Size = new System.Drawing.Size(53, 24);
+            toolStripMenuItem3.Text = "文件";
             // 
-            // 加载Voc数据集ToolStripMenuItem
+            // 打开数据集ToolStripMenuItem
             // 
-            加载Voc数据集ToolStripMenuItem.Name = "加载Voc数据集ToolStripMenuItem";
-            加载Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            加载Voc数据集ToolStripMenuItem.Text = "加载Voc数据集";
-            加载Voc数据集ToolStripMenuItem.Click += 加载Voc数据集ToolStripMenuItem_Click;
+            打开数据集ToolStripMenuItem.Name = "打开数据集ToolStripMenuItem";
+            打开数据集ToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            打开数据集ToolStripMenuItem.Text = "打开数据集";
+            打开数据集ToolStripMenuItem.Click += 打开数据集ToolStripMenuItem_Click;
+            // 
+            // 历史数据集ToolStripMenuItem
+            // 
+            历史数据集ToolStripMenuItem.Name = "历史数据集ToolStripMenuItem";
+            历史数据集ToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            历史数据集ToolStripMenuItem.Text = "历史数据集";
+            // 
+            // 修改程序集属性ToolStripMenuItem
+            // 
+            修改程序集属性ToolStripMenuItem.Name = "修改程序集属性ToolStripMenuItem";
+            修改程序集属性ToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            修改程序集属性ToolStripMenuItem.Text = "程序集设置";
+            修改程序集属性ToolStripMenuItem.Click += 修改程序集属性ToolStripMenuItem_Click;
+            // 
+            // 系统设置ToolStripMenuItem
+            // 
+            系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
+            系统设置ToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            系统设置ToolStripMenuItem.Text = "系统设置";
+            系统设置ToolStripMenuItem.Click += 系统设置ToolStripMenuItem_Click;
+            // 
+            // 导入ToolStripMenuItem
+            // 
+            导入ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 导入Voc数据集ToolStripMenuItem, toolStripMenuItem1, 导入图片数据集ToolStripMenuItem, toolStripMenuItem2, 导入VocXml标注ToolStripMenuItem });
+            导入ToolStripMenuItem.Name = "导入ToolStripMenuItem";
+            导入ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            导入ToolStripMenuItem.Text = "导入";
+            // 
+            // 导入Voc数据集ToolStripMenuItem
+            // 
+            导入Voc数据集ToolStripMenuItem.Name = "导入Voc数据集ToolStripMenuItem";
+            导入Voc数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            导入Voc数据集ToolStripMenuItem.Text = "导入Voc数据集";
+            导入Voc数据集ToolStripMenuItem.Click += 导入Voc数据集ToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new System.Drawing.Size(269, 26);
-            toolStripMenuItem1.Text = "加载BoxWord数据集";
+            toolStripMenuItem1.Text = "导入BoxWord数据集";
             toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
-            // 加载图片数据集ToolStripMenuItem
+            // 导入图片数据集ToolStripMenuItem
             // 
-            加载图片数据集ToolStripMenuItem.Name = "加载图片数据集ToolStripMenuItem";
-            加载图片数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            加载图片数据集ToolStripMenuItem.Text = "加载图片数据集";
-            加载图片数据集ToolStripMenuItem.Click += 加载图片数据集ToolStripMenuItem_Click;
+            导入图片数据集ToolStripMenuItem.Name = "导入图片数据集ToolStripMenuItem";
+            导入图片数据集ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            导入图片数据集ToolStripMenuItem.Text = "导入图片数据集";
+            导入图片数据集ToolStripMenuItem.Click += 导入图片数据集ToolStripMenuItem_Click;
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
             toolStripMenuItem2.Size = new System.Drawing.Size(269, 26);
-            toolStripMenuItem2.Text = "加载PaddleOcrDet数据集";
+            toolStripMenuItem2.Text = "导入PaddleOcrDet数据集";
             toolStripMenuItem2.Click += toolStripMenuItem2_Click;
             // 
-            // 加载VocXml标注ToolStripMenuItem
+            // 导入VocXml标注ToolStripMenuItem
             // 
-            加载VocXml标注ToolStripMenuItem.Name = "加载VocXml标注ToolStripMenuItem";
-            加载VocXml标注ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            加载VocXml标注ToolStripMenuItem.Text = "加载Voc-Xml标注";
-            加载VocXml标注ToolStripMenuItem.Click += 加载VocXml标注ToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
-            // 
-            // 保存数据ToolStripMenuItem
-            // 
-            保存数据ToolStripMenuItem.Name = "保存数据ToolStripMenuItem";
-            保存数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            保存数据ToolStripMenuItem.Text = "保存数据";
-            保存数据ToolStripMenuItem.Click += 保存数据ToolStripMenuItem_Click;
-            // 
-            // 加载数据ToolStripMenuItem
-            // 
-            加载数据ToolStripMenuItem.Name = "加载数据ToolStripMenuItem";
-            加载数据ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            加载数据ToolStripMenuItem.Text = "加载数据";
-            加载数据ToolStripMenuItem.Click += 加载数据ToolStripMenuItem_Click;
+            导入VocXml标注ToolStripMenuItem.Name = "导入VocXml标注ToolStripMenuItem";
+            导入VocXml标注ToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            导入VocXml标注ToolStripMenuItem.Text = "导入Voc-Xml标注";
+            导入VocXml标注ToolStripMenuItem.Click += 导入VocXml标注ToolStripMenuItem_Click;
             // 
             // 导出ToolStripMenuItem
             // 
@@ -281,6 +307,20 @@
             导出选中分类到ImageNet数据集ToolStripMenuItem.Size = new System.Drawing.Size(314, 26);
             导出选中分类到ImageNet数据集ToolStripMenuItem.Text = "导出选中分类到ImageNet数据集";
             导出选中分类到ImageNet数据集ToolStripMenuItem.Click += 导出选中分类到ImageNet数据集ToolStripMenuItem_Click;
+            // 
+            // 操作ToolStripMenuItem
+            // 
+            操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { 减少标注图片等级ToolStripMenuItem, 增加标注图片等级ToolStripMenuItem });
+            操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
+            操作ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            操作ToolStripMenuItem.Text = "操作";
+            // 
+            // 减少标注图片等级ToolStripMenuItem
+            // 
+            减少标注图片等级ToolStripMenuItem.Name = "减少标注图片等级ToolStripMenuItem";
+            减少标注图片等级ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            减少标注图片等级ToolStripMenuItem.Text = "减少标注图片等级";
+            减少标注图片等级ToolStripMenuItem.Click += 减少标注图片等级ToolStripMenuItem_Click;
             // 
             // tcMain
             // 
@@ -312,15 +352,20 @@
             // liMain
             // 
             liMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            liMain.Location = new System.Drawing.Point(4, 161);
+            liMain.Location = new System.Drawing.Point(4, 214);
             liMain.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             liMain.Name = "liMain";
-            liMain.Size = new System.Drawing.Size(354, 721);
+            liMain.Size = new System.Drawing.Size(354, 668);
             liMain.TabIndex = 1;
             liMain.LabelChange += liMain_LabelChange;
             // 
             // panel3
             // 
+            panel3.Controls.Add(btnSetAllLabel);
+            panel3.Controls.Add(btnShowLabel);
+            panel3.Controls.Add(btnCheckBox);
+            panel3.Controls.Add(btnFullLabel);
+            panel3.Controls.Add(btnRevert);
             panel3.Controls.Add(btnUnknown);
             panel3.Controls.Add(btnSonEmpty);
             panel3.Controls.Add(btnLabelOverlapping);
@@ -328,8 +373,63 @@
             panel3.Location = new System.Drawing.Point(4, 5);
             panel3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel3.Name = "panel3";
-            panel3.Size = new System.Drawing.Size(354, 156);
+            panel3.Size = new System.Drawing.Size(354, 209);
             panel3.TabIndex = 0;
+            // 
+            // btnSetAllLabel
+            // 
+            btnSetAllLabel.Location = new System.Drawing.Point(177, 151);
+            btnSetAllLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnSetAllLabel.Name = "btnSetAllLabel";
+            btnSetAllLabel.Size = new System.Drawing.Size(165, 39);
+            btnSetAllLabel.TabIndex = 9;
+            btnSetAllLabel.Text = "推广所有位置标签";
+            btnSetAllLabel.UseVisualStyleBackColor = true;
+            btnSetAllLabel.Click += btnSetAllLabel_Click;
+            // 
+            // btnShowLabel
+            // 
+            btnShowLabel.Location = new System.Drawing.Point(4, 151);
+            btnShowLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnShowLabel.Name = "btnShowLabel";
+            btnShowLabel.Size = new System.Drawing.Size(165, 39);
+            btnShowLabel.TabIndex = 8;
+            btnShowLabel.Text = "单项预览";
+            btnShowLabel.UseVisualStyleBackColor = true;
+            btnShowLabel.Click += btnShowLabel_Click;
+            // 
+            // btnCheckBox
+            // 
+            btnCheckBox.Location = new System.Drawing.Point(177, 102);
+            btnCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnCheckBox.Name = "btnCheckBox";
+            btnCheckBox.Size = new System.Drawing.Size(165, 39);
+            btnCheckBox.TabIndex = 7;
+            btnCheckBox.Text = "检查边框";
+            btnCheckBox.UseVisualStyleBackColor = true;
+            btnCheckBox.Click += btnCheckBox_Click;
+            // 
+            // btnFullLabel
+            // 
+            btnFullLabel.Location = new System.Drawing.Point(4, 102);
+            btnFullLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnFullLabel.Name = "btnFullLabel";
+            btnFullLabel.Size = new System.Drawing.Size(165, 39);
+            btnFullLabel.TabIndex = 6;
+            btnFullLabel.Text = "填充标签";
+            btnFullLabel.UseVisualStyleBackColor = true;
+            btnFullLabel.Click += btnFullLabel_Click;
+            // 
+            // btnRevert
+            // 
+            btnRevert.Location = new System.Drawing.Point(176, 53);
+            btnRevert.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            btnRevert.Name = "btnRevert";
+            btnRevert.Size = new System.Drawing.Size(165, 39);
+            btnRevert.TabIndex = 5;
+            btnRevert.Text = "图片还原";
+            btnRevert.UseVisualStyleBackColor = true;
+            btnRevert.Click += btnRevert_Click;
             // 
             // btnUnknown
             // 
@@ -507,6 +607,13 @@
             timeAutoSave.Interval = 30000;
             timeAutoSave.Tick += timeAutoSave_Tick;
             // 
+            // 增加标注图片等级ToolStripMenuItem
+            // 
+            增加标注图片等级ToolStripMenuItem.Name = "增加标注图片等级ToolStripMenuItem";
+            增加标注图片等级ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            增加标注图片等级ToolStripMenuItem.Text = "增加标注图片等级";
+            增加标注图片等级ToolStripMenuItem.Click += 增加标注图片等级ToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -519,6 +626,7 @@
             Name = "MainForm";
             Text = "繁星标注  V1.0";
             Load += MainForm_Load;
+            Shown += MainForm_Shown;
             KeyDown += MainForm_KeyDown;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
@@ -545,11 +653,11 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.MenuStrip msMain;
-        private System.Windows.Forms.ToolStripMenuItem 文件ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 加载Voc数据集ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入Voc数据集ToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ToolStripMenuItem 加载图片数据集ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 加载VocXml标注ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入图片数据集ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入VocXml标注ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 导出Voc数据集ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 导出EasyData数据集ToolStripMenuItem;
@@ -570,9 +678,6 @@
         private UserForm.LabelImageUserControl liShow;
         private UserForm.LabelInfoUserControl liMain;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem 保存数据ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 加载数据ToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog sfdSaveFile;
         private System.Windows.Forms.OpenFileDialog ofdOpenFile;
         private System.Windows.Forms.Timer timeAutoSave;
@@ -588,6 +693,19 @@
         private System.Windows.Forms.Button btnSonEmpty;
         private System.Windows.Forms.Button btnUnknown;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem 打开数据集ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 历史数据集ToolStripMenuItem;
+        private System.Windows.Forms.Button btnCheckBox;
+        private System.Windows.Forms.Button btnFullLabel;
+        private System.Windows.Forms.Button btnRevert;
+        private System.Windows.Forms.ToolStripMenuItem 操作ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 减少标注图片等级ToolStripMenuItem;
+        private System.Windows.Forms.Button btnShowLabel;
+        private System.Windows.Forms.ToolStripMenuItem 修改程序集属性ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 系统设置ToolStripMenuItem;
+        private System.Windows.Forms.Button btnSetAllLabel;
+        private System.Windows.Forms.ToolStripMenuItem 增加标注图片等级ToolStripMenuItem;
     }
 }
 

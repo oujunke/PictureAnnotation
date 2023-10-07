@@ -24,6 +24,7 @@ namespace PictureAnnotationForm.Models
         /// <summary>
         /// 填充对象
         /// </summary>
+        [JsonIgnore]
         public SolidBrush Brush;
         /// <summary>
         /// 是否填充

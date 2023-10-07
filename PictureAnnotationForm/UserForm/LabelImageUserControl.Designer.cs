@@ -30,8 +30,8 @@
         {
             btnNext = new System.Windows.Forms.Button();
             btnLast = new System.Windows.Forms.Button();
-            pbMian = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)pbMian).BeginInit();
+            pbMain = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pbMain).BeginInit();
             SuspendLayout();
             // 
             // btnNext
@@ -60,34 +60,35 @@
             btnLast.UseVisualStyleBackColor = true;
             btnLast.Click += btnLast_Click;
             // 
-            // pbMian
+            // pbMain
             // 
-            pbMian.Dock = System.Windows.Forms.DockStyle.Fill;
-            pbMian.Location = new System.Drawing.Point(68, 0);
-            pbMian.Margin = new System.Windows.Forms.Padding(0);
-            pbMian.Name = "pbMian";
-            pbMian.Size = new System.Drawing.Size(656, 528);
-            pbMian.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            pbMian.TabIndex = 4;
-            pbMian.TabStop = false;
-            pbMian.MouseDown += pbMian_MouseDown;
-            pbMian.MouseLeave += pbMian_MouseLeave;
-            pbMian.MouseMove += pbMian_MouseMove;
-            pbMian.MouseUp += pbMian_MouseUp;
-            pbMian.PreviewKeyDown += pbMian_PreviewKeyDown;
+            pbMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            pbMain.Location = new System.Drawing.Point(68, 0);
+            pbMain.Margin = new System.Windows.Forms.Padding(0);
+            pbMain.Name = "pbMain";
+            pbMain.Size = new System.Drawing.Size(656, 528);
+            pbMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            pbMain.TabIndex = 4;
+            pbMain.TabStop = false;
+            pbMain.SizeChanged += pbMian_SizeChanged;
+            pbMain.MouseDown += pbMian_MouseDown;
+            pbMain.MouseEnter += pbMian_MouseEnter;
+            pbMain.MouseLeave += pbMian_MouseLeave;
+            pbMain.MouseMove += pbMian_MouseMove;
+            pbMain.MouseUp += pbMian_MouseUp;
             // 
             // LabelImageUserControl
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(pbMian);
+            Controls.Add(pbMain);
             Controls.Add(btnNext);
             Controls.Add(btnLast);
             DoubleBuffered = true;
             Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             Name = "LabelImageUserControl";
             Size = new System.Drawing.Size(792, 528);
-            ((System.ComponentModel.ISupportInitialize)pbMian).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbMain).EndInit();
             ResumeLayout(false);
         }
 
@@ -95,6 +96,6 @@
 
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnLast;
-        private System.Windows.Forms.PictureBox pbMian;
+        private System.Windows.Forms.PictureBox pbMain;
     }
 }

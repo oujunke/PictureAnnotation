@@ -25,6 +25,7 @@ namespace PictureAnnotationForm.BLL
         private static Dictionary<LabelColor, string> _labelColorToLabelName = new Dictionary<LabelColor, string>();
         private static Dictionary<string, LabelColor> _labelNameToLabelColor = new Dictionary<string, LabelColor>();
         private static object _labelColor = new object();
+        private static LabelColor OcrDefaultLabelColor;
         static LabelColorManagers()
         {
             AddLabelColors("Red", new LabelColor(Color.Red));
@@ -34,6 +35,7 @@ namespace PictureAnnotationForm.BLL
             AddLabelColors("DarkRed", new LabelColor(Color.DarkRed));
             AddLabelColors("DarkGreen", new LabelColor(Color.DarkGreen));
             AddLabelColors("DarkOrange", new LabelColor(Color.DarkOrange));
+            OcrDefaultLabelColor = _labelColorDictionary["Red"];
         }
         private static void AddLabelColors(string name, LabelColor labelColor)
         {
@@ -43,6 +45,10 @@ namespace PictureAnnotationForm.BLL
         }
         public static LabelColor GetLabelColor(string labelName)
         {
+            if(ImageManagers.CurrentImageData.DatasetProperties.Type== Enums.EDatasetPropertiesType.Ocr)
+            {
+                return OcrDefaultLabelColor;
+            }
             if (_labelNameToLabelColor.ContainsKey(labelName))
             {
                 return _labelNameToLabelColor[labelName];
@@ -79,17 +85,17 @@ namespace PictureAnnotationForm.BLL
         /// 保存数据
         /// </summary>
         /// <param name="saveModel"></param>
-        public static void SaveData(SaveModel saveModel)
+        public static void SaveData()
         {
-            saveModel.LabelNameToLabelColor = _labelNameToLabelColor;
+            ImageManagers.CurrentImageData.DatasetProperties.LabelNameToLabelColor = _labelNameToLabelColor;
         }
         /// <summary>
         /// 加载数据
         /// </summary>
         /// <param name="saveModel"></param>
-        public static void LoadData(SaveModel saveModel)
+        public static void LoadData()
         {
-            _labelNameToLabelColor = saveModel.LabelNameToLabelColor;
+            _labelNameToLabelColor = ImageManagers.CurrentImageData.DatasetProperties.LabelNameToLabelColor;
             if (_labelNameToLabelColor == null)
             {
                 _labelNameToLabelColor = new Dictionary<string, LabelColor>();

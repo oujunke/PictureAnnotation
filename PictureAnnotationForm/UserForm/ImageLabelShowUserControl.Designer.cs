@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             // 
             // ImageLabelShowUserControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 27F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "ImageLabelShowUserControl";
-            this.Size = new System.Drawing.Size(0, 0);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ImageLabelShowUserControl_Paint);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseDown);
-            this.MouseEnter += new System.EventHandler(this.ImageLabelShowUserControl_MouseEnter);
-            this.MouseLeave += new System.EventHandler(this.ImageLabelShowUserControl_MouseLeave);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ImageLabelShowUserControl_MouseUp);
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ImageLabelShowUserControl_PreviewKeyDown);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(16F, 33F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            DoubleBuffered = true;
+            Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+            Margin = new System.Windows.Forms.Padding(0);
+            Name = "ImageLabelShowUserControl";
+            Size = new System.Drawing.Size(0, 0);
+            Paint += ImageLabelShowUserControl_Paint;
+            MouseDown += ImageLabelShowUserControl_MouseDown;
+            MouseEnter += ImageLabelShowUserControl_MouseEnter;
+            MouseLeave += ImageLabelShowUserControl_MouseLeave;
+            MouseMove += ImageLabelShowUserControl_MouseMove;
+            MouseUp += ImageLabelShowUserControl_MouseUp;
+            PreviewKeyDown += ImageLabelShowUserControl_PreviewKeyDown;
+            ResumeLayout(false);
         }
 
         #endregion
