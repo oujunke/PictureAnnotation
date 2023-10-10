@@ -1,4 +1,5 @@
 ﻿using PictureAnnotationForm.Forms;
+using PictureAnnotationForm.Servers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace PictureAnnotationForm
         [STAThread]
         static void Main()
         {
+            AutoEditServer editServer = new AutoEditServer(null);
+            object obj = null;
+            editServer.Init(ref obj);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
