@@ -2,6 +2,7 @@
 using PictureAnnotationForm.Attributes;
 using PictureAnnotationForm.Enums;
 using PictureAnnotationForm.Models;
+using PictureAnnotationForm.Servers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,7 +34,9 @@ namespace PictureAnnotationForm.Forms
             Type type = typeof(T);
             AutoEditForm autoEditForm = new AutoEditForm();
             var prefix = obj == null ? "添加" : "修改";
-            Propertys propertys = GetPropertys(type);
+            AutoEditServer autoEditServer = new AutoEditServer();
+            autoEditServer.Init(obj,type, autoEditForm.panel2);
+            Propertys propertys = autoEditServer.Propertys;
             if (propertys != null)
             {
                 autoEditForm.Text = propertys.Text;
@@ -42,22 +45,12 @@ namespace PictureAnnotationForm.Forms
             {
                 autoEditForm.Text = prefix + type.Name;
             }
-            var memberInfoPropertysBind = InfoPropertysBind(obj, null);
-            if (memberInfoPropertysBind.Child.Count == 0)
-            {
-                Debugger.Break();
-            }
-            SetControl(memberInfoPropertysBind, autoEditForm.panel2, autoEditForm);
-            autoEditForm.memberInfoPropertys = memberInfoPropertysBind;
+            autoEditServer.SetControl();
             if (autoEditForm.ShowDialog() == DialogResult.OK)
             {
-                if (obj == null)
-                {
-                    obj = new T();
-                }
-                UpdateData(obj, memberInfoPropertysBind);
+                autoEditServer.UpdateData(()=> new T());
             }
-            return obj;
+            return autoEditServer.Data as T;
         }
         private MemberInfoPropertysBind memberInfoPropertys;
         private void btnSave_Click(object sender, EventArgs e)

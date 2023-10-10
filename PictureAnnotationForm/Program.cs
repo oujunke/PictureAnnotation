@@ -15,9 +15,6 @@ namespace PictureAnnotationForm
         [STAThread]
         static void Main()
         {
-            AutoEditServer editServer = new AutoEditServer(null);
-            object obj = null;
-            editServer.Init(ref obj);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

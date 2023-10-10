@@ -25,7 +25,7 @@ namespace PictureAnnotationForm.UserForm
         /// <summary>
         /// 当前标签
         /// </summary>
-        private ImageLabelsModel _currentLabel;
+        public ImageLabelsModel CurrentLabel { get; private set; }
         private bool _isChanged;
         private bool _isUpdate;
         /// <summary>
@@ -35,7 +35,7 @@ namespace PictureAnnotationForm.UserForm
         public void SetLabel(ImageLabelsModel imageLabels)
         {
             UpdateLabel();
-            _currentLabel = imageLabels;
+            CurrentLabel = imageLabels;
             if (imageLabels == null)
             {
                 _isUpdate = true;
@@ -59,17 +59,17 @@ namespace PictureAnnotationForm.UserForm
         }
         public void LabelsUodate()
         {
-            if (_currentLabel == null || _isUpdate)
+            if (CurrentLabel == null || _isUpdate)
             {
                 return;
             }
             _isUpdate = true;
-            tbName.Text = _currentLabel.Name;
-            tbSubName.Text = _currentLabel.SubName;
-            nudX1.Value = _currentLabel.X1;
-            nudX2.Value = _currentLabel.X2;
-            nudY1.Value = _currentLabel.Y1;
-            nudY2.Value = _currentLabel.Y2;
+            tbName.Text = CurrentLabel.Name;
+            tbSubName.Text = CurrentLabel.SubName;
+            nudX1.Value = CurrentLabel.X1;
+            nudX2.Value = CurrentLabel.X2;
+            nudY1.Value = CurrentLabel.Y1;
+            nudY2.Value = CurrentLabel.Y2;
             nudLeft.Value = nudX1.Value;
             nudRight.Value = nudX2.Value;
             nudTop.Value = nudY1.Value;
@@ -82,18 +82,18 @@ namespace PictureAnnotationForm.UserForm
         /// <param name="saveModel"></param>
         public void SaveData()
         {
-            if (_currentLabel == null)
+            if (CurrentLabel == null)
             {
                 ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex = -1;
             }
             else
             {
-                ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex = _currentLabel.ImageItemModel.Labels.IndexOf(_currentLabel);
+                ImageManagers.CurrentImageData.DatasetProperties.SelectLabelIndex = CurrentLabel.ImageItemModel.Labels.IndexOf(CurrentLabel);
             }
         }
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (_currentLabel == null || _isUpdate)
+            if (CurrentLabel == null || _isUpdate)
             {
                 return;
             }
@@ -110,20 +110,20 @@ namespace PictureAnnotationForm.UserForm
 
         private bool UpdateLabel()
         {
-            if (_currentLabel == null || !_isChanged || _isUpdate)
+            if (CurrentLabel == null || !_isChanged || _isUpdate)
             {
                 return false;
             }
             _isChanged = false;
             if (tbName.Text.Length == 0)
             {
-                tbName.Text = _currentLabel.Name;
+                tbName.Text = CurrentLabel.Name;
             }
             else
             {
-                _currentLabel.Name = tbName.Text;
-                _currentLabel.SubName = tbSubName.Text;
-                LabelChange?.Invoke(_currentLabel);
+                CurrentLabel.Name = tbName.Text;
+                CurrentLabel.SubName = tbSubName.Text;
+                LabelChange?.Invoke(CurrentLabel);
                 return true;
             }
             return false;
@@ -135,7 +135,7 @@ namespace PictureAnnotationForm.UserForm
 
         private void nud_ValueChanged(object sender, EventArgs e)
         {
-            if (_currentLabel == null || _isUpdate)
+            if (CurrentLabel == null || _isUpdate)
             {
                 return;
             }
@@ -143,13 +143,13 @@ namespace PictureAnnotationForm.UserForm
             {
                 return;
             }
-            _currentLabel.X1 = (int)nudX1.Value;
-            _currentLabel.Y1 = (int)nudY1.Value;
-            _currentLabel.X2 = (int)nudX2.Value;
-            _currentLabel.Y2 = (int)nudY2.Value;
+            CurrentLabel.X1 = (int)nudX1.Value;
+            CurrentLabel.Y1 = (int)nudY1.Value;
+            CurrentLabel.X2 = (int)nudX2.Value;
+            CurrentLabel.Y2 = (int)nudY2.Value;
             if (!UpdateLabel())
             {
-                LabelChange?.Invoke(_currentLabel);
+                LabelChange?.Invoke(CurrentLabel);
             }
         }
 
@@ -174,7 +174,7 @@ namespace PictureAnnotationForm.UserForm
         }
         private void LimitUpdateLabel(Action act)
         {
-            if (_currentLabel == null || _isUpdate)
+            if (CurrentLabel == null || _isUpdate)
             {
                 return;
             }

@@ -549,7 +549,46 @@ namespace PictureAnnotationForm.Forms
 
         private void btnSetAllLabel_Click(object sender, EventArgs e)
         {
+            if (liMain.CurrentLabel == null)
+            {
+                return;
+            }
+            if(MessageBox.Show("是否设置所有未标志数据标签","请确认",MessageBoxButtons.YesNo, MessageBoxIcon.Question)!= DialogResult.Yes)
+            {
+                return;
+            }
 
+            var area = liMain.CurrentLabel.Width * liMain.CurrentLabel.Height*ImageManagers.CurrentImageData.DatasetProperties.OverScale;
+            var rec = liMain.CurrentLabel.LabelRectangle;
+            int addCount = 0;
+            int updateCount = 0;
+            foreach (var item in ImageManagers.CurrentImageDataList)
+            {
+                if (item.CompleteLevel > 0)
+                {
+                    continue;
+                }
+                bool isNoFount = true;
+                foreach (var imageLabel in item.Labels)
+                {
+                    //获取两个位置的交集
+                    var intersectRectangle = Rectangle.Intersect(imageLabel.LabelRectangle, rec);
+                    var currArea = intersectRectangle.Width * intersectRectangle.Height;
+                    //如果80%面积重复则认定是重复框
+                    if (currArea > area || currArea > imageLabel.Width * imageLabel.Height *ImageManagers.CurrentImageData.DatasetProperties.OverScale)
+                    {
+                        imageLabel.Set(liMain.CurrentLabel);
+                        updateCount++;
+                        isNoFount = true;
+                    }
+                }
+                if (isNoFount)
+                {
+                    item.Labels.Add(new ImageLabelsModel { ImageItemModel= item , LabelId= item .Id}.Set(liMain.CurrentLabel));
+                    addCount++;
+                }
+            }
+            MessageBox.Show($"设置未标志数据标签数量为:{addCount},修改标签数量为:{updateCount}");
         }
 
         private void MainForm_Shown(object sender, EventArgs e)

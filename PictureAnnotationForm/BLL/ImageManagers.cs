@@ -130,16 +130,21 @@ namespace PictureAnnotationForm.BLL
                 KevImageData.Add(item.Id, item);
                 foreach (var labelsModel in item.Labels)
                 {
+                    if (!string.IsNullOrWhiteSpace(labelsModel.LabelId))
+                    {
+                        if (LabelKeyDictionary.ContainsKey(labelsModel.LabelId))
+                        {
+                            continue;
+                        }
+                        LabelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
+                    }
                     labelsModel.ImageItemModel = item;
                     if (!LabelNameData.ContainsKey(labelsModel.Name))
                     {
                         LabelNameData.Add(labelsModel.Name, null);
                         LabelNames.Add(labelsModel.Name);
                     }
-                    if (!string.IsNullOrWhiteSpace(labelsModel.LabelId))
-                    {
-                        LabelKeyDictionary.Add(labelsModel.LabelId, labelsModel);
-                    }
+                    
                 }
             }
         }

@@ -17,15 +17,26 @@ namespace PictureAnnotationForm.Servers
     public class AutoEditServer
     {
         private static Type _ptype = typeof(Propertys);
-        private Dictionary<Type, Control> _controlDict = new Dictionary<Type, Control>();
+        private Dictionary<Type, object> _controlDict = new Dictionary<Type, object>();
         public Control Control;
         public object Data { get; private set; }
         public Type DataType { get; private set; }
+        public Propertys Propertys { get; private set; }
+        public MemberInfoPropertysBind MemberInfoPropertysBind { get; private set; }
         public void Init(object obj, Type objType,Control control)
         {
             Data = obj;
             DataType = objType;
             Control = control;
+            Propertys = GetPropertys(DataType);
+        }
+        public void AddTypeControl<T>(T c)
+        {
+            var t = typeof(T);
+            if (!_controlDict.ContainsKey(t))
+            {
+                _controlDict.Add(t,c);
+            }
         }
         private void UpdateData(object obj, MemberInfoPropertysBind memberInfo)
         {
@@ -149,9 +160,9 @@ namespace PictureAnnotationForm.Servers
                         button.Click += (s, e) =>
                         {
                             var folderBrowserDialog = GetControl<FolderBrowserDialog>();
-                            if (autoEditForm.folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                            if (folderBrowserDialog != null&& folderBrowserDialog.ShowDialog() == DialogResult.OK)
                             {
-                                textBox.Text = autoEditForm.folderBrowserDialog1.SelectedPath;
+                                textBox.Text = folderBrowserDialog.SelectedPath;
                             }
                         };
                         control.Controls.Add(button);
@@ -161,37 +172,12 @@ namespace PictureAnnotationForm.Servers
             }
             control.Height = y + 5;
         }
-        private  T? GetControl<T>() where T : Control
+        private T GetControl<T>() where T:class
         {
-            var type= typeof(T);
-            if (_controlDict.ContainsKey(type))
+            var t=typeof(T);
+            if (_controlDict.ContainsKey(t))
             {
-                return _controlDict[type] as T;
-            }
-            Form form = Control.FindForm();
-            if (form != null)
-            {
-                foreach (Control c in form.Controls)
-                {
-                    if(c.GetType().FullName== type.FullName)
-                    {
-                        _controlDict.Add(type,c);
-                        return c as T;
-                    }
-                }
-            }
-            Control control = Control;
-            while (control != null)
-            {
-                foreach (Control c in control.Controls)
-                {
-                    if (c.GetType().FullName == type.FullName)
-                    {
-                        _controlDict.Add(type, c);
-                        return c as T;
-                    }
-                }
-                control = control.Parent;
+                return _controlDict[t] as T;
             }
             return null;
         }
@@ -224,7 +210,26 @@ namespace PictureAnnotationForm.Servers
 
             memberInfoPropertysBind.Propertys.Type = EPropertysType.Text;
         }
-
+        public void SetControl()
+        {
+            MemberInfoPropertysBind = InfoPropertysBind(Data,null);
+            SetControl(MemberInfoPropertysBind, Control);
+        }
+        public void UpdateData(Func<object> newFunc=null)
+        {
+            if (Data == null)
+            {
+                if (newFunc == null)
+                {
+                    return;
+                }
+                else
+                {
+                    Data = newFunc();
+                }
+            }
+            UpdateData(Data, MemberInfoPropertysBind);
+        }
         private MemberInfoPropertysBind InfoPropertysBind(object obj, MemberInfoPropertysBind bind)
         {
             Type type = obj.GetType();

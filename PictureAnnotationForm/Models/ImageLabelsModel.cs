@@ -67,6 +67,17 @@ namespace PictureAnnotationForm.Models
         /// 标签显示位置
         /// </summary>
         [JsonIgnore]
+        public Rectangle LabelRectangle
+        {
+            get
+            {
+                return new Rectangle(X1, Y1, Width, Height);
+            }
+        }
+        /// <summary>
+        /// 标签显示位置
+        /// </summary>
+        [JsonIgnore]
         public Rectangle LabelShowRectangle
         {
             get
@@ -76,7 +87,7 @@ namespace PictureAnnotationForm.Models
             set
             {
                 X1 = (int)Math.Ceiling(value.X / ZoomMultiple);
-                Y1= (int)Math.Ceiling(value.Y / ZoomMultiple);
+                Y1 = (int)Math.Ceiling(value.Y / ZoomMultiple);
                 X2 = (int)Math.Ceiling(value.Right / ZoomMultiple);
                 Y2 = (int)Math.Ceiling(value.Bottom / ZoomMultiple);
             }
@@ -90,9 +101,23 @@ namespace PictureAnnotationForm.Models
         /// 复制到新成员中
         /// </summary>
         /// <returns></returns>
-        public ImageLabelsModel Copy()
+        public ImageLabelsModel CopyTo()
         {
             return null;
+        }
+        /// <summary>
+        /// 复制到新成员中
+        /// </summary>
+        /// <returns></returns>
+        public ImageLabelsModel Set(ImageLabelsModel imageLabels)
+        {
+            Name = imageLabels.Name;
+            SubName = imageLabels.SubName;
+            X1= imageLabels.X1;
+            Y1 = imageLabels.Y1;
+            X2 = imageLabels.X2;
+            Y2= imageLabels.Y2;
+            return this;
         }
     }
 }

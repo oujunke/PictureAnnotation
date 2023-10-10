@@ -54,6 +54,7 @@
             导出选中分类到ImageNet数据集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             减少标注图片等级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            增加标注图片等级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tcMain = new System.Windows.Forms.TabControl();
             tpLabelInfo = new System.Windows.Forms.TabPage();
             liMain = new UserForm.LabelInfoUserControl();
@@ -83,7 +84,6 @@
             sfdSaveFile = new System.Windows.Forms.SaveFileDialog();
             ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             timeAutoSave = new System.Windows.Forms.Timer(components);
-            增加标注图片等级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -322,6 +322,13 @@
             减少标注图片等级ToolStripMenuItem.Text = "减少标注图片等级";
             减少标注图片等级ToolStripMenuItem.Click += 减少标注图片等级ToolStripMenuItem_Click;
             // 
+            // 增加标注图片等级ToolStripMenuItem
+            // 
+            增加标注图片等级ToolStripMenuItem.Name = "增加标注图片等级ToolStripMenuItem";
+            增加标注图片等级ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            增加标注图片等级ToolStripMenuItem.Text = "增加标注图片等级";
+            增加标注图片等级ToolStripMenuItem.Click += 增加标注图片等级ToolStripMenuItem_Click;
+            // 
             // tcMain
             // 
             tcMain.Controls.Add(tpLabelInfo);
@@ -383,7 +390,7 @@
             btnSetAllLabel.Name = "btnSetAllLabel";
             btnSetAllLabel.Size = new System.Drawing.Size(165, 39);
             btnSetAllLabel.TabIndex = 9;
-            btnSetAllLabel.Text = "推广所有位置标签";
+            btnSetAllLabel.Text = "推广未标记位置标签";
             btnSetAllLabel.UseVisualStyleBackColor = true;
             btnSetAllLabel.Click += btnSetAllLabel_Click;
             // 
@@ -606,13 +613,6 @@
             timeAutoSave.Enabled = true;
             timeAutoSave.Interval = 30000;
             timeAutoSave.Tick += timeAutoSave_Tick;
-            // 
-            // 增加标注图片等级ToolStripMenuItem
-            // 
-            增加标注图片等级ToolStripMenuItem.Name = "增加标注图片等级ToolStripMenuItem";
-            增加标注图片等级ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            增加标注图片等级ToolStripMenuItem.Text = "增加标注图片等级";
-            增加标注图片等级ToolStripMenuItem.Click += 增加标注图片等级ToolStripMenuItem_Click;
             // 
             // MainForm
             // 
