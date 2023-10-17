@@ -334,17 +334,20 @@ namespace PictureAnnotationForm.UserForm
             pbMain.Focus();
             if (e.Button == MouseButtons.Right && CurrentImageItemModel != null)
             {
+                var x = (int)Math.Ceiling((e.X - ImageShowInfo.X) / CurrentImageItemModel.ZoomMultiple)+LeftPoint.X;
+                var y = (int)Math.Ceiling((e.Y - ImageShowInfo.Y) / CurrentImageItemModel.ZoomMultiple) + LeftPoint.Y;
                 isDrag = true;
                 var tempLabel = new ImageLabelsModel
                 {
                     ImageItemModel = CurrentImageItemModel,
                     LabelId = Guid.NewGuid().ToString("N"),
                     Name = "未知",
-                    X1 = e.X,
-                    X2 = e.X + 1,
-                    Y1 = e.Y,
-                    Y2 = e.Y + 1,
+                    X1=x,
+                    X2=x+1,
+                    Y1=y, 
+                    Y2=y+1,
                 };
+              
                 CurrentImageItemModel.Labels.Add(tempLabel);
                 dragImageLabelShowUserControl = AddLabelControl(CurrentImageItemModel.Labels.Count - 1);
                 dragImageLabelShowUserControl.BringToFront();

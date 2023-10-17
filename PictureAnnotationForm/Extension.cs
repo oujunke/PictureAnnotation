@@ -201,5 +201,16 @@ namespace PictureAnnotationForm
             return bitmap;
         }
         #endregion
+        #region
+        /// <summary>
+        /// 向上获取rect
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <returns></returns>
+        public static Rectangle ToRectangleCeiling(this RectangleF rectangle)
+        {
+            return new Rectangle((int)Math.Ceiling(rectangle.Left), (int)Math.Ceiling(rectangle.Top), (int)Math.Ceiling(rectangle.Width), (int)Math.Ceiling(rectangle.Height));
+        }
+        #endregion
     }
 }
