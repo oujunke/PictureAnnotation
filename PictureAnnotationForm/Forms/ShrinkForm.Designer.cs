@@ -1,6 +1,6 @@
 ﻿namespace PictureAnnotationForm.Forms
 {
-    partial class Form1
+    partial class ShrinkForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,21 @@
         {
             SuspendLayout();
             // 
-            // Form1
+            // ShrinkForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
-            Name = "Form1";
-            Text = "Form1";
+            ControlBox = false;
+            DoubleBuffered = true;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ShrinkForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            Text = "ShrinkForm";
+            MouseLeave += ShrinkForm_MouseLeave;
             ResumeLayout(false);
         }
 

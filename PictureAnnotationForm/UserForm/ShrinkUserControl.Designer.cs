@@ -28,33 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new System.Windows.Forms.Panel();
+            MainPanel = new System.Windows.Forms.Panel();
+            button1 = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
-            // panel1
+            // MainPanel
             // 
-            panel1.BackColor = System.Drawing.SystemColors.Control;
-            panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            panel1.Location = new System.Drawing.Point(3, 3);
-            panel1.Margin = new System.Windows.Forms.Padding(0);
-            panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(246, 223);
-            panel1.TabIndex = 1;
+            MainPanel.BackColor = System.Drawing.SystemColors.Control;
+            MainPanel.Location = new System.Drawing.Point(3, 32);
+            MainPanel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            MainPanel.Name = "MainPanel";
+            MainPanel.Size = new System.Drawing.Size(246, 194);
+            MainPanel.TabIndex = 3;
+            // 
+            // button1
+            // 
+            button1.Dock = System.Windows.Forms.DockStyle.Top;
+            button1.Location = new System.Drawing.Point(3, 3);
+            button1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(246, 29);
+            button1.TabIndex = 2;
+            button1.Text = "button1";
+            button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // ShrinkUserControl
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            BackColor = System.Drawing.Color.Black;
+            BackColor = System.Drawing.SystemColors.Control;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            Controls.Add(panel1);
+            Controls.Add(MainPanel);
+            Controls.Add(button1);
             Name = "ShrinkUserControl";
             Padding = new System.Windows.Forms.Padding(3);
             Size = new System.Drawing.Size(252, 229);
+            VisibleChanged += ShrinkUserControl_VisibleChanged;
+            Paint += ShrinkUserControl_Paint;
+            MouseLeave += ShrinkUserControl_MouseLeave;
             ResumeLayout(false);
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Panel MainPanel;
     }
 }

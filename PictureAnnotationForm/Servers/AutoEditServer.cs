@@ -3,6 +3,7 @@ using PictureAnnotationForm.Attributes;
 using PictureAnnotationForm.Enums;
 using PictureAnnotationForm.Forms;
 using PictureAnnotationForm.Models;
+using PictureAnnotationForm.UserForm;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,17 +18,18 @@ namespace PictureAnnotationForm.Servers
     public class AutoEditServer
     {
         private static Type _ptype = typeof(Propertys);
+        private static Type _otype = typeof(ObjectShow);
         private Dictionary<Type, object> _controlDict = new Dictionary<Type, object>();
         public Control Control;
         public object Data { get; private set; }
         public Type DataType { get; private set; }
         public Propertys Propertys { get; private set; }
         public MemberInfoPropertysBind MemberInfoPropertysBind { get; private set; }
-        public void Init(object obj, Type objType,Control control)
+        public void Init(object obj, Type objType, Control control = null)
         {
             Data = obj;
             DataType = objType;
-            Control = control;
+            Control = control ?? new Panel();
             Propertys = GetPropertys(DataType);
         }
         public void AddTypeControl<T>(T c)
@@ -35,7 +37,7 @@ namespace PictureAnnotationForm.Servers
             var t = typeof(T);
             if (!_controlDict.ContainsKey(t))
             {
-                _controlDict.Add(t,c);
+                _controlDict.Add(t, c);
             }
         }
         private void UpdateData(object obj, MemberInfoPropertysBind memberInfo)
@@ -81,22 +83,54 @@ namespace PictureAnnotationForm.Servers
             {
                 if (bind.Child.Count > 0)
                 {
-                    GroupBox groupBox = new GroupBox();
-                    groupBox.Width = control.Width - 10;
-                    SetControl(bind, groupBox);
-                    groupBox.Top = y + 5;
-                    groupBox.Left = 5;
-                    y += groupBox.Height + 5;
-                    control.Controls.Add(groupBox);
+                    var os = GetObjectShow(bind.Property);
+                    if (os == null || os.EObjectShowType == EObjectShowType.None)
+                    {
+                        GroupBox groupBox = new GroupBox();
+                        groupBox.Width = control.Width - 10;
+                        SetControl(bind, groupBox);
+                        groupBox.Top = y + 5;
+                        groupBox.Left = 5;
+                        y += groupBox.Height + 5;
+                        control.Controls.Add(groupBox);
+                    }
+                    else if (os.EObjectShowType == EObjectShowType.ShrinkControl)
+                    {
+                        ShrinkUserControl shrinkUserControl = new ShrinkUserControl();
+                        shrinkUserControl.Width = control.Width - 10;
+                        SetControl(bind, shrinkUserControl.MainPanel);
+                        shrinkUserControl.Top = y + 5;
+                        shrinkUserControl.Left = 5;
+                        shrinkUserControl.Init();
+                        y += shrinkUserControl.Height + 5;
+                        control.Controls.Add(shrinkUserControl);
+                    }
+                    else if (os.EObjectShowType == EObjectShowType.ShrinkFrom)
+                    {
+                        Button button = new Button();
+                        button.Text = (string.IsNullOrWhiteSpace(bind.Propertys.Text) ? bind.Property.Name : bind.Propertys.Text) + ":";
+                        button.Top += y + 5;
+                        button.Left = 5;
+                        y += 35;
+                        button.Click += (s, e) =>
+                        {
+                            var rect = button.RectangleToScreen(button.ClientRectangle);
+                            ShrinkForm.ShowEditObj(bind.Value, bind.Property.PropertyType, rect.X, rect.Y);
+                        };
+                        control.Controls.Add(button);
+                    }
                 }
                 else
                 {
+                    Panel panel = new Panel();
+                    panel.Width = panel.Width;
+                    panel.Controls.Add(panel);
                     Label label = new Label();
                     label.Text = (string.IsNullOrWhiteSpace(bind.Propertys.Text) ? bind.Property.Name : bind.Propertys.Text) + ":";
                     label.Top += y + 5;
                     label.Left = 5;
                     y += 35;
-                    control.Controls.Add(label);
+                    panel.Controls.Add(label);
                     GetEPropertysType(bind);
                     if (bind.Propertys.Type == EPropertysType.Text)
                     {
@@ -104,9 +138,9 @@ namespace PictureAnnotationForm.Servers
                         textBox.Top = label.Top;
                         textBox.Height = 27;
                         textBox.Left = 170;
-                        textBox.Width = control.Width - 175;
+                        textBox.Width = panel.Width - 175;
                         textBox.Text = bind.Value.ToString();
-                        control.Controls.Add(textBox);
+                        panel.Controls.Add(textBox);
                         bind.Control = textBox;
                     }
                     else if (bind.Propertys.Type == EPropertysType.Enum)
@@ -116,10 +150,10 @@ namespace PictureAnnotationForm.Servers
                         comboBox.Top = label.Top;
                         comboBox.Height = 27;
                         comboBox.Left = 170;
-                        comboBox.Width = control.Width - 175;
+                        comboBox.Width = panel.Width - 175;
                         comboBox.Items.AddRange(bind.Property.PropertyType.GetEnumNames());
                         comboBox.Text = bind.Value.ToString();
-                        control.Controls.Add(comboBox);
+                        panel.Controls.Add(comboBox);
                         bind.Control = comboBox;
                     }
                     else if (bind.Propertys.Type == EPropertysType.Int || bind.Propertys.Type == EPropertysType.Decimal)
@@ -128,7 +162,7 @@ namespace PictureAnnotationForm.Servers
                         numericUp.Top = label.Top;
                         numericUp.Height = 27;
                         numericUp.Left = 170;
-                        numericUp.Width = control.Width - 175;
+                        numericUp.Width = panel.Width - 175;
                         numericUp.Text = bind.Value.ToString();
                         if (bind.Propertys.Type == EPropertysType.Int)
                         {
@@ -139,7 +173,7 @@ namespace PictureAnnotationForm.Servers
                             numericUp.DecimalPlaces = 2;
                             numericUp.Increment = 0.01m;
                         }
-                        control.Controls.Add(numericUp);
+                        panel.Controls.Add(numericUp);
                         bind.Control = numericUp;
                     }
                     else if (bind.Propertys.Type == EPropertysType.Folder)
@@ -148,33 +182,34 @@ namespace PictureAnnotationForm.Servers
                         textBox.Top = label.Top;
                         textBox.Height = 27;
                         textBox.Left = 170;
-                        textBox.Width = control.Width - 175 - 40;
+                        textBox.Width = panel.Width - 175 - 40;
                         textBox.Text = bind.Value.ToString();
-                        control.Controls.Add(textBox);
+                        panel.Controls.Add(textBox);
                         bind.Control = textBox;
                         Button button = new Button();
                         button.Text = "...";
                         button.Top = textBox.Top;
                         button.Width = 35;
-                        button.Left = control.Width - 40;
+                        button.Left = panel.Width - 40;
                         button.Click += (s, e) =>
                         {
                             var folderBrowserDialog = GetControl<FolderBrowserDialog>();
-                            if (folderBrowserDialog != null&& folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                            if (folderBrowserDialog != null && folderBrowserDialog.ShowDialog() == DialogResult.OK)
                             {
                                 textBox.Text = folderBrowserDialog.SelectedPath;
                             }
                         };
-                        control.Controls.Add(button);
+                        panel.Controls.Add(button);
                     }
-
+                    panel.Height = panel.Controls.Cast<Control>().Max(c => c.Height);
                 }
             }
             control.Height = y + 5;
         }
-        private T GetControl<T>() where T:class
+
+        private T GetControl<T>() where T : class
         {
-            var t=typeof(T);
+            var t = typeof(T);
             if (_controlDict.ContainsKey(t))
             {
                 return _controlDict[t] as T;
@@ -212,10 +247,10 @@ namespace PictureAnnotationForm.Servers
         }
         public void SetControl()
         {
-            MemberInfoPropertysBind = InfoPropertysBind(Data,null);
+            MemberInfoPropertysBind = InfoPropertysBind(Data, null);
             SetControl(MemberInfoPropertysBind, Control);
         }
-        public void UpdateData(Func<object> newFunc=null)
+        public void UpdateData(Func<object> newFunc = null)
         {
             if (Data == null)
             {
@@ -279,12 +314,20 @@ namespace PictureAnnotationForm.Servers
             }
             return bind;
         }
-        private  Propertys GetPropertys(MemberInfo memberInfo)
+        private Propertys GetPropertys(MemberInfo memberInfo)
         {
-            var ps = memberInfo.GetCustomAttributes(_ptype, false);
+            return GetAttributes(memberInfo, _ptype) as Propertys;
+        }
+        private ObjectShow GetObjectShow(MemberInfo memberInfo)
+        {
+            return GetAttributes(memberInfo, _otype) as ObjectShow;
+        }
+        private object GetAttributes(MemberInfo memberInfo, Type type)
+        {
+            var ps = memberInfo.GetCustomAttributes(type, false);
             if (ps.Length > 0)
             {
-                return ps[0] as Propertys;
+                return ps[0];
             }
             else
             {

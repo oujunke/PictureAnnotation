@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PictureAnnotationForm.Enums
+namespace PictureAnnotationForm.Visions
 {
-    public enum EObjectShowType
+    public abstract class VisionBase
     {
-        None,
-        ShrinkControl,
-        ShrinkFrom,
+
     }
 }
